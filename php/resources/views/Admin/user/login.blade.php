@@ -23,12 +23,11 @@
                 </div>
                 <div class="LGnt1"><p>密&nbsp;&nbsp;&nbsp;&nbsp;码:</p>
                     <input type="password" name="user_password" id="password"  class="LGnt2"/>
-                    <i>忘记密码？</i>
+                    <i><a href="{{route('Admin.find_password')}}">忘记密码？</a></i>
                 </div>
                 <div class="LGnt1"><p>验证码:</p>
                     <input type="text" name="user_code" id="textfield"  class="LGnt3"/>
                     <div class="LGnt4"><img src="{{ url('yanzheng/mews') }}" onclick="this.src='{{ url('yanzheng/mews') }}?r='+Math.random();" alt=""></div>
-                    {{--<i style="margin-left: 35px"><span></span>换一张？</i>--}}
                 </div>
                 <div style="float:left; margin-left:45px;">
                     <input type="submit" name="button" id="button" value="提 交" class="LGButton1"/>

@@ -168,7 +168,7 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td class="sbox_3_t1"><img src="/images/logo_sina.jpg" /> 新浪新闻</td>
+                                        <td class="sbox_3_t1"><img src="{{url('Admin/images/logo_sina.jpg')}}" /> 新浪新闻</td>
                                         <td class="sbox_3_t2">文字标题</td>
                                         <td class="sbox_3_t3">无入口</td>
                                         <td class="sbox_3_t4">不能带图片、网址、
@@ -179,7 +179,7 @@
                                         <td class="sbox_3_t8" >￥228.00</td>
                                     </tr>
                                     <tr>
-                                        <td class="sbox_3_t1"><img src="/images/logo_sina.jpg" /> 新浪新闻</td>
+                                        <td class="sbox_3_t1"><img src="{{url('Admin/images/logo_sina.jpg')}}" /> 新浪新闻</td>
                                         <td class="sbox_3_t2">文字标题</td>
                                         <td class="sbox_3_t3">无入口</td>
                                         <td class="sbox_3_t4">不能带图片、网址、
@@ -190,7 +190,7 @@
                                         <td class="sbox_3_t8" >￥228.00</td>
                                     </tr>
                                     <tr>
-                                        <td class="sbox_3_t1"><img src="/images/logo_sina.jpg" /> 新浪新闻</td>
+                                        <td class="sbox_3_t1"><img src="{{url('Admin/images/logo_sina.jpg')}}" /> 新浪新闻</td>
                                         <td class="sbox_3_t2">文字标题</td>
                                         <td class="sbox_3_t3">无入口</td>
                                         <td class="sbox_3_t4">不能带图片、网址、
@@ -216,25 +216,25 @@
                                         <td class="WIna4">删除</td>
                                     </tr>
                                     <tr>
-                                        <td class="WIna5"><img src="img/bn66.png">新浪网</td>
+                                        <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
                                         <td class="WIna6">新浪网XXXXXXXXXXXXXX</td>
                                         <td class="WIna7">80元</td>
                                         <td class="WIna8"><a href="">×</a></td>
                                     </tr>
                                     <tr>
-                                        <td class="WIna5"><img src="img/bn66.png">新浪网</td>
+                                        <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
                                         <td class="WIna6">新浪网*****</td>
                                         <td class="WIna7">100元</td>
                                         <td class="WIna8"><a href="">×</a></td>
                                     </tr>
                                     <tr>
-                                        <td class="WIna5"><img src="img/bn66.png">新浪网</td>
+                                        <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
                                         <td class="WIna6">新浪网*****</td>
                                         <td class="WIna7">100元</td>
                                         <td class="WIna8"><a href="">×</a></td>
                                     </tr>
                                     <tr>
-                                        <td class="WIna5"><img src="img/bn66.png">新浪网</td>
+                                        <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
                                         <td class="WIna6">新浪网*****</td>
                                         <td class="WIna7">100元</td>
                                         <td class="WIna8"><a href="">×</a></td>
@@ -308,7 +308,7 @@
                                     </div>
                                 </div>
                                 <div style="margin:40px 0 80px 0; float:left; left:30%; position:relative;">
-                                    <img src="img/WLButton.png" />
+                                    <img src="{{url('Admin/img/WLButton.png')}}" />
                                 </div>
                                 <script>
                                     $(function(){
@@ -338,66 +338,67 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        /*	日历	*/
+        var picker1 = new Pikaday({
+            field: document.getElementById('datepicker1'),
+            firstDay: 1,
+            minDate: new Date('2000-01-01'),
+            maxDate: new Date('2020-12-31'),
+            yearRange: [2000,2020]
+        });
+        var picker2 = new Pikaday({
+            field: document.getElementById('datepicker2'),
+            firstDay: 1,
+            minDate: new Date('2000-01-01'),
+            maxDate: new Date('2020-12-31'),
+            yearRange: [2000,2020]
+        });
 
-                </div></div>
-        </div></div>
+        $(".sbox_1_item .m ul li a").click(function(){
+            $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
+            var option=$(this).parents(".m").prev("span").attr("data");
+            var value=$.trim($(this).html());
+            var li="<li data='"+option+"'><a href=''>"+value+"</a></li>";
+            if( value=="不限" ){
+                $(".sbox_2 .m li[data='"+option+"']").remove();
+            }else if( $(".sbox_2 .m li[data='"+option+"']").length>0 ){
+//		$(".sbox_2 .m li[data='"+option+"']").remove();
+                $(".sbox_2 .m li[data='"+option+"']").find("a").html(value);
+            }else{
+                $(".sbox_2 .m").append(li);
+            }
+            return false;
+        });
+        $(".sbox_2 .m").on("click","li a",function(){
+            var option=$(this).parent("li").attr("data");
+            var value=$.trim($(this).html());
+            $(this).parent("li").remove();
+            $(".sbox_1_item span.l[data='"+option+"']").next(".m").find("ul li a").removeClass("cur");
+            $(".sbox_1_item span.l[data='"+option+"']").next(".m").find("ul li:first-child a").addClass("cur");
+            return false;
+        });
+        $(".sbox_1_item .r a").click(function(){
+            if( $(this).attr("data")=="on" ){
+                $(this).attr("data","off");
+                $(this).parent().siblings(".m").find("ul").css("height","25px");
+                $(this).parents(".sbox_1_item").css("height","73px");
+            }else{
+                $(this).attr("data","on");
+                $(this).parent().siblings(".m").find("ul").css("height","auto");
+                $(this).parents(".sbox_1_item").css("height","auto");
+                var height=$(this).parents(".sbox_1_item").height();
+                //	console.log(height);
+                $(this).parents(".sbox_1_item").find(".l").css("height",height);
+            }
+            return false;
+        });
+    </script>
 @endsection
 @section('footer_related')
 
 @endsection
-<script type="text/javascript">
-    /*	日历	*/
-    var picker1 = new Pikaday({
-        field: document.getElementById('datepicker1'),
-        firstDay: 1,
-        minDate: new Date('2000-01-01'),
-        maxDate: new Date('2020-12-31'),
-        yearRange: [2000,2020]
-    });
-    var picker2 = new Pikaday({
-        field: document.getElementById('datepicker2'),
-        firstDay: 1,
-        minDate: new Date('2000-01-01'),
-        maxDate: new Date('2020-12-31'),
-        yearRange: [2000,2020]
-    });
-
-    $(".sbox_1_item .m ul li a").click(function(){
-        $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
-        var option=$(this).parents(".m").prev("span").attr("data");
-        var value=$.trim($(this).html());
-        var li="<li data='"+option+"'><a href=''>"+value+"</a></li>";
-        if( value=="不限" ){
-            $(".sbox_2 .m li[data='"+option+"']").remove();
-        }else if( $(".sbox_2 .m li[data='"+option+"']").length>0 ){
-//		$(".sbox_2 .m li[data='"+option+"']").remove();
-            $(".sbox_2 .m li[data='"+option+"']").find("a").html(value);
-        }else{
-            $(".sbox_2 .m").append(li);
-        }
-        return false;
-    });
-    $(".sbox_2 .m").on("click","li a",function(){
-        var option=$(this).parent("li").attr("data");
-        var value=$.trim($(this).html());
-        $(this).parent("li").remove();
-        $(".sbox_1_item span.l[data='"+option+"']").next(".m").find("ul li a").removeClass("cur");
-        $(".sbox_1_item span.l[data='"+option+"']").next(".m").find("ul li:first-child a").addClass("cur");
-        return false;
-    });
-    $(".sbox_1_item .r a").click(function(){
-        if( $(this).attr("data")=="on" ){
-            $(this).attr("data","off");
-            $(this).parent().siblings(".m").find("ul").css("height","25px");
-            $(this).parents(".sbox_1_item").css("height","73px");
-        }else{
-            $(this).attr("data","on");
-            $(this).parent().siblings(".m").find("ul").css("height","auto");
-            $(this).parents(".sbox_1_item").css("height","auto");
-            var height=$(this).parents(".sbox_1_item").height();
-            //	console.log(height);
-            $(this).parents(".sbox_1_item").find(".l").css("height",height);
-        }
-        return false;
-    });
-</script>
