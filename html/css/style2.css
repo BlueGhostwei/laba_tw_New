@@ -109,10 +109,11 @@ table.table_in1 thead th, table.table_in1 thead td{		padding:0 0px;		}
 .page_1 span.info{	float:left;		margin-left:30px;	}
 .page_1 span.pages{	float:right;	margin:20px 20px 0 0;	}
 .page_1 span.sus,
-.page_1 a{			color:#333;		float:left;	height:30px;	line-height:30px;	padding:0 10px;	margin:0;	}
-.page_1 .prev,.page_1 .next{		height:28px;	line-height:30px;	border:1px solid #E6E6E6;	border-radius:15px;		padding:0 16px;			}
+.page_1 a{			color:#333;		float:left;	height:30px;	line-height:30px;	padding:0 11px;	margin:0 1px;	}
+.page_1 .prev,.page_1 .next{		height:28px;	line-height:28px;	border:1px solid #E6E6E6;	border-radius:15px;		padding:0 16px;			}
 .page_1 .prev{	margin-right:18px;	}
 .page_1 .next{	margin-left:18px;	}
+.page_1 a:hover,
 .page_1 a.cur{		background:#CCCCCC;	color:#fff;		border-radius:15px;	}
 
 /*	新闻中心、盈利状况、联系我们	*/
@@ -259,10 +260,16 @@ td.sbox_3_t6,td.sbox_3_t7,td.sbox_3_t8{	color:#f00;		font-size:16px;	}
 .sbox_5 .WMain3_2 span{		color:#999999;	font-size:14px;	margin-left:10px;	}
 .sbox_5 select option{		}
 
-
-
-
-
+/*	问答任务列表	*/
+table.table_in1_2{	margin:0 auto;	border-left:1px solid #F2F2F2;	border-right:1px solid #F2F2F2;	}
+table.table_in1_2 tr{	border-bottom:1px solid #F2F2F2;	}
+table.table_in1_2 tr td:nth-child(4),
+table.table_in1_2 tr td:nth-child(7){	color:red;	}
+table.table_in1_2 select{	padding:0 6px 0 10px;	}
+.page_1_2{			text-align:center;	margin-top:30px;	height:auto;	line-height:30px;	}
+.page_1_2 span.pages{	float:none;	margin:0 auto;	}
+.page_1_2 .pages a{		float:none;		display:inline-block;	}
+.page_1_2 span.sus, .page_1_2 a{	float:none;	}
 
 
 
