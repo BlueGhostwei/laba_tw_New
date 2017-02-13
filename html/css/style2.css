@@ -271,6 +271,42 @@ table.table_in1_2 select{	padding:0 6px 0 10px;	}
 .page_1_2 .pages a{		float:none;		display:inline-block;	}
 .page_1_2 span.sus, .page_1_2 a{	float:none;	}
 
+/*	问答任务添加	*/
+table.table_in3{	width:100%;		margin:1px 1px 0;	background:#fff;	}
+.table_in3 tr{	margin-bottom:2px;	}
+.table_in3 tr th{	height:40px;	vertical-align:middle;	text-align:center;	font-size:14px;		background:#F2F2F2;	font-weight:400;	}
+.table_in3 tr td{	aheight:60px;	vertical-align:middle;	text-align:center;	afont-size:14px;	padding:10px 0;	line-height:25px;	}
+.table_in3 tr td:nth-child(1) img{	    width:40px;	height:20px;	overflow:hidden;	margin-right:10px;	}
+.table_in3 tr td:nth-child(1){	width:22%; 	}
+.table_in3 tr td:nth-child(2){	width:25%; 	}
+.table_in3 tr td:nth-child(3){	width:25%;	padding:10px 0 9px 0;	}
+.table_in3 tr td:nth-child(4){	width:14%;	color:#e53935;	}
+.table_in3 tr td:nth-child(5){	width:14%;	text-align: center;	line-height: 25px;	apadding: 10px 0;	font-size: 30px;	color: #999;	}
+.table_in3 tr:nth-child(even){	background:#F9F9F9;	}
+.table_in3 select{	height:28px;	line-height:30px;	border:1px solid #ccc;	background:#fff;	padding:0 6px 0 10px;	font-size:14px;	}
+.table_in3{		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
