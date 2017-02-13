@@ -32,6 +32,9 @@ Route::group(['middleware' => 'guest'], function () {
         //sms短信接口
         //Route::post('Admin/send/sms',['as'=>'send.sms','uses'=>'UserController@postRegister']);
         Route::post('Admin/send/sms',['as'=>'send.sms','uses'=>'SMSController@index']);
+        //找回密码
+        Route::get('Admin/find_password', ['as' => 'Admin.find_password', 'uses' => 'PasswordController@getIndex']);
+        Route::post('Admin/find_password', 'PasswordController@postIndex');
 
     });
 

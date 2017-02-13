@@ -17,13 +17,12 @@ class CaptchaController extends Controller
      */
     public function index()
     {
-        //return 12341234;
+
         return view('Admin.Captcha.captcha');
     }
 
     public function mews(){
 
-        //return captcha();
          return Captcha::create();
     }
 
