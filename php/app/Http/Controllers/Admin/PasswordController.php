@@ -27,7 +27,7 @@ class PasswordController extends Controller
                  $this_time=time()+300;
                  if($get_send['time']>$this_time){
                    //清空缓存
-                   return json_encode(['msg'=>'您的操作台频繁，请稍后再试','sta'=>1,'data'=>''],JSON_UNESCAPED_UNICODE);
+                   return json_encode(['msg'=>'您的操作太频繁，请稍后再试','sta'=>1,'data'=>''],JSON_UNESCAPED_UNICODE);
                  }
                  Redis::forget('user_find_password');
                  //生成随机验证码
@@ -68,8 +68,12 @@ class PasswordController extends Controller
         }
     }
 
+    /**
+     * 验证验证码
+     */
     public function postIndex()
     {
 
     }
+
 }
