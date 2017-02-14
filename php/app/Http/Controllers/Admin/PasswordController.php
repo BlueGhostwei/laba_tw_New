@@ -30,18 +30,21 @@ class PasswordController extends Controller
                    return json_encode(['msg'=>'您的操作太频繁，请稍后再试','sta'=>1,'data'=>''],JSON_UNESCAPED_UNICODE);
                  }
                  Redis::forget('user_find_password');
-                 //生成随机验证码
-                 //获取验证码
+                 //生成随机验证
                  $randStr = str_shuffle('1234567890');
                  $rand = substr($randStr, 0, 4);//4位参数
-                 //发送短信
+                 //发送接口，发送短信
                  //接收发送状态，如果发送成功，写入缓存
-                 $array = array(
-                     'user_phone' => $data,
-                     'time' => time(),
-                     'num' => 1,
-                     'code' => $rand
-                 );
+                 $rst="";
+                if($rst==true){
+                    $array = array(
+                        'user_phone' => $data,
+                        'time' => time(),
+                        'num' => 1,
+                        'code' => $rand
+                    );
+                }
+
                  Redis::set('user_find_password', $array);
                  return json_encode(['msg' => '发送成功', 'sta' => 0, 'data' => ''], JSON_UNESCAPED_UNICODE);
              }
@@ -61,8 +64,6 @@ class PasswordController extends Controller
                 Redis::set('user_find_password', $array);
                 return json_encode(['msg' => '发送成功', 'sta' => 0, 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
-
-
         } else {
             return json_encode(['msg' => '手机号码错误，请重新输入', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
         }
@@ -75,5 +76,6 @@ class PasswordController extends Controller
     {
 
     }
+
 
 }
