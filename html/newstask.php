@@ -231,7 +231,7 @@
 		<div class="sbox_4 clearfix">
 			<div class="WIn2">
 				<h2>已选媒体</h2>
-				<table width="100%" border="0"><tbody>
+				<table class="table_in4" width="100%" border="0"><tbody>
 					<tr class="WIna1">
 						<td class="WIna2">媒体名称</td>
 						<td class="WIna3">介绍</td>
@@ -291,12 +291,12 @@
 								</div>
 								<div class="WMain3 WMain3_2"><p><i class="LGntas">*</i>开始时间:</p>
 									 <input type="text" name="textfield" id="datepicker1" class="txt2"/>
-									 <select >
+									 <select class="sel_t1">
 										<option value="00">00</option>
 										<option value="01">01</option>
 										<option value="02">02</option>
 									 </select>时
-									 <select >
+									 <select class="sel_t1">
 										<option value="00">00</option>
 										<option value="01">01</option>
 										<option value="02">02</option>
@@ -304,13 +304,13 @@
 									 <span>请选择当前时间15分钟后，7天之内的时间</span>
 								</div>
 								<div class="WMain3 WMain3_2"><p><i class="LGntas">*</i>截止时间:</p>
-									 <input type="text" name="textfield" id="datepicker2" class="txt2"/>
-									 <select >
+									<input type="text" name="textfield" id="datepicker2" class="txt2"/>
+									<select class="sel_t1">
 										<option value="00">00</option>
 										<option value="01">01</option>
 										<option value="02">02</option>
 									 </select>时
-									 <select >
+									<select class="sel_t1">
 										<option value="00">00</option>
 										<option value="01">01</option>
 										<option value="02">02</option>

@@ -15,6 +15,7 @@
 	<a href="baike.php">网络-百科</a>
 
 	<br/>
+	<a href="weixin_yingxiao.php" title="网络媒体/微信营销.psd">微信营销</a>
 	<a href="qa_list.php" title="网络媒体/问答任务列表.psd">问答任务列表</a>
 	<a href="qa_add.php" title="网络媒体/问答任务添加.psd">问答任务添加</a>
 	<a href="newstask.php" title="网络媒体/新闻任务.psd">新闻任务</a>
