@@ -429,13 +429,6 @@ var picker1 = new Pikaday({
 	maxDate: new Date('2020-12-31'),
 	yearRange: [2000,2020]
 });
-var picker2 = new Pikaday({
-	field: document.getElementById('datepicker2'),
-	firstDay: 1,
-	minDate: new Date('2000-01-01'),
-	maxDate: new Date('2020-12-31'),
-	yearRange: [2000,2020]
-});
 
 $(".sbox_1_item .m ul li a").click(function(){
 	$(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
