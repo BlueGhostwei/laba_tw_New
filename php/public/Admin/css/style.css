@@ -230,7 +230,7 @@ body{ background:#204186}
 
 /*弹窗注册页*/
 .reveal-modal-bg { position: fixed; height: 100%;width: 100%;background: #000;background: rgba(0,0,0,.8);z-index: 100;display: none;top: 0;left: 0; }	
-.reveal-modal {visibility: hidden;top: 100px; left: 50%;margin-left: -380px;width: 570px;background: #fff url(modal-gloss.png) no-repeat -200px -80px;position: absolute;z-index: 101;padding:30px 100px;
+.reveal-modal {visibility: hidden;top: 100px; left: 50%;margin-left: -380px;width: 570px;background: #fff url(../modal-gloss.png) no-repeat -200px -80px;position: absolute;z-index: 101;padding:30px 100px;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
 		border-radius: 5px;

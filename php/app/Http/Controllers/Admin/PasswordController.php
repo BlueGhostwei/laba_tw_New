@@ -63,7 +63,7 @@ class PasswordController extends Controller
                 //接收发送状态，如果发送成功，写入缓存
                 $array = array(
                     'user_phone' => $data,
-                    'time' => time(),
+                    'time' => time()+120,
                     'num' => 1,
                     'code' => $rand
                 );
@@ -82,6 +82,7 @@ class PasswordController extends Controller
     {
 
     }
+    
 
 
 }

@@ -2,7 +2,7 @@
 
 use App\Models\AclResource;
 use App\Models\AclRole;
-use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Admin\UploadController;
 use App\Models\User;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;

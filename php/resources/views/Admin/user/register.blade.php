@@ -15,8 +15,8 @@ $(function () {
        // var _form=form.getFormData();//获取表单参数
         var moblie_number= $('#mobile_number').val();
         var _token= $('input[name="_token"]').val();
-        var password= $('input[name="password"]').val();
-        var password_confirmation= $('input[name="password"]').val();
+       /* var password= $('input[name="password"]').val();
+        var password_confirmation= $('input[name="password"]').val();*/
 
         //判断手机号码是否正确合法
         if(!IsTel(moblie_number)){
@@ -25,14 +25,14 @@ $(function () {
         $.ajax({
             url:'{{route('send.sms')}}',
             data: {
-                'username':moblie_number,
-                'password':password,
+                'moblie_number':moblie_number,
                 '_token':_token
             },
             type: 'post',
             dataType: "json",
             stopAllStart: true,
             success: function (data) {
+                debugger
                 if (data.sta == '0') {
                         alert(data.msg || '请求成功');
                 } else {
@@ -88,7 +88,7 @@ $(function () {
             <h4>已经注册过？<a href="{{route('user.login')}}"><input type="submit" name="button" id="button" value="登 录" class="LGBo1"/></a></h4>
             <span>登录喇叭传媒，三百万网络推广服务商为您服务！</span>
             <p>如有问题，请联系在线客服：</p>
-            <div><a href="http://wpa.qq.com/msgrd?v=3&uin=3315033406&site=在线客服&menu=yes" target="_blank"><img src="../img/LGn2.jpg" alt="点我咨询"></a></div>
+            <div><a href="http://wpa.qq.com/msgrd?v=3&uin=823721918&site=在线客服&menu=yes" target="_blank"><img src="../img/LGn2.jpg" alt="点我咨询"></a></div>
         </div>
     </div>
 </div>

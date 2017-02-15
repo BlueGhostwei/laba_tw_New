@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0ee3d50cb4b4a189d1b9fda8187b7e8",
+    "content-hash": "67148a0fabf0a1712c4c4bf35658dd05",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "555d3e37009bdb78f5d8bcea6eb8a816529a5cfa"
+                "reference": "56660cab848c18f5d0e34351620227a9d0ca9f45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/barryvdh/laravel-ide-helper/555d3e37009bdb78f5d8bcea6eb8a816529a5cfa.zip",
-                "reference": "555d3e37009bdb78f5d8bcea6eb8a816529a5cfa",
+                "url": "https://packagist.phpcomposer.com/files/barryvdh/laravel-ide-helper/56660cab848c18f5d0e34351620227a9d0ca9f45.zip",
+                "reference": "56660cab848c18f5d0e34351620227a9d0ca9f45",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +40,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -70,7 +70,7 @@
                 "phpstorm",
                 "sublime"
             ],
-            "time": "2017-02-13T19:20:12+00:00"
+            "time": "2017-02-14T15:45:07+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",
