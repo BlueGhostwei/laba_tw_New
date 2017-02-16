@@ -21,6 +21,7 @@ $(function () {
         //判断手机号码是否正确合法
         if(!IsTel(moblie_number)){
             alert('请输入正确的手机号码');
+            $("#mobile_number").focus();
             return false;
         }
         $.ajax({
@@ -34,8 +35,11 @@ $(function () {
             stopAllStart: true,
             success: function (data) {
                 if (data.sta == '0') {
+                        setTiming();
                         alert(data.msg || '请求成功');
+
                 } else {
+                        setTiming();
                         alert(data.msg || '请求失败');
                 }
             },
@@ -54,8 +58,28 @@ $(function () {
             }
         }
     });
+    var timeout=60;
+    var int1;
+    function setTiming(){
+        if(timeout>=1){
+            clearTimeout(int1);
+            $("#send_sms_button").css("cursor","default");
+            $("#send_sms_button").val(""+timeout+" 重新发送");
+            int1=setTimeout(function(){
+                timeout--;
+                setTiming();
+            },1000);
+        }else{
+            clearTimeout(int1);
+            $("#send_sms_button").val("重新发送");
+            $("#send_sms_button").css("cursor","pointer");
+            timeout=60;
+        }
+    }
 
 });
+
+
 </script>
 <body style="background:url(../img/RELogin.jpg) repeat-x top;">
 <div id=RELogin style="">
