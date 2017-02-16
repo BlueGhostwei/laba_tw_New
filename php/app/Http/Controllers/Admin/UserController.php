@@ -10,6 +10,7 @@ use Redirect;
 use Auth;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -27,7 +28,8 @@ class UserController extends Controller
      * @return mixed
      * 用户请求注册页面
      */
-    public function getRegister(){
+    public function getRegister()
+    {
         return view('Admin.user.register');
     }
 
@@ -36,18 +38,19 @@ class UserController extends Controller
      * @return $this|\Illuminate\Http\RedirectResponse
      * 验证用户登录
      */
-    public function post_login(Request $request){
-        $username=Input::get('username');
-        $password=Input::get('user_password');
+    public function post_login(Request $request)
+    {
+        $username = Input::get('username');
+        $password = Input::get('user_password');
         $remember = Input::get('remember', false);
         //判断用户手机号码
-        if(Controller::isMobile(Input::get('username'))==false){
-            return json_encode(["msg"=>"请输入正确的手机号码","sta"=>1,"data"=>""],JSON_UNESCAPED_UNICODE);
+        if (Controller::isMobile(Input::get('username')) == false) {
+            return json_encode(["msg" => "请输入正确的手机号码", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
         }
         //验证用户
-        $set_user=User::where(['username'=>Input::get("username"),'deleted_at'=>null])->get()->toArray();
-        if(empty($set_user)){
-            return json_encode(["msg"=>"用户不存在，请注册","sta"=>1,"data"=>""],JSON_UNESCAPED_UNICODE);
+        $set_user = User::where(['username' => Input::get("username"), 'deleted_at' => null])->get()->toArray();
+        if (empty($set_user)) {
+            return json_encode(["msg" => "用户不存在，请注册", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
         }
         //判断用户状态是否锁定
 
@@ -60,40 +63,63 @@ class UserController extends Controller
             'user_code.captcha' => '验证码错误，请重试'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);//验证码错误！
         } else {
             //通过验证
-           $rst=Auth::attempt(['username' => $username, 'password' => $password],$remember);
-            if($rst==true){
+            $rst = Auth::attempt(['username' => $username, 'password' => $password], $remember);
+            if ($rst == true) {
 
                 return redirect()->intended('/');//登录成功，跳转页面
-            }else{
+            } else {
                 return Redirect::back()->withErrors('用户名或者密码错误')->withInput();
             }
 
         }
 
     }
-    public function postRegister(Request $request){
-        $user= new User();
-        $validate = Validator::make($request->all(), $user->rules()['create']);
-        $messages = $validate->messages();
-        if ($validate->fails()) {
-            $msg = $messages->toArray();
-            foreach ($msg as $k => $v) {
-                return json_encode(['sta' => 0, 'msg' => $v[0], 'data' => '']);
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * user_SMS
+     * 获取手机号码。手机验证码，判断时间，判断验证码,密码
+     */
+    public function postRegister(Request $request)
+    {
+        $mobile_phone = $request->mobile_phone;
+        $password = $request->password;
+        $user_code = $request->user_code;
+        $user_SMS = Redis::exists('user_SMS');
+        if ($user_SMS) {
+            $send_num_data = Redis::get('user_SMS');
+            $send_num = json_decode($send_num_data, true);
+            if ($user_code == $send_num['code']) {
+                if ($mobile_phone != $send_num['user_phone']) {
+                    return json_encode(['msg' => "验证用户不一致！", 'sta' => "1", 'data' => ''],JSON_UNESCAPED_UNICODE);
+                }
+                $user = new User();
+                $validate = Validator::make($request->all(), $user->rules()['create']);
+                $messages = $validate->messages();
+                if ($validate->fails()) {
+                    $msg = $messages->toArray();
+                    foreach ($msg as $k => $v) {
+                        return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''],JSON_UNESCAPED_UNICODE);
+                    }
+                }
+                $data = $user->create($request->only($user->getFillable()));
+                //  $data = User::where(['username'=>$request->username])->update(['created_by' => Auth::id()]);
+                if ($data) {
+                    Redis::del('user_SMS');
+                    return json_encode(['sta' => "0", 'msg' => '注册成功', 'data' => $data->id], JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                return json_encode(['msg' => "验证码错误", 'sta' => "1", 'data' => '']);
             }
         }
-       $data=$user->create($request->only($user->getFillable()));
-      //  $data = User::where(['username'=>$request->username])->update(['created_by' => Auth::id()]);
-        if($data->id) {
-            return json_encode(['sta' => 0, 'msg' => '请求成功', 'data' => ''],JSON_UNESCAPED_UNICODE);
-        }
-        return json_encode(['sta' => 1, 'msg' => '请求失败', 'data' => ''],JSON_UNESCAPED_UNICODE);
+        return json_encode(['sta' =>"1", 'msg' => '请求失败', 'data' => ''], JSON_UNESCAPED_UNICODE);
 
     }
 
-    
 
 }

@@ -75,7 +75,7 @@ class SMSController extends Controller
      * @return mixed
      * 发送请求
      */
-    public function Tohttp_requst($mob)
+    public function Tohttp_requst($mob,$code)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "http://api.weimi.cc/2/sms/send.html");
@@ -84,7 +84,7 @@ class SMSController extends Controller
         $uid = '5CipH7ou8gpw';
         $pas = 'hbnv53a3';
         $cid = "R7NwD6BxC0Mc";
-        $vcode = $this->get_random();
+        $vcode = $code;
         $p2 = "3";
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'uid=' . $uid . '&pas=' . $pas . '&mob=' . $mob . '&cid=' . $cid . '&p1=' . $vcode . '&p2=' . $p2 . '&type=json');
         $res = curl_exec($ch);
@@ -154,19 +154,20 @@ class SMSController extends Controller
         $set_type = $this->send_num($mob, $type);
         //dd($set_type);
         if ($set_type['sta'] == 0) { //num < 5
+            $vcode = $this->get_random();
             $array2 = $this->getnumber($mob, $type);
-            $result = $this->Tohttp_requst($mob);
+            $result = $this->Tohttp_requst($mob,$vcode);
             $data = json_decode($result['res'], true);
             if ($data['code'] == 0) {
                 $array = array(
                     'user_phone' => $mob,
                     'Send_time' => time(),
-                    'code' => $result['vcode'],
+                    'code' => $vcode,
                     'type' => $type
                 );
                 Redis::set('user_SMS', json_encode($array));
                 Redis::set('user_Send_num', json_encode($array2));
-                return array('code' => $result['vcode'], 'sta' => 0);
+                return array('code' => $vcode, 'sta' => 0);
             } else {
                 return array('msg' => "短信发送失败，请联系客服！", 'sta' => '1', 'data' => '');
             }
