@@ -53,7 +53,6 @@
 
                                 <form id="reg_form" method="POST" class="form-horizontal bv-form" action="{{ url('/user/register') }}">
                                     {{ csrf_field() }}
-
                                     <div class="form-group">
                                         <label class="col-lg-2 control-label">用户名</label>
                                         <div class="col-md-8">

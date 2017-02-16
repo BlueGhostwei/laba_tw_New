@@ -1,6 +1,4 @@
-
 (function($) {
-
 /*---------------------------
  Defaults for Reveal
 ----------------------------*/
@@ -10,6 +8,7 @@
 ----------------------------*/
 
 	$('a[data-reveal-id]').live('click', function(e) {
+		debugger
 		e.preventDefault();
 		var modalLocation = $(this).attr('data-reveal-id');
 		$('#'+modalLocation).reveal($(this).data());
@@ -20,8 +19,7 @@
 ----------------------------*/
 
     $.fn.reveal = function(options) {
-        
-        
+
         var defaults = {  
 	    	animation: 'fadeAndPop', //fade, fadeAndPop, none
 		    animationspeed: 300, //how fast animtions are

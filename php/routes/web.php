@@ -35,7 +35,6 @@ Route::group(['middleware' => 'guest'], function () {
         //找回密码
         Route::get('Admin/find_password', ['as' => 'Admin.find_password', 'uses' => 'PasswordController@getIndex']);
         Route::post('Admin/find_password', 'PasswordController@postIndex');
-
     });
 
 });

@@ -10,6 +10,8 @@ use Session;
 use App\Models\User;
 use Illuminate\Support\Facades\Redis;
 
+date_default_timezone_set("Asia/Shanghai");
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -48,7 +50,6 @@ class Controller extends BaseController
     }
 
 
-
     /**
      * @param $mob
      * @param null $type
@@ -64,65 +65,79 @@ class Controller extends BaseController
     public function send_sms($mob, $type = null)
     {
         $set_type = $this->send_num($mob, $type);
-        if ($set_type == true) { //num < 5
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "http://api.weimi.cc/2/sms/send.html");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-                curl_setopt($ch, CURLOPT_POST, TRUE);
-                $uid = '5CipH7ou8gpw';
-                $pas = 'hbnv53a3';
-                $cid = "R7NwD6BxC0Mc";
-                $vcode = $this->get_random();
-                $p2 = "3";
-                curl_setopt($ch, CURLOPT_POSTFIELDS, 'uid=' . $uid . '&pas=' . $pas . '&mob=' . $mob . '&cid=' . $cid . '&p1=' . $vcode . '&p2=' . $p2 . '&type=json');
-                $res = curl_exec($ch);
-                curl_close($ch);
-                if ($res) {
-                    $data = json_decode($res, true);
-                    if ($data['code'] == 0) {
-                        /**
-                         * user_phone用户手机号
-                         * time发送时间
-                         * num发送次数
-                         * code 随机验证码
-                         * type请求发送类型（注册，找回密码）
-                         * 发送次数验证，当发送次数超过5次时，等待20分钟才可再次发送短信
-                         */
-                        $send_num = Session::get('user_Send_num');
-                        if (!empty($send_num)) {
-                            $num = $send_num['num']++;
-                            Session::forget('user_Send_num');
-                            $array2 = array(
-                                'num' => $num,
-                                'type' => $type,
-                                'Send_time' => time()
-                            );
-                        } else {
-                            $array2 = array(
-                                'num' => 1,
-                                'type' => $type,
-                                'Send_time' => time()
-                            );
-                        }
-                        $array = array(
+        if ($set_type['sta'] == 0) { //num < 5
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "http://api.weimi.cc/2/sms/send.html");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            $uid = '5CipH7ou8gpw';
+            $pas = 'hbnv53a3';
+            $cid = "R7NwD6BxC0Mc";
+            $vcode = $this->get_random();
+            $p2 = "3";
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'uid=' . $uid . '&pas=' . $pas . '&mob=' . $mob . '&cid=' . $cid . '&p1=' . $vcode . '&p2=' . $p2 . '&type=json');
+            $res = curl_exec($ch);
+            curl_close($ch);
+            $data = json_decode($res, true);
+            if ($data['code'] == 0) {
+                /**
+                 * user_phone用户手机号
+                 * time发送时间
+                 * num发送次数
+                 * code 随机验证码
+                 * type请求发送类型（注册，找回密码）
+                 * 发送次数验证，当发送次数超过5次时，等待20分钟才可再次发送短信
+                 */
+                $send_num_data = Redis::get('user_Send_num');
+                $send_num = json_decode($send_num_data, true);
+                if (!empty($send_num)) {
+                    //时间判断
+                    $sendtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 60);
+                    $end_time = date('Y-m-d H:i:s', time());
+                    $second = floor((strtotime($sendtime) - strtotime($end_time)) % 86400);
+                    if ($second < 0 && $second < -1200) {
+                        Redis::del('user_Send_num');
+                        $array2 = array(
+                            'num' => 1,
                             'user_phone' => $mob,
-                            'Send_time' => time() + 120,
-                            'code' => $vcode,
-                            'type' => $type
+                            'type' => $type,
+                            'Send_time' => time()
                         );
-                        Redis::set('user_SMS', json_encode($array));
-                        Redis::set('user_Send_num', json_encode($array2));
-                        return array('code'=>$vcode,'sta'=>0);
                     } else {
-                        return array('msg' => "短信发送失败，请联系客服！");
+                        Redis::del('user_Send_num');
+                        $array2 = array(
+                            'num' => $send_num['num'] + 1,
+                            'type' => $type,
+                            'user_phone' => $mob,
+                            'Send_time' => time()
+                        );
                     }
                 } else {
-                    return  array('msg' => "短信发送失败，请联系客服！");
-
+                    $array2 = array(
+                        'num' => 1,
+                        'user_phone' => $mob,
+                        'type' => $type,
+                        'Send_time' => time()
+                    );
                 }
+                $array = array(
+                    'user_phone' => $mob,
+                    'Send_time' => time(),
+                    'code' => $vcode,
+                    'type' => $type
+                );
+                Redis::set('user_SMS', json_encode($array));
+                Redis::set('user_Send_num', json_encode($array2));
+                return array('code' => $vcode, 'sta' => 0);
+
+            } else {
+                return array('msg' => "短信发送失败，请联系客服！", 'sta' => '1', 'data' => '');
+
+            }
 
         } else {
-            return $set_type['msg'];
+            return array('msg' => $set_type['msg'], 'sta' => '1', 'data' => '');
+
         }
     }
 
@@ -140,11 +155,9 @@ class Controller extends BaseController
      * 如果当天请求次数没有达到5次，且超时则清空发送信息记录 user_SMS，return TRUE;   否则 返回错误信息；
      * 如果次数达到5次并没有超时则不发送短信，否则清除发送次数记录 user_Send_num ，return TRUE；
      */
-
     public function send_num($mob, $type)
     {
-       /* var_dump(Redis::get('user_SMS'));
-        var_dump(Redis::get('user_Send_num'));die;*/
+
         if ($this->isMobile($mob)) {
             if ($type == "register") {
                 //判断用户是否已注册
@@ -153,51 +166,49 @@ class Controller extends BaseController
                     return array("msg" => "用户已注册，请登陆", "sta" => "1", "data" => "");
                 }
                 $send_num_data = Redis::get('user_Send_num');
-                $send_num=json_decode($send_num_data,true);
+                $send_num = json_decode($send_num_data, true);
+                //dd(date('Y-m-d H:i:s',$send_num['Send_time']));
                 if (!empty($send_num)) {
                     $send_date = date('Y-m-d', $send_num['Send_time']) == date('Y-m-d', time());//判断日期
-                    if($send_date==false){
-                        Redis::forget('user_Send_num');
-                        return true;
+                    if ($send_date == false) {
+                        Redis::del('user_Send_num');
+                        return array('msg' => '', 'sta' => "0");
                     }
-                    if ($mob == $send_num['user_phone'] && $send_num['num'] == 5 && $send_date == true) {//发送次数等于5，则需等待20分钟才可再次调用
-                        $sendtime = $send_num['Send_time'];//发送日期加上20分钟
-                        $end_time = $send_num['Send_time'] + 1200;
-                        //$second = floor((strtotime($end_time) - strtotime($sendtime)) % 86400 % 60);秒
-                        //$minute=floor((strtotime($end_time)-strtotime($sendtime))%86400/60);分
-                        $second = floor((strtotime($end_time) - strtotime($sendtime)) % 86400 % 60);
-                        if ($second <> 0 || $second > 0) {
+                    if ($mob == $send_num['user_phone'] && $send_num['num'] <= 5 && $send_date == true) {//当天发送次数等于5
+                        $sendtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 1200);
+                        $end_time = date('Y-m-d H:i:s', time());
+                        $second = floor((strtotime($sendtime) - strtotime($end_time)) % 86400);
+                        if ($second <> 0 || $second < 0) {
                             $msg = "您的操作过于频繁，请在" . $second . "秒后再试";
-                            $array = array('msg' => $msg, 'sta' => "1");
-                            return $array;
+                            return array('msg' => $msg, 'sta' => "1");
                         } else {
-                            Redis::forget('user_Send_num');
-                            return true;
+                            Redis::del('user_Send_num');
+                            return array('msg' => '', 'sta' => "0");
                         }
                     } else {
-                        $sendtime = $send_num['Send_time'];//发送日期加上2分钟
-                        $end_time = $send_num['Send_time'] + 120;
-                        $second = floor((strtotime($end_time) - strtotime($sendtime)) % 86400 % 60);
+                        $sendtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 60);
+                        $end_time = date('Y-m-d H:i:s', time());
+                        $second = floor((strtotime($sendtime) - strtotime($end_time)) % 86400);
                         if ($second <> 0 && $second > 0) {
                             $msg = "您的操作过于频繁，请在" . $second . "秒后再试";
                             $array = array('msg' => $msg, 'sta' => "1");
                             return $array;
                         } else {
-                            Redis::forget('user_SMS');//清空数据
-                            return true;
+                            Redis::del('user_SMS');//清空数据
+                            return array('msg' => '', 'sta' => "0");
                         }
                     }
                 } else {
-                    return true;
+                    return array('msg' => '', 'sta' => "0");
                 }
             } else {
                 /**
                  * 别的发送请求
                  */
-                return true;
+                return array('msg' => '', 'sta' => "0");
             }
-        }else{
-            return array('msg' => "短息发送失败，请输入合法的手机号码！");
+        } else {
+            return array('msg' => "短息发送失败，请输入合法的手机号码！", 'sta' => 1, 'data' => '');
         }
 
     }

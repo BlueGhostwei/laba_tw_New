@@ -21,6 +21,7 @@ $(function () {
         //判断手机号码是否正确合法
         if(!IsTel(moblie_number)){
             alert('请输入正确的手机号码');
+            return false;
         }
         $.ajax({
             url:'{{route('send.sms')}}',
@@ -32,7 +33,6 @@ $(function () {
             dataType: "json",
             stopAllStart: true,
             success: function (data) {
-                debugger
                 if (data.sta == '0') {
                         alert(data.msg || '请求成功');
                 } else {

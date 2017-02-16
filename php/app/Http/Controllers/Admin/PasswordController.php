@@ -28,7 +28,7 @@ class PasswordController extends Controller
                 $get_send = Session::get('user_find_password');
                 if ($get_send['user_phone'] == $data) {
                     $this_time = date("Y-m-d H:i:s",time());
-                    $sendtime=date("Y-m-d H:i:s",$get_send['time']);
+                    $sendtime=   date("Y-m-d H:i:s",$get_send['time']);
                     $second=floor((strtotime($sendtime)-strtotime($this_time))%86400%60);
                     if ($second > 0 && $second !== 0 ) {
                         //清空缓存
