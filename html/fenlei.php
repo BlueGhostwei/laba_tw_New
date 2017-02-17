@@ -27,22 +27,28 @@
 <div class="content"><div class="Invoice"><div class="INa1dd">
 <div class="main" style="margin-top:20px;">
 		
-	<!--	媒体资源管理	-->
+	<!--	分类管理	-->
 	<div class="hdorder radius1">
 		<h3 class="title1"><strong><a href="#">媒体资源管理</a></strong>
 		</h3>
 		<div class="dhorder_m">
-			<div class="FLnt1">
-				<p>查看资源分类</p>
-				<span>当前位置：<a href="fenlei.php">媒体资源管理</a> > <a href="fenlei.php">网络媒体</a>  > <a href="fenleiziyuan1.php">新闻发布</a> > 网站类型</span>
+			<div class="tab1">
+				<ul>       
+					<li class="cur"><a href="#">网络媒体</a></li>
+					<li><a href="#">户外媒体</a></li>
+					<li><a href="#">平面媒体</a></li>
+					<li><a href="#">电视媒体</a></li>
+					<li><a href="#">广播媒体</a></li>
+					<li><a href="#">记者媒体</a></li>
+				</ul>
 			</div>
 			<div class="tab1_body">
-				<!--网站类型-->
+				<!--网络媒体-->
 				<table class="table_in1 cur">
 				<thead>
 					<tr>
 						
-						<th style="width: 40%;text-align:left;text-indent:50px;">分类名称</th>
+						<th style="width: 40%;text-align:left;text-indent:50px;">媒体名称</th>
 						<th style="width: 15%;text-align:center;text-indent:20px;">状态</th>
 						<th style="width: 8%;text-align:center;text-indent:20px;">排序</th>
 						<th style="width: 37%;text-align:center;text-indent:20px;">操作</th>
@@ -50,144 +56,47 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td style="width: 40%;text-align:left;text-indent:50px;">全国门户</td>
+						<td style="width: 40%;text-align:left;text-indent:50px;">新闻发布</td>
 						<td style="width: 15%;text-align:center;text-indent:20px;">发布</td>
 						<td style="width: 8%;text-align:center;text-indent:20px;">1</td>
 						<td style="width: 37%;text-align:center;text-indent:20px;">
-							<a href="fenleixiugai2.php">修改</a>|
+							<a href="meitifenlei.php">查看媒体</a>|
+							<a href="fenleiziyuan1.php">查看资源</a>|
+							<a href="fenleixiugai.php">修改</a>|
+							<a href="#">添加媒体</a>|
+							<a href="#">添加资源</a>|
 							<a href="#">删除</a>
 						</td>
 					</tr>
 					<tr>
-						<td style="width: 40%;text-align:left;text-indent:50px;">垂直行业</td>
+						<td style="width: 40%;text-align:left;text-indent:50px;">百度营销</td>
 						<td style="width: 15%;text-align:center;text-indent:20px;">发布</td>
-						<td style="width: 8%;text-align:center;text-indent:20px;">2</td>
+						<td style="width: 8%;text-align:center;text-indent:20px;">1</td>
 						<td style="width: 37%;text-align:center;text-indent:20px;">
+							<a href="#">查看媒体</a>|
+							<a href="#">查看资源</a>|
 							<a href="#">修改</a>|
+							<a href="#">添加媒体</a>|
+							<a href="#">添加资源</a>|
 							<a href="#">删除</a>
 						</td>
 					</tr>
 				</tbody>
 				</table>
-				<!--入口级别-->
+				<!--户外媒体-->
 				<table class="table_in1" id="jibie">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>资源类型</th>
-						<th>资源名称</th>
-						<th>状态</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>入口级别</td>
-						<td>网站首页</td>
-						<td>发布</td>
-						<td><select>
-								<option>修改</option>
-								<option>删除</option>
-							</select></td>
-					</tr>
-				</tbody>
 				</table>
-				<!--入口形式-->
+				<!--平面媒体-->
 				<table class="table_in1" id="xingshi">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>资源类型</th>
-						<th>资源名称</th>
-						<th>状态</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>入口形式</td>
-						<td>网站首页</td>
-						<td>发布</td>
-						<td><select>
-								<option>修改</option>
-								<option>删除</option>
-							</select></td>
-					</tr>
-				</tbody>
 				</table>
-				<!--正文链接-->
+				<!--电视媒体-->
 				<table class="table_in1" id="lianjie">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>资源类型</th>
-						<th>资源名称</th>
-						<th>状态</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>正文链接</td>
-						<td>网站首页</td>
-						<td>发布</td>
-						<td><select>
-								<option>修改</option>
-								<option>删除</option>
-							</select></td>
-					</tr>
-				</tbody>
 				</table>
-				<!--覆盖区域-->
+				<!--广播媒体-->
 				<table class="table_in1" id="quyu">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>资源类型</th>
-						<th>资源名称</th>
-						<th>状态</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>覆盖区域</td>
-						<td>网站首页</td>
-						<td>发布</td>
-						<td><select>
-								<option>修改</option>
-								<option>删除</option>
-							</select></td>
-					</tr>
-				</tbody>
 				</table>
-				<!--频道类型-->
+				<!--记者媒体-->
 				<table class="table_in1" id="pindao">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>资源类型</th>
-						<th>资源名称</th>
-						<th>状态</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>频道类型</td>
-						<td>网站首页</td>
-						<td>发布</td>
-						<td><select>
-								<option>修改</option>
-								<option>删除</option>
-							</select></td>
-					</tr>
-				</tbody>
 				</table>
 				<div class="page_1 page_1_2" style="padding-bottom: 50px;">
 					<span class="pages">

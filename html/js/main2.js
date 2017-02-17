@@ -118,7 +118,6 @@ if( $("#tb1").length>0 ){
 		return false;
 	});
 
-
 /*	首页表格排序	*/
 if( $('#datatable1').length>0 ){
 	$('#datatable1').DataTable({

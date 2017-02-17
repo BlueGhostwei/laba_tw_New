@@ -16,7 +16,8 @@
 	<script type="text/javascript" src="js/plugins.js"></script>
 	<script src="js/jquery.touchslider.min.js"  type="text/javascript"></script>
 
-	
+	<script type="text/javascript" src="js/date.js"></script>
+	<script type="text/javascript" src="js/main2.js"></script>
 
 </head>
 <body>
@@ -32,33 +33,62 @@
 		</h3>
 		<div class="dhorder_m">
 			<div class="FLnt1">
-				<p>修改</p>
+				<p>查看媒体</p>
 				<span>当前位置：<a href="fenlei.php">媒体资源管理</a> > <a href="fenlei.php">网络媒体</a> > 新闻发布</span>
 			</div>
-			<div class="IF1">
-				<div class="FLmeiti1">* 媒体资源信息</div>
-				<div class="FLmeiti2">
-					<div class="XZFL"><p>媒体类型:</p>
-						<select name="select" id="select">
-		                    <option>网站类型</option>
-		                    <option>入口级别</option>
-		                    <option>入口形式</option>
-		                    <option>正文链接</option>
-		                </select>
-					</div>
-					<div class="IF3"><p>媒体名称:</p>
-						<input type="text" name="textfield2" id="FLnome"  class="IFN2"/>
-					</div>
-					<div class="IF3"><p>媒体LOGO:</p>
-					</div>
-					<div class="IF3"><p>网站类型:</p>
-						<input type="text" name="textfield2" id="FLsorting"  class="FLn1"/>
-					</div>
-					<div class="IF3"><p>平台价：</p>
-						<input type="text" name="textfield2" id="FLsorting"  class="FLn1"/><span>元</span>
-					</div>
-					<div class="IF3"><input type="submit" name="button" id="button" value="提  交" class="LGButton3" style="margin-top:15%;" /></div>
-					<p>&nbsp;</p>
+			<div class="tab1_body">
+				<!--网络媒体-->
+				<table class="table_in1 cur">
+				<thead>
+					<tr>
+						<th>媒体名称</th>
+						<th>媒体LOGO</th>
+						<th>网站类型</th>
+						<th>入口形式</th>
+						<th>入口级别</th>
+						<th>正文链接</th>
+						<th>入口示意图</th>
+						<th>覆盖区域</th>
+						<th>频道类型</th>
+						<th>代理价</th>
+						<th>平台价</th>
+						<th>会员价</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>新浪</td>
+						<td style="max-width: 60px;"><img src="img/bn66.png"/></td>
+						<td>全国门户</td>
+						<td>文字标题</td>
+						<td>网站首页</td>
+						<td style="max-width: 90px;">带图片、文字、网网址网址址链接</td>
+						<td style="max-width: 60px;"><img src="img/bn66.png"/></td>
+						<td>广东</td>
+						<td>娱乐</td>
+						<td style="color: #ff0000">￥100</td>
+						<td style="color: #ff0000">￥200</td>
+						<td style="color: #ff0000">￥150</td>
+						<td style="max-width: 70px;">
+							<a href="xinzengshaixuanfenlei.php">修改</a>|
+							<a href="#">删除</a>
+						</td>
+					</tr>
+				</tbody>
+				</table>
+				<div class="page_1 page_1_2" style="padding-bottom: 50px;">
+					<span class="pages">
+						<a href="" class="prev">上一页</a>
+						<a href="" class="">1</a>
+						<a href="" class="cur">2</a>
+						<a href="">3</a>
+						<a href="">4</a>
+						<a href="">5</a>
+						<span class="sus">...</span>
+						<a href="" class="">248</a>
+						<a href="" class="next">下一页</a>
+					</span>
 				</div>
 			</div>
 		</div>

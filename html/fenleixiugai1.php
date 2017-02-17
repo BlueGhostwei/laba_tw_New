@@ -26,36 +26,38 @@
 <div class="content"><div class="Invoice"><div class="INa1dd">
 <div class="main" style="margin-top:20px;">
 		
-	<!--	分类管理	-->
+	<!--	媒体资源管理	-->
 	<div class="hdorder radius1">
 		<h3 class="title1"><strong><a href="#">媒体资源管理</a></strong>
 		</h3>
 		<div class="dhorder_m">
 			<div class="FLnt1">
-				<p>修改</p>
-				<span>当前位置：<a href="fenlei.php">媒体资源管理</a> > <a href="fenlei.php">网络媒体</a> > 新闻发布</span>
+				<p>修改资源</p>
+				<span>当前位置：<a href="fenlei.php">媒体资源管理</a> > <a href="fenlei.php">网络媒体</a>  > <a href="fenleiziyuan1.php">新闻发布</a> > 网站类型</span>
 			</div>
 			<div class="IF1">
-				<div class="FLmeiti1">* 媒体资源信息</div>
-				<div class="FLmeiti2">
-					<div class="XZFL"><p>媒体类型:</p>
+				<div class="xinzengfenlei">
+					<div class="XZFL"><p>资源类型:</p>
 						<select name="select" id="select">
-		                    <option>网站类型</option>
-		                    <option>入口级别</option>
-		                    <option>入口形式</option>
-		                    <option>正文链接</option>
+		                    <option>新闻发布</option>
+		                    <option>百度营销</option>
+		                    <option>短视频</option>
+		                    <option>公众号</option>
+		                    <option>论坛</option>
+		                    <option>秒拍</option>
 		                </select>
 					</div>
-					<div class="IF3"><p>媒体名称:</p>
+					<div class="IF3"><p>资源名称:</p>
 						<input type="text" name="textfield2" id="FLnome"  class="IFN2"/>
 					</div>
-					<div class="IF3"><p>媒体LOGO:</p>
+					<div class="IF3"><p>是否发布:</p>
+						<input type="radio" name="radio" id="radio1" value="radio1"/>
+		                &nbsp;是&nbsp;&nbsp;&nbsp;&nbsp;
+		                <input type="radio" name="radio" id="radio2" value="radio2" />
+		                &nbsp;否
 					</div>
-					<div class="IF3"><p>网站类型:</p>
+					<div class="IF3"><p>排序:</p>
 						<input type="text" name="textfield2" id="FLsorting"  class="FLn1"/>
-					</div>
-					<div class="IF3"><p>平台价：</p>
-						<input type="text" name="textfield2" id="FLsorting"  class="FLn1"/><span>元</span>
 					</div>
 					<div class="IF3"><input type="submit" name="button" id="button" value="提  交" class="LGButton3" style="margin-top:15%;" /></div>
 					<p>&nbsp;</p>

@@ -24,6 +24,6 @@
 	<a href="huodongorder.php" title="媒体供应商_活动订单.psd">活动订单</a>
 
 	<br/>
-	<a href="shaixuanfenlei.php" title="新增页面-筛选分类管理.psd">分类管理</a>
+	<a href="fenlei.php" title="新增页面-筛选分类管理.psd">分类管理</a>
 
 </div>
