@@ -14,7 +14,7 @@ input{	color:#666;	}
 
 .w100{	width:100%;	margin:0 auto;	}
 .wmax{	width:84%;	margin:0 auto;	}
-.main{	awidth:82%;	awidth:84%;	amargin:5px auto 0;	 amin-width:1180px;	awidth:1180px;	padding:0 0 30px;	}
+.main{	awidth:82%;	awidth:84%;	amargin:5px auto 0;	 amin-width:1180px;	awidth:1180px;	padding:0 0 50px;	}
 /*	slidebox	*/
 .banner{	width:100%;		margin:10px auto 0;		overflow:hidden;	}
 .slideBox{ 	overflow:hidden; position:relative;
@@ -88,6 +88,8 @@ input{	color:#666;	}
 	color:#fff;	border-radius:10px;	font-style:normal;	padding:0 1px;	font-weight:400;	}
 
 .tab1 select{	float:right;	height:28px;	line-height:30px;		margin:13px 20px 0 0;	padding:0 5px 0 10px;	border:1px solid #CCCCCC;	}
+
+
 
 table.table_in1{		width:100%;		margin:1px auto 0;	background:#fff;	}
 .table_in1 th{	height:40px;	vertical-align:middle;	text-align:center;	font-size:14px;		background:#F2F2F2;		}
