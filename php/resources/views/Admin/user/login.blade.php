@@ -8,7 +8,7 @@
 </head>
 <body style="background:url(../img/BodyBg.jpg) no-repeat;">
 <div id=Login>
-    <div style=" width:250px; margin:auto;"><a href=""><img src="../img/logolaba.png" style=" width:250px; height:auto"></a></div>
+    <div style=" width:250px; margin:auto;"><a href="{{route('/')}}"><img src="../img/logolaba.png" style=" width:250px; height:auto"></a></div>
     <form action="{{ route('user.post_login') }}" method="post">
         {{ csrf_field() }}
         <div style="width: 633px;HEIGHT: 580px;background:#fff;border-radius:10px;">
