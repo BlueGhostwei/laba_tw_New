@@ -43,7 +43,20 @@ Route::group(['middleware' => 'auth'], function () {
    // echo 34342;die;
     Route::group(['namespace' => 'Admin'], function () {
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
-    //网络媒体
+       //网络媒体
         Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);
+        //个人中心
+        Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
+
+
+
+
+
+        // 文件上传, 图片处理
+        Route::post('upload', 'UploadController@index');
+        Route::post('upload/encode', 'UploadController@encode');
+        Route::post('upload/Cut_out','UploadController@Cut_out');//剪切图片
+        Route::get('/files/{s1}/{s2}/{s3}/{file}', 'ImageController@index');
+        Route::get('upload/config', 'UploadController@config');
     });
 });

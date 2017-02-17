@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Input;
 use Intervention\Image\Facades\Image;
 use App\Http\Controllers\Controller;
-use  Response, Config ,File;
-
+use Illuminate\Support\Facades\File;
+use  Response, Config ;
 /**
 * 文件上传类, 支持普通上传, base64编码上传, 远程下载
 * 普通上传: post 发送到 /upload
@@ -21,6 +21,7 @@ use  Response, Config ,File;
 */
 class UploadController extends Controller
 {
+
     /**
      * 允许的文件类型字典
      *
@@ -74,16 +75,10 @@ class UploadController extends Controller
     {
         // 有效文件
         $key = Input::get('fileKey', 'file');
-
         $file = Input::file($key);
-        //dd($file,$file->isValid());
-
         if (!$file || !$file->isValid()) return Response::json(array('sta' => 0, 'msg' => '无效的文件'));
-
         // 文件类型
         $mimeType = explode('/', $file->getMimeType());
-
-
         if (!$mimeType || count($mimeType) != 2) {
             return Response::json(array('sta' => 0, 'msg' => '不允许的文件类型'));
         }
@@ -350,7 +345,7 @@ class UploadController extends Controller
 
         // 本地 或 http 域名
         $baseDir = base_path('public');
-        $assets = Config::get('shengshi.assets');//域名地址
+        $assets = Config::get('laba_tw.assets');//域名地址
         $domain = $assets[array_rand($assets)];
 
         // 转换为有参数的链接

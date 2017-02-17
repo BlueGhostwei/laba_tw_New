@@ -18,6 +18,7 @@
     <script type="text/javascript" src="{{url('Admin/js/date.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/main2.js')}}"></script>
 
+
 </head>
 
 

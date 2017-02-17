@@ -164,12 +164,14 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
         //
         Mews\Captcha\CaptchaServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -227,7 +229,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
          'Captcha'=>Mews\Captcha\Facades\Captcha::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-
+        'Image'=>Intervention\Image\Facades\Image::class,
+        'Input'     => Illuminate\Support\Facades\Input::class,
     ],
 
 ];

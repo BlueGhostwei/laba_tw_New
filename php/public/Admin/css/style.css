@@ -230,7 +230,7 @@ body{ background:#204186}
 
 /*弹窗注册页*/
 .reveal-modal-bg { position: fixed; height: 100%;width: 100%;background: #000;background: rgba(0,0,0,.8);z-index: 100;display: none;top: 0;left: 0; }	
-.reveal-modal {visibility: hidden;top: 100px; left: 50%;margin-left: -380px;width: 570px;background: #fff url(../modal-gloss.png) no-repeat -200px -80px;position: absolute;z-index: 101;padding:30px 100px;
+.reveal-modal {visibility: hidden;top: 100px; left: 50%;margin-left: -380px;width: 570px;background: #fff url(modal-gloss.png) no-repeat -200px -80px;position: absolute;z-index: 101;padding:30px 100px;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
 		border-radius: 5px;
@@ -317,10 +317,14 @@ body{ background:#204186}
 
 
 
+.tab1 ul span a{	height:54px;	line-height:54px;	font-size:14px;	font-weight:400;	padding:0 30px 0 30px;	float:left;	margin-left:-30px;	color:#666;	}
+.tab1 ul span.cur{	font-weight:400;	color:#2c9fdd;	border-bottom:1px solid #2C9FDD;	z-index:10;	}
+.tab1 ul span.cur a{	font-weight:700;	color:#2c9fdd;	border-bottom:1px solid #2C9FDD;	}
 
-
-
-
+.FLn1{width:80px; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
+.xinzengfenlei{ width:80%; height:auto; margin:auto; padding-left: 20%; padding-top:5%;}
+.XZFL p{ color:#333;font-size:15px; line-height:32px; float:left; width:100px;}
+.XZFL select{ width:20%;height:33px;line-height:30px;font-size:14px; color:#666;border:1px solid #ccc;padding:0 5px 0 5px;}
 
 
 

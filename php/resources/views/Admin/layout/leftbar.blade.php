@@ -129,7 +129,11 @@
         <li><a href="#">
                 <div class="header">
                     <span class="label" id="sd8">宣传定制</span>					</div></a>
+        </li><li><a href="{{route('member.info')}}">
+                <div class="header">
+                    <span class="label" id="sd8">会员信息</span>					</div></a>
         </li>
+
     </ul>
 </div>
 <script type="text/javascript">
