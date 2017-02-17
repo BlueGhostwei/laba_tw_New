@@ -106,10 +106,11 @@ class SMSController extends Controller
         $send_num = json_decode($send_num_data, true);
         if (!empty($send_num)) {
             //时间判断
-            $sendtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 60);
-            $end_time = date('Y-m-d H:i:s', time());
-            $second = floor((strtotime($sendtime) - strtotime($end_time)) % 86400);
-            if ($second < 0 && $second < -1200) {
+            $endtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 1200);
+            $this_time = date('Y-m-d H:i:s', time());
+            $second = intval((strtotime($endtime) - strtotime($this_time)) % 86400);
+            //当前时间是否大于发送时间+时间限制 在限制时间内，当前时间小于发送时间+限制
+            if ($second <> 0 && $second < 0) {
                 Redis::del('user_Send_num');
                 $array2 = array(
                     'num' => 1,

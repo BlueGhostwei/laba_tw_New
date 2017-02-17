@@ -97,8 +97,8 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         return [
             'create' => [
                 'username' => "required|min:3|max:100|unique:".$this->getTable(),
-               /* 'password' => 'required|confirmed:confirm_password',*/
-                'password'=>'required|min:6'
+                'password' => 'required|confirmed:confirm_password',
+               /* 'password'=>'required|min:6'*/
             ],
             'update' => [
                 'username' => "required|min:3|max:100|unique:".$this->getTable().",name,".$this->id,

@@ -97,8 +97,21 @@
                    return false;
                }
             }
-            if ( password != password_confirmation || password !==" ") {
-                layer.msg('两次密码不一致或密码为空');
+            if( password ==''){
+                layer.msg('密码不能为空');
+                return false;
+            }else{
+                if(password_confirmation ==''){
+                    layer.msg('请确认密码');
+                    return false;
+                }
+            }
+            if ( password != password_confirmation ) {
+                layer.msg('两次密码不一致');
+                return false;
+            }
+            if(user_code==''){
+                layer.msg('请输入手机验证码');
                 return false;
             }
             if (confirm != 1) {
@@ -108,7 +121,7 @@
                 url: '{{route('user.register')}}',
                 data: {
                     'data': {
-                        "mobile_number": mobile_number,
+                        "username": mobile_number,
                         "password":password ,
                         "password_confirmation": password_confirmation,
                         "user_code": user_code,
@@ -127,7 +140,7 @@
                     }
                 },
                 error: function () {
-                    layer.msg('网络发生错误！！');
+                    layer.msg('请求错误，请刷新页面重新尝试');
                     return false;
                 }
             });

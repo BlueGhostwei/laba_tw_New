@@ -91,18 +91,23 @@ class UserController extends Controller
      */
     public function postRegister(Request $request)
     {
-        $data=$request->all();
-        
-        dd($data);
+        $Post_Data=$request->all();
+        $data=$Post_Data['data'];
         $user_SMS = Redis::exists('user_SMS');
         if ($user_SMS == 1 && $data) {
-            $user['phone'] = $data['mobile_number'];
-            $user['code'] = $data['user_code'];
-            dd($user);
             $send_num_data = Redis::get('user_SMS');
             $send_num = json_decode($send_num_data, true);
-            if ($user['code'] == $send_num['code']) {
-                if ($user['phone'] != $send_num['user_phone']) {
+            if ($data['user_code'] == $send_num['code']) {
+                //验证码5分钟内有效
+                $endtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 600);
+                $this_time = date('Y-m-d H:i:s', time());
+                //当前时间是否大于发送时间+时间限制 在限制时间内，当前时间小于发送时间+限制
+                $second = intval((strtotime($this_time) - strtotime($endtime)) % 86400);
+                if ($second <> 0 && $second > 0) {
+                    Redis::del('user_SMS');
+                    return json_encode(['sta' => "1", 'msg' => '验证码已失效，请重新申请', 'data' => ""], JSON_UNESCAPED_UNICODE);
+                }
+                if ($data['username'] != $send_num['user_phone']) {
                     return json_encode(['msg' => "验证用户不一致！", 'sta' => "1", 'data' => ''],JSON_UNESCAPED_UNICODE);
                 }
                 $user = new User();
