@@ -111,7 +111,7 @@ class UserController extends Controller
                     return json_encode(['msg' => "验证用户不一致！", 'sta' => "1", 'data' => ''],JSON_UNESCAPED_UNICODE);
                 }
                 $user = new User();
-                $validate = Validator::make($request->all(), $user->rules()['create']);
+                $validate = Validator::make($request->data, $user->rules()['create']);
                 $messages = $validate->messages();
                 if ($validate->fails()) {
                     $msg = $messages->toArray();
@@ -129,7 +129,7 @@ class UserController extends Controller
                 return json_encode(['msg' => "验证码错误", 'sta' => "1", 'data' => '']);
             }
         }
-        return json_encode(['sta' =>"1", 'msg' => '请求失败', 'data' => ''], JSON_UNESCAPED_UNICODE);
+        return json_encode(['sta' =>"1", 'msg' => '请求错误，请刷新页面重试', 'data' => ''], JSON_UNESCAPED_UNICODE);
 
     }
 

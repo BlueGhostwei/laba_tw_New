@@ -56,6 +56,9 @@ class CreateUserTable extends Migration
 
             // 记住用户 token
             $table->rememberToken();
+            
+            //是否同意协议
+            $table->tinyInteger('confirm')->default(1)->index();
 
             // 创建的管理员
             $table->integer('created_by')->unsigned();
