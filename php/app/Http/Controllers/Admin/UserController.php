@@ -8,7 +8,7 @@ use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 use Validator;
 use Redirect;
 use Auth;
-use Illuminate\Support\Facades\Input;
+use Input;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 
@@ -84,18 +84,25 @@ class UserController extends Controller
      * @return mixed
      * user_SMS
      * 获取手机号码。手机验证码，判断时间，判断验证码,密码
+    data['mobile_number']=$('#mobile_number').val();
+    data['password']=$('#user_password').val();
+    data['user_code']=$('#user_code').val();
+    data['confirm']=$('#confirm').val();
      */
     public function postRegister(Request $request)
     {
-        $mobile_phone = $request->mobile_phone;
-        $password = $request->password;
-        $user_code = $request->user_code;
+        $data=$request->all();
+        
+        dd($data);
         $user_SMS = Redis::exists('user_SMS');
-        if ($user_SMS) {
+        if ($user_SMS == 1 && $data) {
+            $user['phone'] = $data['mobile_number'];
+            $user['code'] = $data['user_code'];
+            dd($user);
             $send_num_data = Redis::get('user_SMS');
             $send_num = json_decode($send_num_data, true);
-            if ($user_code == $send_num['code']) {
-                if ($mobile_phone != $send_num['user_phone']) {
+            if ($user['code'] == $send_num['code']) {
+                if ($user['phone'] != $send_num['user_phone']) {
                     return json_encode(['msg' => "验证用户不一致！", 'sta' => "1", 'data' => ''],JSON_UNESCAPED_UNICODE);
                 }
                 $user = new User();
@@ -125,6 +132,15 @@ class UserController extends Controller
      * @return mixed
      */
       public function user_info(){
+          $id=Auth::id();
+          $type=Input::get('type');
+          if(!empty($type) && $type=="update_info"){
+            $user=User::find($id);
+              if(!empty($user)){
+                  dd(Input::all());
+                  $rst = User::where('id', $id)->update(['deleted_at' => NULL]);
+              }
+          }
        return view('Admin.user.info');
       }
 

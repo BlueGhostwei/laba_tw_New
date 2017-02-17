@@ -119,6 +119,7 @@
             $('#submit_button').click(function () {
                 var data=[];
                 var _token= $('input[name="_token"]').val();
+                data['user_avatar']=$('#user_avatar').val();
                 data['companyn_name']=$('#companyn_name').val();
                 data['Contact_person']=$('#Contact_person').val();
                 data['user_phone']=$('#user_phone').val();
@@ -128,9 +129,9 @@
                      alert("手机号码不合法！");
                 }
                 $.ajax({
-                    url:'{{route('user.info')}}',
+                    url:'{{route('member.info')}}',
                     data: {
-                        'type':'update',
+                        'type':'update_info',
                         'data':data,
                         '_token':_token
                     },

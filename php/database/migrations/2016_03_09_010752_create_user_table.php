@@ -32,18 +32,18 @@ class CreateUserTable extends Migration
             // 头像图片的 md5, 35位
             $table->char('avatar', 35)->nullable();
 
-            // 真实姓名
-            $table->string('real_name', 30)->nullable();
+            // 昵称
+            $table->string('nickname', 30)->nullable();
 
             // 性别 0女, 1男
             $table->tinyInteger('gender')->default(1);
 
 
             // 移动电话, 固话
-            $table->string('phone', 20)->nullable();
+            $table->string('user_phone', 20)->nullable();
 
-            // 微信号
-            $table->string('wechat', 20)->nullable();
+        /*    // 微信号
+            $table->string('wechat', 20)->nullable();*/
 
             // QQ
             $table->integer('qq')->nullable();
