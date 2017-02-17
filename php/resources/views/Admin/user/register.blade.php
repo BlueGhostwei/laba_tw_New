@@ -82,7 +82,7 @@ $(function () {
 </script>
 <body style="background:url(../img/RELogin.jpg) repeat-x top;">
 <div id=RELogin style="">
-    <div style=" width:250px; margin:auto;"><a href="{{route('/')}}"><img src="../img/logolaba.png" style=" width:250px; height:auto"></a></div>
+    <div style=" width:250px; margin:auto;"><a href="{{route('admin.dashboard')}}"><img src="../img/logolaba.png" style=" width:250px; height:auto"></a></div>
     <div style="width: 850px;HEIGHT: 530px;background:#fff;border-radius:10px;">
         <div class=LoginHead>
             <H1>用户注册</H1>

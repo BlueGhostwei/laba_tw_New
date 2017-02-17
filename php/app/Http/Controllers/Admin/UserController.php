@@ -121,5 +121,12 @@ class UserController extends Controller
 
     }
 
+    /**
+     * @return mixed
+     */
+      public function user_info(){
+       return view('Admin.user.info');
+      }
+
 
 }
