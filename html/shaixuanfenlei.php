@@ -65,8 +65,8 @@
 				<thead>
 					<tr>
 						<th>排序</th>
+						<th>资源类型</th>
 						<th>资源名称</th>
-						<th>资源分类</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -74,8 +74,8 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>网站首页</td>
 						<td>网站类型</td>
+						<td>网站首页</td>
 						<td>发布</td>
 						<td><select>
 								<option>查看</option>
@@ -89,8 +89,8 @@
 				<thead>
 					<tr>
 						<th>排序</th>
+						<th>资源类型</th>
 						<th>资源名称</th>
-						<th>资源分类</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -98,8 +98,8 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>网站首页</td>
 						<td>入口级别</td>
+						<td>网站首页</td>
 						<td>发布</td>
 						<td><select>
 								<option>查看</option>
@@ -113,8 +113,8 @@
 				<thead>
 					<tr>
 						<th>排序</th>
+						<th>资源类型</th>
 						<th>资源名称</th>
-						<th>资源分类</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -122,8 +122,8 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>网站首页</td>
 						<td>入口形式</td>
+						<td>网站首页</td>
 						<td>发布</td>
 						<td><select>
 								<option>查看</option>
@@ -137,8 +137,8 @@
 				<thead>
 					<tr>
 						<th>排序</th>
+						<th>资源类型</th>
 						<th>资源名称</th>
-						<th>资源分类</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -146,8 +146,8 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>网站首页</td>
 						<td>正文链接</td>
+						<td>网站首页</td>
 						<td>发布</td>
 						<td><select>
 								<option>查看</option>
@@ -161,8 +161,8 @@
 				<thead>
 					<tr>
 						<th>排序</th>
+						<th>资源类型</th>
 						<th>资源名称</th>
-						<th>资源分类</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -170,8 +170,8 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>网站首页</td>
 						<td>覆盖区域</td>
+						<td>网站首页</td>
 						<td>发布</td>
 						<td><select>
 								<option>查看</option>
@@ -185,8 +185,8 @@
 				<thead>
 					<tr>
 						<th>排序</th>
+						<th>资源类型</th>
 						<th>资源名称</th>
-						<th>资源分类</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -194,8 +194,8 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>网站首页</td>
 						<td>频道类型</td>
+						<td>网站首页</td>
 						<td>发布</td>
 						<td><select>
 								<option>查看</option>
