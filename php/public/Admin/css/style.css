@@ -171,7 +171,7 @@ body{ background:#204186}
 .Wikipedia{width:100%; height:auto; margin:auto; padding:15px 0;}
 .LGButton1{ width:100px; line-height:40px; border:1px solid #fff;border-radius:5px; font-size:18px; color:#fff; background:#ff4a50; margin:30px 20px;}
 .LGButton2{ width:100px; line-height:40px; border:1px solid #fff;border-radius:5px; font-size:18px; color:#fff; background:#c4c4c4; margin:30px 10px;}
-.LGButton3{ width:130px; line-height:40px; border:1px solid #fff;border-radius:5px; font-size:18px; color:#fff; background:#ff4a50; margin:30px 20px;float:left; margin-left:80px;}
+.LGButton3{ width:130px; line-height:40px; border:1px solid #fff;border-radius:5px; font-size:18px; color:#fff;  margin:30px 20px;float:left; margin-left:80px;}
 .LGntas{ color:#ff0000; padding-right:5px;}
 .TOUbutton{ width:120px; line-height:40px; border:1px solid #1d3a78;border-radius:5px; font-size:16px; color:#fff; background:#ff4a50; margin:30px 70px;}
 

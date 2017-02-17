@@ -14,12 +14,22 @@
 </head>
 <script type="text/javascript">
     $(function () {
+        /*background:#ff4a50;*/
+        $('#confirm').click(function () {
+            var confirm = $('#confirm').val();
+            if(confirm==0){
+                $('#confirm').val('1');
+                $('.LGButton3').css('background','#ff4a50');
+            }else{
+                $('#confirm').val('0');
+                $('.LGButton3').css('background','');
+            }
+        });
         $("#send_sms_button").click(function () {
             // var _form=form.getFormData();//获取表单参数
             var moblie_number = $('#mobile_number').val();
             var _token = $('input[name="_token"]').val();
-            /* var password= $('input[name="password"]').val();
-             var password_confirmation= $('input[name="password"]').val();*/
+            
 
             //判断手机号码是否正确合法
             if (!IsTel(moblie_number)) {
@@ -82,35 +92,39 @@
         }
 
         $('#submit_button').click(function () {
+            var confirm = $('#confirm').val();
+            if(confirm !=1){
+                return false
+            }
             var _token = $('input[name="_token"]').val();
             var mobile_number = $('#mobile_number').val();
             var password = $('#user_password').val();
             var password_confirmation = $('#password_confirmation').val();
             var user_code = $('#user_code').val();
-            var confirm = $('#confirm').val();
-            if (mobile_number == "") {
+
+            if (mobile_number == '') {
                 layer.msg('手机号码不能为空');
                 return false;
-            }else{
-               if(!IsTel(mobile_number)){
-                   layer.msg('请输入正确的手机号码');
-                   return false;
-               }
+            } else {
+                if (!IsTel(mobile_number)) {
+                    layer.msg('请输入正确的手机号码');
+                    return false;
+                }
             }
-            if( password ==''){
+            if (password == '') {
                 layer.msg('密码不能为空');
                 return false;
-            }else{
-                if(password_confirmation ==''){
+            } else {
+                if (password_confirmation == '') {
                     layer.msg('请确认密码');
                     return false;
                 }
             }
-            if ( password != password_confirmation ) {
+            if (password != password_confirmation) {
                 layer.msg('两次密码不一致');
                 return false;
             }
-            if(user_code==''){
+            if (user_code == '') {
                 layer.msg('请输入手机验证码');
                 return false;
             }
@@ -120,13 +134,11 @@
             $.ajax({
                 url: '{{route('user.register')}}',
                 data: {
-                    'data': {
-                        "username": mobile_number,
-                        "password":password ,
-                        "password_confirmation": password_confirmation,
-                        "user_code": user_code,
-                        "confirm":confirm,
-                    },
+                    "username": mobile_number,
+                    "password": password,
+                    "password_confirmation": password_confirmation,
+                    "user_code": user_code,
+                    "confirm": confirm,
                     '_token': _token
                 },
                 type: 'post',
@@ -135,6 +147,10 @@
                 success: function (data) {
                     if (data.sta == '0') {
                         layer.msg(data.msg || '请求成功');
+                         $('.reveal-modal').css({"visibility":'visible'});
+                         $('.reveal-modal-bg').css({'display': 'block', 'cursor': 'pointer',
+                             'position': 'fixed', 'height': '100%','width': '100%','background': 'rgba(0,0,0,.8)','z-index':'100','top': '0',
+                        'left':'0'});
                     } else {
                         layer.msg(data.msg || '请求失败');
                     }
@@ -145,12 +161,12 @@
                 }
             });
         });
-        function IsTel(Tel){
-            var re=new RegExp(/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)$/);
-            var retu=Tel.match(re);
-            if(retu){
+        function IsTel(Tel) {
+            var re = new RegExp(/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)$/);
+            var retu = Tel.match(re);
+            if (retu) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -184,7 +200,7 @@
                 </div>
             </div>
             <div class="LGntnn6">
-                <input name="confirm" id="confirm" type="checkbox" value="1"/><span style="margin-left:10px;"><a href=""
+                <input name="confirm" id="confirm" type="checkbox"  value="0"/><span style="margin-left:10px;"><a href=""
                                                                                                                  target="_blank">阅读《服务协议》</a></span>
             </div>
             <a class="big-link" data-reveal-id="myModal">

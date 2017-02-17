@@ -91,8 +91,7 @@ class UserController extends Controller
      */
     public function postRegister(Request $request)
     {
-        $Post_Data=$request->all();
-        $data=$Post_Data['data'];
+        $data=$request->all();
         $user_SMS = Redis::exists('user_SMS');
         if ($user_SMS == 1 && $data) {
             $send_num_data = Redis::get('user_SMS');
@@ -111,7 +110,7 @@ class UserController extends Controller
                     return json_encode(['msg' => "验证用户不一致！", 'sta' => "1", 'data' => ''],JSON_UNESCAPED_UNICODE);
                 }
                 $user = new User();
-                $validate = Validator::make($request->data, $user->rules()['create']);
+                $validate = Validator::make($request->all(), $user->rules()['create']);
                 $messages = $validate->messages();
                 if ($validate->fails()) {
                     $msg = $messages->toArray();
@@ -119,7 +118,7 @@ class UserController extends Controller
                         return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''],JSON_UNESCAPED_UNICODE);
                     }
                 }
-                $data = $user->create($request->only($user->getFillable()));
+                $data =  $user->create($request->only($user->getFillable()));
                 //  $data = User::where(['username'=>$request->username])->update(['created_by' => Auth::id()]);
                 if ($data) {
                     Redis::del('user_SMS');
