@@ -104,8 +104,6 @@
             if (confirm != 1) {
                 return false;
             }
-
-            debugger
             $.ajax({
                 url: '{{route('user.register')}}',
                 data: {
@@ -123,9 +121,9 @@
                 stopAllStart: true,
                 success: function (data) {
                     if (data.sta == '0') {
-                        //alert(data.msg || '请求成功');
+                        layer.msg(data.msg || '请求成功');
                     } else {
-                        //alert(data.msg || '请求失败');
+                        layer.msg(data.msg || '请求失败');
                     }
                 },
                 error: function () {
@@ -133,8 +131,6 @@
                     return false;
                 }
             });
-
-
         });
         function IsTel(Tel){
             var re=new RegExp(/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)$/);
