@@ -6,14 +6,34 @@
     <title></title>
     <link href="../css/style.css" rel="stylesheet" type="text/css"/>
     <script src="http://www.jq22.com/jquery/jquery-1.6.2.js"></script>
-    <script type="text/javascript" src="{{url("Admin/js/jquery.reveal.js")}}"></script>
-    <script src="http://www.jq22.com/js/jq.js"></script>
+    {{--<script type="text/javascript" src="{{url("Admin/js/jquery.reveal.js")}}"></script>--}}
+   {{-- <script src="http://www.jq22.com/js/jq.js"></script>--}}
     <script src="{{url('Admin/js/jquery-2.1.1.min.js')}}"></script>
     <script src="{{url('Admin/js/layer.js')}}"></script>
 
 </head>
+<style type="text/css">
+    .reveal-modal{
+        left: 50%;
+        margin-left: -380px;
+        width: 570px;
+       /* background: #fff url(../css/modal-gloss.png) no-repeat -200px -80px;*/
+        position: absolute;
+        z-index: 101;
+        padding: 30px 100px;
+    }
+    *{
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+
+</style>
 <script type="text/javascript">
     $(function () {
+        $('.close-reveal-modal').click(function () {
+            $('.reveal-modal').css({ 'visibility': 'hidden'});
+            $('.reveal-modal-bg').css({'display':'none'});
+        });
         /*background:#ff4a50;*/
         $('#confirm').click(function () {
             var confirm = $('#confirm').val();
@@ -213,13 +233,13 @@
             <span>登录喇叭传媒，三百万网络推广服务商为您服务！</span>
             <p>如有问题，请联系在线客服：</p>
             <div><a href="http://wpa.qq.com/msgrd?v=3&uin=823721918&site=在线客服&menu=yes" target="_blank"><img
-                            src="../img/LGn2.jpg" alt="点我咨询"></a></div>
+                            src="{{url('Admin/img/LGn2.jpg')}}" alt="点我咨询"></a></div>
         </div>
     </div>
 </div>
 
 <!--弹窗完善信息页-->
-<div id="set_myModal" class="reveal-modal">
+{{--<div id="myModal" class="reveal-modal">
     <div><img src="../img/myModal.jpg"/></div>
     <div style="width:570px;HEIGHT:450px; margin-top:20px;">
         <div class="LGnt7"><p>昵称:</p>
@@ -250,8 +270,40 @@
         <div><input type="submit" name="button" id="button" value="保  存" class="LGButton3"/></div>
     </div>
     <a class="close-reveal-modal">&#215;</a>
+</div>--}}
+<div id="myModal" class="reveal-modal"  style="top: 100px; opacity: 1; visibility: visible;">
+    <div><img src="{{url('Admin/img/myModal.jpg')}}"></div>
+    <div style="width:570px;HEIGHT:450px; margin-top:20px;">
+        <div class="LGnt7"><p>昵称:</p>
+            <input type="text" name="nickname" id="nickname" class="IFN1">
+        </div>
+        <div class="LGnt7"><p>联系人:</p>
+            <input type="text" name="Contact_person" id="Contact_person" class="IFN1">
+        </div>
+        <div class="LGnt7"><p>电子邮箱:</p>
+            <input type="text" name="user_Eail" id="user_Eail" class="IFN1">
+            <i>* 请填写有效的邮箱地址，接收通知及定单信息。</i>
+        </div>
+        <div class="LGnt7"><p>QQ:</p>
+            <input type="text" name="user_QQ" id="user_QQ" class="IFN1">
+        </div>
+        {{--<div class="LGnt7"><p style=" height:90px;">资料类型:</p>
+            <ul style="display:block;">
+                <li><input name="" type="checkbox" value="">新闻/软文</li>
+                <li><input name="" type="checkbox" value="">草根微信</li>
+                <li><input name="" type="checkbox" value="">草根微博</li>
+                <li><input name="" type="checkbox" value="">草根朋友圈</li>
+                <li><input name="" type="checkbox" value="">名人/媒体微信</li>
+                <li><input name="" type="checkbox" value="">名人/媒体微博</li>
+                <li><input name="" type="checkbox" value="">名人/媒体微信</li>
+                <li><input name="" type="checkbox" value="">平媒</li>
+            </ul>
+        </div>--}}
+        <div><input type="submit" name="button" id="upload_info" value="保  存" class="LGButton3" style="background:#ff4a50"></div>
+    </div>
+    <a class="close-reveal-modal">×</a>
 </div>
-
+<div class="reveal-modal-bg" style="display: block; cursor: pointer;"></div>
 </body>
 </html>
 

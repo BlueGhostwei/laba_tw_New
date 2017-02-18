@@ -21,7 +21,7 @@ class CreateUserTable extends Migration
             $table->string('username', 100)->unique();
 
             // 邮箱, 唯一
-            $table->string('email', 100)->nullable();
+            $table->string('user_Eail', 100)->nullable();
 
             // 密码, hash 值
             $table->string('password', 60);
@@ -30,17 +30,20 @@ class CreateUserTable extends Migration
             $table->tinyInteger('email_validate')->unsigned()->default(0);
 
             // 头像图片的 md5, 35位
-            $table->char('avatar', 35)->nullable();
+            $table->char('user_avatar', 35)->nullable();
 
             // 昵称
             $table->string('nickname', 30)->nullable();
+
+            //联系人
+            $table->string('Contact_person',30)->nullable();
 
             // 性别 0女, 1男
             $table->tinyInteger('gender')->default(1);
 
 
             // 移动电话, 固话
-            $table->string('user_phone', 20)->nullable();
+            $table->integer('user_phone')->unique()->nullable()->index();
 
         /*    // 微信号
             $table->string('wechat', 20)->nullable();*/
