@@ -680,6 +680,12 @@ function get_val($arr_data, $obj = '')
     }
 }
 
+//请求用户信息
+function Get_user_info(){
+   $set_user_info=User::find(Auth::id())->toArray();
+    return $set_user_info;
+}
+
 
 
 
