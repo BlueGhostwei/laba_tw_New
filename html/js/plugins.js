@@ -1,4 +1,26 @@
 /* Sidebar Menu*/
+$(document).ready(function(){
+
+      $(".header").click(function()
+      {
+        var arrow = $(this).find("span.arrow");
+
+        if(arrow.hasClass("up"))
+        {
+          arrow.removeClass("up");
+          arrow.addClass("down");
+        }
+        else if(arrow.hasClass("down"))
+        {
+          arrow.removeClass("down");
+          arrow.addClass("up");
+        }
+
+        $(this).parent().find(".menu").slideToggle();
+      });
+    });
+
+/* 
 $(document).ready(function () {
   $('.nav > li > a').click(function(){
     if ($(this).attr('class') != 'active'){
@@ -9,7 +31,8 @@ $(document).ready(function () {
     }
   });
 });
-/* Top Stats Show Hide */
+
+Top Stats Show Hide */
 $(document).ready(function(){
     $("#topstats").click(function(){
         $(".topstats").slideToggle(100);

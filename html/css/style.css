@@ -49,8 +49,8 @@ body{ background:#204186}
 .header:hover{background: #2754b1;cursor: pointer; color:#fff;}
 .label { padding-left: 45px; background: no-repeat; }
 .arrow { display: block; width: 16px; height: 16px; background: no-repeat center; float: right; }
-.arrow.up { background-image: url(../img/arrow_d.png); }
-.arrow.down { background-image: url(../img/arrow_u.png); }
+.arrow.up { background-image: url(../img/arrow_u.png); }
+.arrow.down { background-image: url(../img/arrow_d.png); }
 .sidebar-panel li ul{ display:none}
 .sidebar-panel li ul li { background-color: #1a2e59; width:205px;color: #919fbe; padding-left:40px; border-bottom:1px dashed #14264c }
 .sidebar-panel li ul li a{color: #919fbe;line-height:45px;font-size:14px; padding-left:25px;}

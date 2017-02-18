@@ -7,6 +7,9 @@
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/plugins.js"></script>
 <script src="js/jquery.touchslider.min.js"  type="text/javascript"></script>
+
+ <script type="text/javascript" src="js/jquery.tools.min.js"></script>
+
 </head>
 <body >
 
