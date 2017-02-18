@@ -50,7 +50,7 @@
 						<input type="text" name="textfield2" id="FLnome"  class="IFN2"/>
 					</div>
 					<div class="IF3"><p>媒体LOGO:</p>
-						<input type="text" name="textfield2" id="FLnome"  class="IFN2"/>
+						<input type="text" name="textfield2" id="FLnome" placeholder="未选择任何文件" class="IFN2"/>
 						<i style="font-size: 12px;color: #ccc; padding-left:10px;">(100KB以内)</i>
 					</div>
 					<div class="IFMeiTi">
@@ -138,7 +138,7 @@
 		                    <option>营业执照</option>
 		                    <option>身份证</option>
 		                </select>
-		                <input type="text" name="textfield2"  class="FLn4"/><i style="font-size: 12px;color: #ccc; padding-left:10px;">(100KB以内)</i>
+		                <input type="text" name="textfield2" placeholder="未选择任何文件"  class="FLn4"/><i style="font-size: 12px;color: #ccc; padding-left:10px;">(100KB以内)</i>
 					</div>
 					<div class="IF3"><p>媒体简介:</p>
 						<textarea name="textfield3" class="IFN3"></textarea>
