@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{url('Admin/js/zoom/css/bootstrap-grid.min.css')}}">
     <link rel="stylesheet" href="{{url('Admin/js/zoom/dist/zoomify.min.css')}}">
     <link rel="stylesheet" href="{{url('Admin/js/zoom/css/style.css')}}">
-
+    <script src="{{url('Admin/js/layer.js')}}"></script>
 @endsection
 @section('content')
     <div class="content">
@@ -35,7 +35,7 @@
                                             </form>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>企业名称:</p>
-                                            <input type="text" name="companyn_name" id="companyn_name" class="LGnt2"/>
+                                            <input type="text" name="company_name" id="company_name" class="LGnt2"/>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>联系人:</p>
                                             <input type="text" name="Contact_person" id="Contact_person" class="LGnt2"/>
@@ -110,7 +110,7 @@
                             if(ret.sta == 1){
                                 $("#user_pic_img").attr("src", ret.url ) ;
                             }else{
-                                alert('头像上传失败！');
+                                layer.msg('头像上传失败');
                             }
                         });
 
@@ -119,20 +119,25 @@
             $('#submit_button').click(function () {
                 var data=[];
                 var _token= $('input[name="_token"]').val();
-                data['user_avatar']=$('#user_avatar').val();
-                data['companyn_name']=$('#companyn_name').val();
-                data['Contact_person']=$('#Contact_person').val();
-                data['user_phone']=$('#user_phone').val();
-                data['user_QQ']=$('#user_QQ').val();
-                data['user_Eail']=$('#user_Eail').val();
-                if(!IsTel[data['user_phone']] ){
-                     alert("手机号码不合法！");
+                var user_avatar=$('#user_avatar').val();
+                var company_name =$('#company_name').val();
+                var Contact_person=$('#Contact_person').val();
+                var  user_phone =$('#user_phone').val();
+                var  user_QQ =$('#user_QQ').val();
+                var  user_Eail=$('#user_Eail').val();
+                if(!IsTel(user_phone) ){
+                    layer.msg('请输入正确的手机号码');
                 }
                 $.ajax({
                     url:'{{route('member.info')}}',
                     data: {
                         'type':'update_info',
-                        'data':data,
+                        'user_avatar':user_avatar,
+                        'company_name':company_name,
+                        'Contact_person':Contact_person,
+                        'user_phone':user_phone,
+                        'user_QQ':user_QQ,
+                        'user_Eail':user_Eail,
                         '_token':_token
                     },
                     type: 'post',
@@ -140,18 +145,16 @@
                     stopAllStart: true,
                     success: function (data) {
                         if (data.sta == '0') {
-                            alert(data.msg || '请求成功');
+                            layer.msg(data.msg || '请求成功');
                         } else {
-                            alert(data.msg || '请求失败');
+                            layer.msg(data.msg || '请求失败');
                         }
                     },
                     error: function () {
-                        alert('网络发生错误');
+                        layer.msg(data.msg || '网络发生错误');
                         return false;
                     }
                 });
-
-
             });
             function IsTel(Tel){
                 var re=new RegExp(/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)$/);
@@ -170,6 +173,5 @@
         $('#user_pic_img').zoomify();
     </script>
 @endsection
-
 @section('footer_related')
 @endsection

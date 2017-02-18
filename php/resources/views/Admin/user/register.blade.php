@@ -30,6 +30,8 @@
 </style>
 <script type="text/javascript">
     $(function () {
+        var _token = $('input[name="_token"]').val();
+
         $('.close-reveal-modal').click(function () {
             $('.reveal-modal').css({ 'visibility': 'hidden'});
             $('.reveal-modal-bg').css({'display':'none'});
@@ -48,9 +50,6 @@
         $("#send_sms_button").click(function () {
             // var _form=form.getFormData();//获取表单参数
             var moblie_number = $('#mobile_number').val();
-            var _token = $('input[name="_token"]').val();
-            
-
             //判断手机号码是否正确合法
             if (!IsTel(moblie_number)) {
                 layer.msg('请输入正确的手机号码');
@@ -70,14 +69,13 @@
                     if (data.sta == '0') {
                         setTiming();
                         layer.msg(data.msg || '请求成功');
+
                     } else {
                         layer.msg(data.msg || '请求失败');
-
                     }
                 },
                 error: function () {
                     layer.msg('网络发生错误！！');
-
                     return false;
                 }
             });
@@ -116,7 +114,7 @@
             if(confirm !=1){
                 return false
             }
-            var _token = $('input[name="_token"]').val();
+
             var mobile_number = $('#mobile_number').val();
             var password = $('#user_password').val();
             var password_confirmation = $('#password_confirmation').val();
@@ -167,6 +165,7 @@
                 success: function (data) {
                     if (data.sta == '0') {
                         layer.msg(data.msg || '请求成功');
+                         $('input[name="user_id"]').val(data.data);
                          $('.reveal-modal').css({"visibility":'visible'});
                          $('.reveal-modal-bg').css({'display': 'block', 'cursor': 'pointer',
                              'position': 'fixed', 'height': '100%','width': '100%','background': 'rgba(0,0,0,.8)','z-index':'100','top': '0',
@@ -180,6 +179,45 @@
                     return false;
                 }
             });
+        });
+        $('#upload_info').click(function () {
+            var nickname=$('#nickname').val();
+            var Contact_person=$('#Contact_person').val();
+            var user_Eail=$('#user_Eail').val();
+            var user_QQ=$('#user_QQ').val();
+            var user_id= $('input[name="user_id"]').val();
+            $.ajax({
+                url: '{{route('member.info')}}',
+                data: {
+                    'type':"update_info",
+                    "nickname": nickname,
+                    'user_id':user_id,
+                    "Contact_person": Contact_person,
+                    "user_Eail": user_Eail,
+                    "user_QQ": user_QQ,
+                    '_token':_token
+                },
+                type: 'post',
+                dataType: "json",
+                stopAllStart: true,
+                success: function (data) {
+                    if (data.sta == '0') {
+                        layer.msg(data.msg || '请求成功');
+                        //跳转页面
+                        window.location.href="{{route('admin.dashboard')}}"
+                    } else {
+                        layer.msg(data.msg || '请求失败');
+                        window.location.href="{{route('user.login')}}"
+                    }
+                },
+                error: function () {
+                    layer.msg('请求错误，请刷新页面重新尝试');
+                    return false;
+                }
+            });
+
+
+
         });
         function IsTel(Tel) {
             var re = new RegExp(/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)$/);
@@ -205,6 +243,7 @@
         </div>
         <div class="LGn1" style="float:left; margin-left:50px;">
             <div class="LGnt6"><p>手机号码:</p>
+
                 <input type="text" name="mobile_number" id="mobile_number" class="LGnt2"/>
                 {{ csrf_field() }}
             </div>
@@ -271,10 +310,11 @@
     </div>
     <a class="close-reveal-modal">&#215;</a>
 </div>--}}
-<div id="myModal" class="reveal-modal"  style="top: 100px; opacity: 1; visibility: visible;">
+<div id="myModal" class="reveal-modal"  style="top: 100px; opacity: 1; visibility: hidden;">
     <div><img src="{{url('Admin/img/myModal.jpg')}}"></div>
     <div style="width:570px;HEIGHT:450px; margin-top:20px;">
         <div class="LGnt7"><p>昵称:</p>
+             <input type="hidden" name="user_id" value="">
             <input type="text" name="nickname" id="nickname" class="IFN1">
         </div>
         <div class="LGnt7"><p>联系人:</p>
@@ -303,7 +343,7 @@
     </div>
     <a class="close-reveal-modal">×</a>
 </div>
-<div class="reveal-modal-bg" style="display: block; cursor: pointer;"></div>
+<div class="reveal-modal-bg" style="display:none; cursor: pointer;"></div>
 </body>
 </html>
 

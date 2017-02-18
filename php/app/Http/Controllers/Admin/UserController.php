@@ -119,6 +119,7 @@ class UserController extends Controller
                     }
                 }
                 $data =  $user->create($request->only($user->getFillable()));
+                 Auth::login($data);
                 //  $data = User::where(['username'=>$request->username])->update(['created_by' => Auth::id()]);
                 if ($data) {
                     Redis::del('user_SMS');
@@ -136,17 +137,51 @@ class UserController extends Controller
      * @return mixed
      */
       public function user_info(){
-          $id=Auth::id();
-          $type=Input::get('type');
-          if(!empty($type) && $type=="update_info"){
-            $user=User::find($id);
-              if(!empty($user)){
-                  dd(Input::all());
-                  $rst = User::where('id', $id)->update(['deleted_at' => NULL]);
-              }
-          }
-       return view('Admin.user.info');
+        return view('Admin.user.info');
       }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     *
+     */
+    public function update_info(Request $request){
+        $id=Auth::id();
+        $type=Input::get('type');
+        if(!empty($type) && $type=="update_info"){
+            if($id != Input::get('user_id')){
+                Auth::logout();
+                return json_encode(['msg'=>'请求失败','sta'=>'1','data'=>'',JSON_UNESCAPED_UNICODE]);
+            }
+            $user=User::find($id);
+            if($user){
+                if(!empty($request->user_Eail)){
+                    $validate = Validator::make($request->all(), $user->rules()['update_info']);
+                    $messages = $validate->messages();
+                    if ($validate->fails()) {
+                        $msg = $messages->toArray();
+                        foreach ($msg as $k => $v) {
+                            return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''],JSON_UNESCAPED_UNICODE);
+                        }
+                    }
+                }
+                $result=User::where('id',$id)->update([
+                    'user_avatar'=>$request->user_avatar,
+                    'company_name'=>$request->company_name,
+                    'user_phone'=>$request->user_phone,
+                    'nickname'=>$request->nickname,
+                    'Contact_person'=>$request->Contact_person,
+                    'user_Eail'=>$request->user_Eail,
+                    'user_QQ'=>$request->user_QQ
+                ]);
+                if($result){
+                    return json_encode(['msg'=>'更新资料成功','sta'=>'0','data'=>''],JSON_UNESCAPED_UNICODE);
+                }else{
+                    return json_encode(['msg'=>'更新资料失败','sta'=>'1','data'=>''],JSON_UNESCAPED_UNICODE);
+                }
+            }
+        }
+    }
 
 
 }

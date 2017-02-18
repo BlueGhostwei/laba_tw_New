@@ -32,6 +32,9 @@ class CreateUserTable extends Migration
             // 头像图片的 md5, 35位
             $table->char('user_avatar', 35)->nullable();
 
+            //公司名称
+            $table->string('company_name',100)->nullable();
+
             // 昵称
             $table->string('nickname', 30)->nullable();
 
@@ -49,7 +52,7 @@ class CreateUserTable extends Migration
             $table->string('wechat', 20)->nullable();*/
 
             // QQ
-            $table->integer('qq')->nullable();
+            $table->integer('user_QQ')->nullable();
 
             // 用户角色
             $table->tinyInteger('role')->default(1)->index();

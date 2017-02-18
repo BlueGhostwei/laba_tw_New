@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
+        Route::post('Admin/user/info','UserController@update_info');
 
 
 
