@@ -120,10 +120,10 @@ class UserController extends Controller
                 }
                 $data =  $user->create($request->only($user->getFillable()));
                  Auth::login($data);
-                //  $data = User::where(['username'=>$request->username])->update(['created_by' => Auth::id()]);
+                // $data = User::where(['username'=>$request->username])->update(['created_by' => Auth::id()]);
                 if ($data) {
                     Redis::del('user_SMS');
-                    return json_encode(['sta' => "0", 'msg' => '注册成功', 'data' => $data->id], JSON_UNESCAPED_UNICODE);
+                    return json_encode(['sta' => "0", 'msg' => '注册成功', 'data' => $data], JSON_UNESCAPED_UNICODE);
                 }
             } else {
                 return json_encode(['msg' => "验证码错误", 'sta' => "1", 'data' => '']);
@@ -137,7 +137,7 @@ class UserController extends Controller
      * @return mixed
      */
       public function user_info(){
-        return view('Admin.user.info');
+          return view('Admin.user.info');
       }
 
     /**
@@ -149,10 +149,6 @@ class UserController extends Controller
         $id=Auth::id();
         $type=Input::get('type');
         if(!empty($type) && $type=="update_info"){
-            if($id != Input::get('user_id')){
-                Auth::logout();
-                return json_encode(['msg'=>'请求失败','sta'=>'1','data'=>'',JSON_UNESCAPED_UNICODE]);
-            }
             $user=User::find($id);
             if($user){
                 if(!empty($request->user_Eail)){
@@ -168,10 +164,10 @@ class UserController extends Controller
                 $result=User::where('id',$id)->update([
                     'user_avatar'=>$request->user_avatar,
                     'company_name'=>$request->company_name,
-                    'user_phone'=>$request->user_phone,
+                     'user_phone'=>$request->user_phone,
                     'nickname'=>$request->nickname,
-                    'Contact_person'=>$request->Contact_person,
-                    'user_Eail'=>$request->user_Eail,
+                    'contact_person'=>$request->contact_person,
+                    'user_Eail'=>"$request->user_Eail",
                     'user_QQ'=>$request->user_QQ
                 ]);
                 if($result){

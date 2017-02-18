@@ -25,36 +25,54 @@
                                         <div class="LGnt6"><p><i class="LGntas">*</i>个人头像:</p>
                                             <form id="form1" method="post">
                                                 <div class="LGnt11" id="show_upload">
-                                                    <img id="user_pic_img" src="{{url('Admin/img/bn66.png')}}"/>
+                                                       @if(isset(Auth::user()->user_avatar) && Auth::user()->user_avatar!=null)
+                                                        <img id="user_pic_img" src="{{ md52url(Auth::user()->user_avatar, false, '') }}"/>
+                                                        @else
+                                                        <img id="user_pic_img" src="{{url('Admin/img/bn66.png')}}"/>
+                                                        @endif
                                                     {{ csrf_field() }}
-                                                    <input id="user_avatar" name="file" accept="image/*"
-                                                           type="file"
-                                                           style="display: none"/>
+                                                     <input id="user_avatar" name="file" accept="image/*" type="file" style="display: none"/>
+                                                           @if(isset(Auth::user()->user_avatar) && Auth::user()->user_avatar!=null)
+                                                               <input type="hidden" name="user_image" value="{{Auth::user()->user_avatar}}">
+                                                               @else
+                                                               <input type="hidden" name="user_image" value=" ">
+                                                               @endif
+
+
                                                     <p id="user_pic">上传头像</p>
                                                 </div>
                                             </form>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>企业名称:</p>
-                                            <input type="text" name="company_name" id="company_name" class="LGnt2"/>
+                                            <input type="text" name="company_name" id="company_name" class="LGnt2"
+                                                   value="@if(isset(Auth::user()->company_name) && Auth::user()->company_name!=null){{Auth::user()->company_name}}@endif "/>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>联系人:</p>
-                                            <input type="text" name="Contact_person" id="Contact_person" class="LGnt2"/>
+                                            <input type="text" name="contact_person" id="contact_person" class="LGnt2"
+                                                   value="@if(isset(Auth::user()->contact_person) && Auth::user()->contact_person!=null){{Auth::user()->contact_person}}@endif "/>
+                                        </div>
+                                        <div class="LGnt6"><p><i class="LGntas">*</i>昵称:</p>
+                                            <input type="text" name="nickname" id="nickname" class="LGnt2"
+                                                   value="@if(isset(Auth::user()->nickname) && Auth::user()->nickname!=null){{Auth::user()->nickname}}@endif"/>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>QQ:</p>
-                                            <input type="text" name="user_QQ" id="user_QQ" class="LGnt2"/>
+                                            <input type="text" name="user_QQ" id="user_QQ" class="LGnt2"
+                                                   value="@if(isset(Auth::user()->user_QQ) && Auth::user()->user_QQ!=null){{Auth::user()->user_QQ}}@endif"/>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>手机:</p>
-                                            <input type="text" name="user_phone" id="user_phone" class="LGnt2"/>
+                                            <input type="text" name="user_phone" id="user_phone" class="LGnt2"
+                                                   value="@if(isset(Auth::user()->user_phone) && Auth::user()->user_phone!=null){{Auth::user()->user_phone}}@endif"/>
                                             <span>修改</span>
                                         </div>
                                         <div class="LGnt6"><p><i class="LGntas">*</i>邮箱:</p>
-                                            <input type="text" name="user_Eail" id="user_Eail" class="LGnt2"/>
+                                            <input type="text" name="user_Eail" id="user_Eail" class="LGnt2"
+                                                   value="@if(isset(Auth::user()->user_Eail) && Auth::user()->user_Eail!=null){{Auth::user()->user_Eail}}@endif"/>
                                             <span>绑定</span>
                                         </div>
                                         <i style=" padding-left:80px; font-size:12px; color:#999; float:left;">温馨提示：请填写有效邮箱地址，以便接受通知及订单信息，建议使用QQ，hotmail等邮箱</i>
                                         <div style="margin-top:40px; float:left; width:100%">
                                             <input type="submit" name="button" id="submit_button" value="提 交"
-                                                   class="LGButton3"/>
+                                                   class="LGButton3" style="background: #ff4a50;"/>
                                         </div>
                                     </div>
                                     <div class="LGnta2">
@@ -109,6 +127,7 @@
                         }).done(function(ret){
                             if(ret.sta == 1){
                                 $("#user_pic_img").attr("src", ret.url ) ;
+                               $('input[name="user_image"]').val(ret.md5);
                             }else{
                                 layer.msg('头像上传失败');
                             }
@@ -119,22 +138,25 @@
             $('#submit_button').click(function () {
                 var data=[];
                 var _token= $('input[name="_token"]').val();
-                var user_avatar=$('#user_avatar').val();
+                var user_avatar=$('input[name="user_image"]').val();
                 var company_name =$('#company_name').val();
-                var Contact_person=$('#Contact_person').val();
+                var contact_person=$('#contact_person').val();
                 var  user_phone =$('#user_phone').val();
                 var  user_QQ =$('#user_QQ').val();
+                var  nickname =$('#nickname').val();
                 var  user_Eail=$('#user_Eail').val();
                 if(!IsTel(user_phone) ){
                     layer.msg('请输入正确的手机号码');
+                    return false
                 }
                 $.ajax({
                     url:'{{route('member.info')}}',
                     data: {
                         'type':'update_info',
                         'user_avatar':user_avatar,
+                        'nickname':nickname,
                         'company_name':company_name,
-                        'Contact_person':Contact_person,
+                        'contact_person':contact_person,
                         'user_phone':user_phone,
                         'user_QQ':user_QQ,
                         'user_Eail':user_Eail,

@@ -39,14 +39,14 @@ class CreateUserTable extends Migration
             $table->string('nickname', 30)->nullable();
 
             //联系人
-            $table->string('Contact_person',30)->nullable();
+            $table->string('contact_person',30)->nullable();
 
             // 性别 0女, 1男
             $table->tinyInteger('gender')->default(1);
 
 
             // 移动电话, 固话
-            $table->integer('user_phone')->unique()->nullable()->index();
+            $table->char('user_phone',15)->unique()->nullable()->index();
 
         /*    // 微信号
             $table->string('wechat', 20)->nullable();*/
