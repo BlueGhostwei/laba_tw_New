@@ -11,7 +11,7 @@ body{ background:#204186}
 .frame{ width:100%; height:60px; background:#2856b6; position:relative; top:0; float:left;}
 .logo{ width:150px; height:auto; float:left;}
 .logo img{ width:110px; height:auto; margin:10px 20px;}
-.sidebar-open-button{ width:70px; height:60px; float:left; background:url(../img/menu1.png) no-repeat;display:block;}
+.sidebar-open-button{ width:70px; height:60px; float:left; background:url(../img/menu1da.png) no-repeat;display:block;}
 .ITuser{ width:260px; height:60px; float:right; background:url(../img/menu2.png) no-repeat;display:block;}
 .Hlogo{border-radius:50px; width:35px; height:35px; float:left;margin:15px 10px 15px 20px;position:relative;}
 .Hlogo img{width:35px; height:35px;border-radius:50px; }
@@ -22,7 +22,7 @@ body{ background:#204186}
 .sidepanel-open-button{width:20px; height:60px; float:left; background:url(../img/menu3.png) no-repeat}
 
 /*隐藏*/
-.menuntda{ width:70px; height:60px; float:left; display:none;background:url(../img/menu1da.png) no-repeat;}
+.menuntda{ width:70px; height:60px; float:left; display:none;background:url(../img/menu1.png) no-repeat;}
 .sidepanel{ width:260px; height:100%; float:right; display:none;right:0;top:0px; position: fixed; background:#1d3978;z-index: 9999;overflow: auto;}
 .IMenuda{width:20px; height:60px;float:left;background:url(../img/menu3da.png) no-repeat}
 .IT_nt1{ width:40px; height:40px; margin:7px;float:left; position:relative; background:url(../img/IT_nt1.png) no-repeat;}
@@ -324,7 +324,7 @@ body{ background:#204186}
 .tab1 ul span.cur a{	font-weight:700;	color:#2c9fdd;	border-bottom:1px solid #2C9FDD;	}
 
 .FLn1{width:80px; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
-.xinzengfenlei{ width:90%; height:auto; margin:auto; padding-left: 25%; padding-top:5%;}
+.xinzengfenlei{ width:75%; height:auto; margin:auto; padding-left: 25%; padding-top:5%;}
 .XZFL p{ color:#333;font-size:15px; line-height:32px; float:left; width:100px;text-align: right;padding-right: 20px;}
 .XZFL select{ width:20%;height:33px;line-height:30px;font-size:14px; color:#666;border:1px solid #ccc;padding:0 5px 0 5px;}
 
@@ -336,13 +336,13 @@ body{ background:#204186}
 .FLnt1 span,.FLnt1 span a{ font-size:12px; color: #ccc;line-height:74px;}
 
 .FLmeiti1{ width: 100%;border-bottom:1px dashed #2C9FDD;line-height: 50px;font-weight:700; color: #000; font-size: 18px;}
-.FLmeiti2{width:90%; height:auto; margin:auto; padding-top:5%;}
-
-
-
-
-
-
+.FLmeiti2{width:91%; height:auto; margin:auto; padding-top:5%;}
+.IFMeiTi{ width:100%; height:auto; float:left; margin:10px 0;line-height:32px;font-size:14px;}
+.IFMeiTi p{color:#333;font-size:15px; line-height:32px; float:left; width:100px;text-align: right;padding-right: 20px;}
+.IFMeiTi li{ width: auto; margin-right:25px; float: left;}
+.FLn2{width:100px; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
+.FLn3{width:28%; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
+.FLn4{width:25%; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666;}
 
 
 

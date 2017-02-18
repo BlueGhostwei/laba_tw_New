@@ -8,6 +8,7 @@
         <div class="IName">
         	<p class="name">1171801173@qq.com</p>
             <p class="account">认证账户</p>
+            <a style="line-height:20px; font-size:10px;  color: #cbc631; padding: 0 10px;">退出</a>
         </div>
         <div class="sidepanel-open-button"></div>
     </div>

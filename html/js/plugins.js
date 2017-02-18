@@ -40,17 +40,32 @@ $(document).ready(function(){
     $('.sidebar-open-button').on('click', function(){
         if($('.sidebar').hasClass('hidden')){
             $('.sidebar').removeClass('hidden');
-			$(".sidebar").show();
+      $(".sidebar").show();
             $('.content').css({
                 'marginLeft' : 245
             });  
         }else{
             $('.sidebar').addClass('hidden');
-			$(".sidebar").css("display","none")
+      $(".sidebar").css("display","none")
+      $(".sidebar-open-button").hide();
+      $(".menuntda").show();
             $('.content').css({
                 'marginLeft' : 0
             });    
         }
+    
+    });
+   $('.menuntda').on('click', function(){
+        if($('.sidebar').hasClass('hidden')){
+            $('.sidebar').removeClass('hidden');
+      $(".sidebar-open-button").show();
+      $(".menuntda").hide();
+      $(".sidebar").show();
+            $('.content').css({
+                'marginLeft' : 245
+            });  
+        }
+    
     });
 
 });

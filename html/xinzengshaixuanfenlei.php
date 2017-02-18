@@ -27,7 +27,7 @@
 <div class="main" style="margin-top:20px;">
 		
 	<!--	分类管理	-->
-	<div class="hdorder radius1">
+	<div class="hdorder radius1" style=" float: left; margin-bottom:50px;">
 		<h3 class="title1"><strong><a href="#">媒体资源管理</a></strong>
 		</h3>
 		<div class="dhorder_m">
@@ -38,33 +38,120 @@
 			<div class="IF1">
 				<div class="FLmeiti1">* 媒体资源信息</div>
 				<div class="FLmeiti2">
-					<div class="XZFL"><p>媒体类型:</p>
+					<div class="IF3"><p>媒体类型:</p>
 						<select name="select" id="select">
-		                    <option>网站类型</option>
-		                    <option>入口级别</option>
-		                    <option>入口形式</option>
-		                    <option>正文链接</option>
+		                    <option>新闻发布</option>
+		                    <option>百度营销</option>
+		                    <option>短视频</option>
+		                    <option>公众号</option>
 		                </select>
 					</div>
 					<div class="IF3"><p>媒体名称:</p>
 						<input type="text" name="textfield2" id="FLnome"  class="IFN2"/>
 					</div>
 					<div class="IF3"><p>媒体LOGO:</p>
+						<input type="text" name="textfield2" id="FLnome"  class="IFN2"/>
+						<i style="font-size: 12px;color: #ccc; padding-left:10px;">(100KB以内)</i>
 					</div>
-					<div class="IF3"><p>网站类型:</p>
-						<input type="text" name="textfield2" id="FLsorting"  class="FLn1"/>
+					<div class="IFMeiTi">
+						<table><tr>
+							<td valign="top"><p>网站类型:</p></td>
+							<td><li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+							</td>
+						</tr></table>
+					</div>
+					<div class="IFMeiTi">
+						<table><tr>
+							<td valign="top"><p>入口级别:</p></td>
+							<td><li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+							</td>
+						</tr></table>
+					</div>
+					<div class="IFMeiTi">
+						<table><tr>
+							<td valign="top"><p>入口形式:</p></td>
+							<td><li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+							</td>
+						</tr></table>
+					</div>
+					<div class="IFMeiTi">
+						<table><tr>
+							<td valign="top"><p>正文链接:</p></td>
+							<td><li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+							</td>
+						</tr></table>
+					</div>
+					<div class="IFMeiTi">
+						<table><tr>
+							<td valign="top"><p>覆盖区域:</p></td>
+							<td><li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+								<li><input type="checkbox" name="checkbox" />全国门户</li>
+							</td>
+						</tr></table>
 					</div>
 					<div class="IF3"><p>平台价：</p>
 						<input type="text" name="textfield2" id="FLsorting"  class="FLn1"/><span>元</span>
-					</div>
-					<div class="IF3"><input type="submit" name="button" id="button" value="提  交" class="LGButton3" style="margin-top:15%;" /></div>
-					<p>&nbsp;</p>
+					</div><p>&nbsp;</p>
 				</div>
+				<div class="FLmeiti1">* 媒体负责人基本信息</div>
+				<div class="FLmeiti2">
+					<div class="IF3"><p>媒体负责人:</p>
+						<input type="text" name="textfield2"  class="FLn3"/>
+					</div>
+					<div class="IF3"><p>联系电话:</p>
+						<input type="text" name="textfield2" class="FLn3"/>
+					</div>
+					<div class="IF3"><p>手机验证码:</p>
+						<input type="text" name="textfield2" class="FLn2"/>
+					</div>
+					<div class="XZFL"><p>电子邮箱:</p>
+						<input type="text" name="textfield2"  class="FLn3"/>
+					</div>
+					<div class="IF3"><p>联系QQ:</p>
+						<input type="text" name="textfield2"  class="FLn3"/>
+					</div>
+					<div class="IF3"><p>联系地址:</p>
+						<input type="text" name="textfield2" class="IFN2"/>
+					</div>
+					<div class="IF3"><p>邮编:</p>
+						<input type="text" name="textfield2" class="FLn3"/>
+					</div>
+					<div class="IF3"><p>媒体认证:</p>
+						<select name="select" id="select">
+		                    <option>营业执照</option>
+		                    <option>身份证</option>
+		                </select>
+		                <input type="text" name="textfield2"  class="FLn4"/><i style="font-size: 12px;color: #ccc; padding-left:10px;">(100KB以内)</i>
+					</div>
+					<div class="IF3"><p>媒体简介:</p>
+						<textarea name="textfield3" class="IFN3"></textarea>
+					</div>
+				</div>
+				<input type="submit" name="button" value="提  交" class="LGButton3" style="margin: 5% 30%" />
 			</div>
 		</div>
 	</div>
 </div>
 </div></div></div>
+
+
 
 <?php include("foot.php"); ?>
 

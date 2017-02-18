@@ -47,7 +47,6 @@
 						<th>入口形式</th>
 						<th>入口级别</th>
 						<th>正文链接</th>
-						<th>入口示意图</th>
 						<th>覆盖区域</th>
 						<th>频道类型</th>
 						<th>代理价</th>
@@ -64,7 +63,6 @@
 						<td>文字标题</td>
 						<td>网站首页</td>
 						<td style="max-width: 90px;">带图片、文字、网网址网址址链接</td>
-						<td style="max-width: 60px;"><img src="img/bn66.png"/></td>
 						<td>广东</td>
 						<td>娱乐</td>
 						<td style="color: #ff0000">￥100</td>
