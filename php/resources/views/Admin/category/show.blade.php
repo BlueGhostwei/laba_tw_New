@@ -36,7 +36,7 @@
                                         <td style="width: 15%;text-align:center;text-indent:20px;">发布</td>
                                         <td style="width: 8%;text-align:center;text-indent:20px;">1</td>
                                         <td style="width: 37%;text-align:center;text-indent:20px;">
-                                            <a href="fenleixiugai2.php">修改</a>|
+                                            <a href="fenleixiugai2.php">查看分类</a>|
                                             <a href="#">删除</a>
                                         </td>
                                     </tr>

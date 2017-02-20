@@ -35,6 +35,7 @@
         $('.close-reveal-modal').click(function () {
             $('.reveal-modal').css({ 'visibility': 'hidden'});
             $('.reveal-modal-bg').css({'display':'none'});
+            window.location.href="{{route('admin.dashboard')}}"
         });
         /*background:#ff4a50;*/
         $('#confirm').click(function () {

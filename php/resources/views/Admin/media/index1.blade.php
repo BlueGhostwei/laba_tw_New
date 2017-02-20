@@ -3,7 +3,5 @@
 @section('header_related')
 @endsection
 @section('content')
-    
-@endsection
-@section('footer_related')
+
 @endsection

@@ -16,7 +16,7 @@ class CreateUserHistoryTable extends Migration
         {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('name', 100); // 冗余字段, 可以追溯用户使用过的名字
+            $table->string('username', 100); // 冗余字段, 可以追溯用户使用过的名字
             $table->integer('ip')->unsigned();
             $table->string('user_agent', 500);
             $table->timestamps();

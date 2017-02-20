@@ -78,6 +78,10 @@ class UserController extends Controller
         }
 
     }
+    public function getLogout(){
+        Auth::logout();
+        return Redirect::route('user.login');
+    }
 
     /**
      * @param Request $request
@@ -115,7 +119,7 @@ class UserController extends Controller
                 if ($validate->fails()) {
                     $msg = $messages->toArray();
                     foreach ($msg as $k => $v) {
-                        return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''],JSON_UNESCAPED_UNICODE);
+                        return json_encode(['sta' => "1", 'msg' => $v[0], 'data' => ''],JSON_UNESCAPED_UNICODE);
                     }
                 }
                 $data =  $user->create($request->only($user->getFillable()));

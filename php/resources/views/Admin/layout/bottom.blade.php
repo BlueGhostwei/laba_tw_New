@@ -14,6 +14,13 @@
         maxDate: new Date('2020-12-31'),
         yearRange: [2000,2020]
     });
+    var picker3 = new Pikaday({
+        field: document.getElementById('datepicker3'),
+        firstDay: 1,
+        minDate: new Date('2000-01-01'),
+        maxDate: new Date('2020-12-31'),
+        yearRange: [2000,2020]
+    });
 
 </script>
 <div class="foot">
@@ -37,6 +44,7 @@
     #f_nav a{	color:#fff;		padding:0px 10px;	}
 </style>
 
+{{--
 <div class="clr" id="f_nav">
     <a href="login.php">登录</a>
     <a href="reg.php">注册</a>
@@ -45,4 +53,4 @@
     <a href="huiyuanedit.php">会员资料编辑</a>
     <a href="baike.php">网络-百科</a>
     <a href="huodongorder.php" title="媒体供应商_活动订单.psd">活动订单</a>
-</div>
+</div>--}}

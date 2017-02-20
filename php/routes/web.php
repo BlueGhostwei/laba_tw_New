@@ -46,19 +46,24 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
         Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );
         Route::get('Admin/category/show',['as'=>'category.show','uses'=>'CategoryController@show'] );
+        //保存分类
+        Route::post('Admin/category/save',['as'=>'category.save','uses'=>'CategoryController@create_category']);
 
-
-
+        //首页
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
        //网络媒体
         Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);
+        Route::get('Admin/media/market',['as'=>'media.market','uses'=>'MediaController@Encyclopedia']);//百科
+        Route::get('Admin/media/Short_video',['as'=>'media.Short_video','uses'=>'MediaController@Short_video']);//短视频
+        Route::get('Admin/media/Public_Wechat',['as'=>'media.Public_Wechat','uses'=>'MediaController@Public_Wechat']);//公众号
+        Route::get('Admin/media/forum',['as'=>'media.forum','uses'=>'MediaController@forum']);//论坛
+        Route::get('Admin/media/Second_shot',['as'=>'media.Second_shot','uses'=>'MediaController@Second_shot']);//秒拍
+        Route::get('Admin/media/Copy_plan',['as'=>'media.Copy_plan','uses'=>'MediaController@Copy_plan']);//文案策划
+        Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
         Route::post('Admin/user/info','UserController@update_info');
-
-
-
-
+        Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
 
         // 文件上传, 图片处理
         Route::post('upload', 'UploadController@index');
@@ -66,5 +71,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('upload/Cut_out','UploadController@Cut_out');//剪切图片
         Route::get('/files/{s1}/{s2}/{s3}/{file}', 'ImageController@index');
         Route::get('upload/config', 'UploadController@config');
+
+        // 权限配置
+        Route::resource('/acl/resource', 'AclResourceController');
+        Route::resource('/acl/role', 'AclRoleController');
+        Route::resource('/acl/user', 'AclUserController');
+        Route::any('user_role', 'AclUserController@user_role');
+        Route::get('/system/logs', ['as' => 'system.logs', 'uses' => 'SystemController@logs']);
+        Route::get('/system/action', ['as' => 'system.action', 'uses' => 'SystemController@action']);
+        Route::get('/system/login-history', ['as' => 'system.login-history', 'uses' => 'SystemController@loginHistory']);
     });
 });

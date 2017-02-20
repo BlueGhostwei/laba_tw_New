@@ -19,7 +19,9 @@
     <script type="text/javascript" src="{{url('Admin/js/date.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/main2.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.tools.min.js')}}"></script>
-
+    <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor.config.js')}}"></script>
+    <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor.all.min.js')}}"> </script>
+    <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/zh-cn.js')}}"></script>
     @yield('header_related')
 </head>
 <body>

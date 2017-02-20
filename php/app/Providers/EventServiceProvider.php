@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
-use SocialiteProviders\Manager\SocialiteWasCalled;
+use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -13,15 +13,19 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-   
+
 
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        'auth.login' => [
+            'App\Listeners\AuthLoginListener',
+        ],
+        'App\Events\Action' => [
+            'App\Listeners\ActionListener',
         ],
         SocialiteWasCalled::class => [
             \SocialiteProviders\Weixin\WeixinExtendSocialite::class,
         ],
+
     ];
 
     /**

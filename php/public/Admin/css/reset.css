@@ -47,5 +47,5 @@ table {
 }
 button {outline:none;}
 button::-moz-focus-inner{border-color:transparent!important;}
-textarea {resize:none;word-wrap:break-word;}
+textarea {aresize:none;word-wrap:break-word;}
 article, aside, dialog, figure, footer, header, hgroup, nav, section {display: block;}
