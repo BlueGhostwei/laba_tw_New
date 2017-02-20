@@ -18,11 +18,13 @@
     <script type="text/javascript" src="{{url('Admin/js/echarts.min.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/date.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/main2.js')}}"></script>
+    <script type="text/javascript" src="{{url('Admin/js/jquery.tools.min.js')}}"></script>
+
     @yield('header_related')
 </head>
 <body>
 @include('Admin.layout.leftbar')
 @yield('content')
-@yield('footer_related')
+@include('Admin.layout.bottom')
 </body>
 </html>

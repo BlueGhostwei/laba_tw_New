@@ -399,6 +399,4 @@
         });
     </script>
 @endsection
-@section('footer_related')
 
-@endsection

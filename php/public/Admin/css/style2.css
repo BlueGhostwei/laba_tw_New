@@ -155,7 +155,7 @@ table.table_in1 thead th, table.table_in1 thead td{		padding:0 0px;		}
 	cursor:pointer;		outline:none;	}
 
 /*	媒体供应商_活动订单	*/
-.hdorder{	background:#fff;		}
+.hdorder{	background:#fff;}
 .nav_hdorder{		padding-bottom:15px;	background:url(../images/bg_hdtab.png) repeat-x 0 bottom #fff;		}
 .nav_hdorder .tab{		aheight:50px;		}
 .nav_hdorder .tab li{	float:left;	height:40px;	margin:5px 1px 0 0;	}

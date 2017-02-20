@@ -42,6 +42,13 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
    // echo 34342;die;
     Route::group(['namespace' => 'Admin'], function () {
+        //平台分类管理
+        Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
+        Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );
+        Route::get('Admin/category/show',['as'=>'category.show','uses'=>'CategoryController@show'] );
+
+
+
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
        //网络媒体
         Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);
