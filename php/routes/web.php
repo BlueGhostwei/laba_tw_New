@@ -15,6 +15,11 @@
 //游客路由
 Route::group(['middleware' => 'guest'], function () {
     Route::group(['namespace' => 'Admin'], function () {
+
+
+
+
+
         //验证码
         Route::get('yanzheng/test',['as'=>'captcha.test','uses'=>'CaptchaController@index']);
         //生成
@@ -42,6 +47,7 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
    // echo 34342;die;
     Route::group(['namespace' => 'Admin'], function () {
+
         //平台分类管理
         Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
         Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );
@@ -62,7 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
-        Route::post('Admin/user/info','UserController@update_info');
+        Route::post('Admin/user/info','UserController@update_info');//会员信息
+        Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
 
         // 文件上传, 图片处理
@@ -71,6 +78,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('upload/Cut_out','UploadController@Cut_out');//剪切图片
         Route::get('/files/{s1}/{s2}/{s3}/{file}', 'ImageController@index');
         Route::get('upload/config', 'UploadController@config');
+        //支付宝支付
+        Route::get('/pay', ['as' => 'website.pay', 'uses' => 'PayController@index']);
+        Route::get('/alipay/webnotify', ['as' => 'website.pay', 'uses' => 'PayController@webnotify']);
+        Route::get('/alipay/webreturn', ['as' => 'website.pay', 'uses' => 'PayController@webreturn']);//网页支付
+        Route::get('/mobile_pay', ['as' => 'website.mobile_pay', 'uses' => 'PayController@mobile_pay']);
+        Route::get('/alipay/alipayNotify', ['as' => 'website.alipayNotify', 'uses' => 'PayController@alipayNotify']);
+
+
 
         // 权限配置
         Route::resource('/acl/resource', 'AclResourceController');

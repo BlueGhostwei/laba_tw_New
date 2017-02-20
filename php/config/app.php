@@ -163,8 +163,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-
-
+        Latrell\Alipay\AlipayServiceProvider::class,
         /*
          * Package Service Providers...
          */

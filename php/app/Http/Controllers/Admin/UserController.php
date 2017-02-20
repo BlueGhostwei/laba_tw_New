@@ -182,6 +182,14 @@ class UserController extends Controller
             }
         }
     }
+    /**
+     * @return mixed
+     * 在线充值
+     */
+    public function Onlnetop_up(){
+        return view('Admin.user.top-up');
+    }
+
 
 
 }

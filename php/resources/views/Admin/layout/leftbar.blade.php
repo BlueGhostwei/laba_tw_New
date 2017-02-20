@@ -150,20 +150,24 @@
             <div class="header">
                 <span class="label" id="sd8">宣传定制</span>					</div>
         </li>
-        <li><a href="{{route('member.info')}}">
-                <div class="header">
-                    <span class="label" id="sd8">会员信息</span></div>
-            </a>
+        <li>
+            <div class="header">
+                <span class="label" id="sd1">会员中心</span>
+                <span class="arrow up"></span>
+            </div>
+            <ul class="menu">
+                <li><a href="{{route('member.info')}}"><div class="nd1n">会员信息</div></a></li>
+                <li><a href="{{route('member.Onlnetop_up')}}"><div class="nd2n">在线充值</div></a></li>
+            </ul>
         </li>
-
         <li>
             <div class="header">
                 <span class="label" id="sd1">平台管理</span>
                 <span class="arrow up"></span>
             </div>
             <ul class="menu">
-                <li><a href="{{route('category.index')}}"><div class="nd1n">媒体管理</div></a></li>
-                <li><a href="#"><div class="nd2n">户外大牌</div></a></li>
+                <li><a href="{{route('category.index')}}"><div class="nd1n">网络媒体</div></a></li>
+               {{-- <li><a href="#"><div class="nd2n">户外大牌</div></a></li>--}}
             </ul>
         </li>
     </ul>

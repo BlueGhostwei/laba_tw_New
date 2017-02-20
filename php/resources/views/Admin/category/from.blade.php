@@ -1,132 +1,210 @@
 @extends('Admin.layout.main')
 @section('title', '资源管理')
 @section('header_related')
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 @endsection
 @section('content')
     <div class="content">
         <div class="Invoice">
             <div class="INa1dd">
-                <div class="main" style="margin-top:20px;">
-                    <!--	分类管理	-->
-                    <div class="hdorder radius1">
-                        <h3 class="title1"><strong><a href="#">媒体资源管理</a></strong>
-                        </h3>
-                        <div class="dhorder_m">
-                            <div class="tab1">
-                                <ul>
-                                    @if(isset($midia_type) && !empty($midia_type))
-                                        @foreach($midia_type as $k =>$v)
-                                            <li @if($v['media_id']==0)
-                                                class="cur"
-                                                @else
-                                                class=""
-                                                @endif
-                                                category_id="{{$v['media_id']}}"><a href="#">{{$v['media_name']}}</a>
-                                            </li>
-                                        @endforeach
-                                    @else
-                                        <li class="cur" category_id="0"><a href="#">网络媒体</a></li>
-                                    @endif
-                                    {{--<li class="cur" category_id="0"><a href="#">网络媒体</a></li>
-                                    <li><a href="#" category_id="1">户外媒体</a></li>
-                                    <li><a href="#" category_id="2">平面媒体</a></li>
-                                    <li><a href="#" category_id="3">电视媒体</a></li>
-                                    <li><a href="#" category_id="4">广播媒体</a></li>
-                                    <li><a href="#" category_id="5">记者媒体</a></li>--}}
-                                </ul>
-                            </div>
-                            <div class="tab1_body">
-                                <!--网络媒体-->
-                                <table class="table_in1 cur">
-                                    <thead>
-                                    <tr>
-                                        <th style="width: 30%;text-align:left;text-indent:50px;">媒体名称</th>
-                                        <th style="width: 15%;text-align:center;text-indent:20px;">状态</th>
-                                        <th style="width: 8%;text-align:center;text-indent:20px;">排序</th>
-                                        <th style="width: 37%;text-align:center;text-indent:20px;">操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @if(isset($midia_type) && !empty($midia_type))
-                                        @foreach($midia_type[0]['classification'] as $rst =>$rvb)
-                                            <tr>
-                                                <td style="width: 40%;text-align:left;text-indent:50px;">{{$rvb['name']}}</td>
-                                                <td style="width: 15%;text-align:center;text-indent:20px;">发布</td>
-                                                <td style="width: 8%;text-align:center;text-indent:20px;">1</td>
-                                                <td style="width: 37%;text-align:center;text-indent:20px;">
-                                                    <a href="{{route('category.show')}}">查看</a>|
-                                                    <a href="{{route('category.store')}}">添加</a>|
-                                                    <a href="#">删除</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td style="width: 40%;text-align:left;text-indent:50px;">新闻发布</td>
-                                            <td style="width: 15%;text-align:center;text-indent:20px;">发布</td>
-                                            <td style="width: 8%;text-align:center;text-indent:20px;">1</td>
-                                            <td style="width: 37%;text-align:center;text-indent:20px;">
-                                                <a href="{{route('category.show')}}">查看</a>|
-                                                <a href="{{route('category.store')}}">添加</a>|
-                                                <a href="#">删除</a>
-                                            </td>
-                                        </tr>
-                                    @endif
+                <div class="ndt">
+                    <!--新闻任务	-->
+                    <div class="radius1">
+                        <h3 class="title1"><strong><a href="#">新闻任务</a></strong></h3>
 
-                                    </tbody>
-                                </table>
-                                <!--户外媒体-->
-                                <table class="table_in1" id="jibie">
-                                </table>
-                                <!--平面媒体-->
-                                <table class="table_in1" id="xingshi">
-                                </table>
-                                <!--电视媒体-->
-                                <table class="table_in1" id="lianjie">
-                                </table>
-                                <!--广播媒体-->
-                                <table class="table_in1" id="quyu">
-                                </table>
-                                <!--记者媒体-->
-                                <table class="table_in1" id="pindao">
-                                </table>
-                                <div class="page_1 page_1_2" style="padding-bottom: 50px;">
-					<span class="pages">
-						<a href="" class="prev">上一页</a>
-						<a href="" class="">1</a>
-						<a href="" class="cur">2</a>
-						<a href="">3</a>
-						<a href="">4</a>
-						<a href="">5</a>
-						<span class="sus">...</span>
-						<a href="" class="">248</a>
-						<a href="" class="next">下一页</a>
-					</span>
+                        <div class="sbox_1 clearfix">
+
+                            <div class="sbox_1_w">
+                                <div class="sbox_1_item clearfix">
+                                    <span class="l" data="option_1"><strong>网站类型</strong></span>
+                                    <div class="m">
+                                        <ul class="sortable">
+                                            <li><a href="" class="cur">不限</a></li>
+                                            <li><a href="">全国门户<i class="del"></i></a></li>
+                                            <li><a href="">垂直行业<i class="del"></i></a></li>
+                                            <li><a href="">地方门户</a></li>
+                                            <span   target="_blank">编辑</span>&nbsp;&nbsp;<span  target="_blank">添加</span>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <div class="sbox_1_item clearfix">
+                                    <span class="l" data="option_2"><strong>入口级别</strong></span>
+                                    <div class="m">
+                                        <ul class="sortable">
+                                            <li><a href="" class="cur">不限</a></li>
+                                            <li><a href="">网站首页</a></li>
+                                            <li><a href="">频道首页</a></li>
+                                            <li><a href="">二级频道首页</a></li>
+                                            <li><a href="">三级频道首页</a></li>
+                                            <li><a href="">列表页入口</a></li>
+                                            <li><a href="">无入口</a></li>
+                                            <li class="add"><a href="" target="_blank">添加</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="sbox_1_item clearfix">
+                                    <span class="l" data="option_3"><strong>入口形式</strong></span>
+                                    <div class="m">
+                                        <ul class="sortable">
+                                            <li><a href="" class="cur">不限</a></li>
+                                            <li><a href="">文字标题</a></li>
+                                            <li><a href="">焦点图片</a></li>
+                                            <li><a href="">图文混排</a></li>
+                                            <li><a href="">其他图片</a></li>
+                                            <li><a href="">通栏</a></li>
+                                            <li><a href="">文字链</a></li>
+                                            <li><a href="">画中画</a></li>
+                                            <li><a href="">Banner</a></li>
+                                            <li><a href="">Button</a></li>
+                                            <li><a href="">Floating</a></li>
+                                            <li><a href="">流媒体</a></li>
+                                        </ul>
+                                    </div>
+                                    <span class="r"><a href="">更多</a></span>
+                                </div>
+                                <div class="sbox_1_item clearfix">
+                                    <span class="l" data="option_4"><strong>覆盖区域</strong></span>
+                                    <div class="m">
+                                        <ul class="sortable">
+                                            <li><a href="" class="cur">不限</a></li>
+                                            <li><a href="">全国</a></li>
+                                            <li><a href="">北京</a></li>
+                                            <li><a href="">上海</a></li>
+                                            <li><a href="">广州</a></li>
+                                            <li><a href="">深圳</a></li>
+                                            <li><a href="">重庆</a></li>
+                                            <li><a href="">天津</a></li>
+                                            <li><a href="">江苏</a></li>
+                                            <li><a href="">浙江</a></li>
+                                            <li><a href="">福建</a></li>
+                                            <li><a href="">湖南</a></li>
+                                            <li><a href="">湖北</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                            <li><a href="">广东</a></li>
+                                            <li><a href="">广西</a></li>
+                                        </ul>
+                                    </div>
+                                    <span class="r"><a href="">更多</a></span>
+                                </div>
+                                <div class="sbox_1_item clearfix">
+                                    <span class="l" data="option_5"><strong>频道类型</strong></span>
+                                    <div class="m">
+                                        <ul class="sortable">
+                                            <li><a href="" class="cur">不限</a></li>
+                                            <li><a href="">新闻</a></li>
+                                            <li><a href="">财经</a></li>
+                                            <li><a href="">IT科技</a></li>
+                                            <li><a href="">娱乐</a></li>
+                                            <li><a href="">旅游</a></li>
+                                            <li><a href="">教育</a></li>
+                                            <li><a href="">房产</a></li>
+                                            <li><a href="">家居</a></li>
+                                            <li><a href="">汽车</a></li>
+                                            <li><a href="">女性</a></li>
+                                            <li><a href="">时尚</a></li>
+                                            <li><a href="">美容</a></li>
+                                            <li><a href="">母婴育儿</a></li>
+                                        </ul>
+                                    </div>
+                                    <span class="r"><a href="">更多</a></span>
+                                </div>
+                                <div class="sbox_1_item clearfix">
+                                    <span class="l" data="option_6"><strong>会员价</strong></span>
+                                    <div class="m">
+                                        <ul class="sortable">
+                                            <li><a href="" class="cur">不限</a></li>
+                                            <li><a href="">50元以下</a></li>
+                                            <li><a href="">50-100</a></li>
+                                            <li><a href="">100-200</a></li>
+                                            <li><a href="">200-500</a></li>
+                                            <li><a href="">500-1000</a></li>
+                                            <li><a href="">1000以上</a></li>
+                                        </ul>
+                                    </div>
+                                    <span class="r"><a href="">更多</a></span>
+                                </div>
+
                             </div>
+                            <div class="sbox_1_b"><i></i><strong>高级搜索</strong></div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script type="text/javascript">
-        /*	日历	*/
-        var picker1 = new Pikaday({
-            field: document.getElementById('datepicker1'),
-            firstDay: 1,
-            minDate: new Date('2000-01-01'),
-            maxDate: new Date('2020-12-31'),
-            yearRange: [2000, 2020]
+        $(".sbox_1_item .m ul li a").click(function () {
+            $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
+            var option = $(this).parents(".m").prev("span").attr("data");
+            var value = $.trim($(this).html());
+            var li = "<li data='" + option + "'><a href=''>" + value + "</a></li>";
+            if (value == "不限") {
+                $(".sbox_2 .m li[data='" + option + "']").remove();
+            } else if ($(".sbox_2 .m li[data='" + option + "']").length > 0) {
+//		$(".sbox_2 .m li[data='"+option+"']").remove();
+                $(".sbox_2 .m li[data='" + option + "']").find("a").html(value);
+            } else {
+                $(".sbox_2 .m").append(li);
+            }
+            return false;
         });
-        var picker2 = new Pikaday({
-            field: document.getElementById('datepicker2'),
-            firstDay: 1,
-            minDate: new Date('2000-01-01'),
-            maxDate: new Date('2020-12-31'),
-            yearRange: [2000, 2020]
+
+
+        //$(".sbox_1_w").sortable();										/*	网站类型、入口级别 上下拖拽	*/
+        $(".sortable").sortable();
+        /*	分类 左右拖拽	*/
+        //$(".sortable").sortable({"cancel":"li.add,li:first-child"});		/*	分类 左右拖拽	*/
+        $(".sortable").disableSelection();
+
+
+        $(".sbox_1_item .m ul li a i").click(function () {            /*	点击 右上角x 移除分类	*/
+            $(this).parents("li").remove();
+            return false;
+        });
+        $(".sbox_1_item .m ul li.add a").unbind("click").click(function () {            /*	移除 添加按钮 点击事件并绑定新事件	*/
+            console.log("xx");
+            return false;
+        });
+
+
+        $(".sbox_2 .m").on("click", "li a", function () {
+            var option = $(this).parent("li").attr("data");
+            var value = $.trim($(this).html());
+            $(this).parent("li").remove();
+            $(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li a").removeClass("cur");
+            $(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").addClass("cur");
+            return false;
+        });
+        $(".sbox_1_item .r a").click(function () {
+            if ($(this).attr("data") == "on") {
+                $(this).attr("data", "off");
+                $(this).parent().siblings(".m").find("ul").css("height", "25px");
+                $(this).parents(".sbox_1_item").css("height", "73px");
+            } else {
+                $(this).attr("data", "on");
+                $(this).parent().siblings(".m").find("ul").css("height", "auto");
+                $(this).parents(".sbox_1_item").css("height", "auto");
+                var height = $(this).parents(".sbox_1_item").height();
+                //	console.log(height);
+                $(this).parents(".sbox_1_item").find(".l").css("height", height);
+            }
+            return false;
         });
     </script>
 @endsection
