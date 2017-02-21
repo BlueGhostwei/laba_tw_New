@@ -52,8 +52,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
         Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );
         Route::get('Admin/category/show',['as'=>'category.show','uses'=>'CategoryController@show'] );
-        //保存分类
-        Route::post('Admin/category/save',['as'=>'category.save','uses'=>'CategoryController@create_category']);
+        Route::post('Admin/category/save',['as'=>'category.save','uses'=>'CategoryController@create_category']);  //保存分类
+        Route::post('Admin/category/cate_dele',['as'=>'category.cate_dele','uses'=>'CategoryController@cate_dele']);  //分类删除
+
 
         //首页
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
@@ -86,7 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/alipay/alipayNotify', ['as' => 'website.alipayNotify', 'uses' => 'PayController@alipayNotify']);//手机回调
         //微信支付
         //网银支付
-        
+
 
 
 
