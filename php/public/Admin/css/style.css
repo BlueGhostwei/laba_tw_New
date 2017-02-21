@@ -138,7 +138,7 @@ body{ background:#204186}
 	left: 55%;	
 	position: fixed;
 	bottom: 5px;
-	background: #fff url(images/bg_float_top.gif) no-repeat center -2px;
+	background: #fff url(../images/bg_float_top.gif) no-repeat center -2px;
 	margin-left: 500px;
 	width: 18px;
 	padding: 16px 0 0;

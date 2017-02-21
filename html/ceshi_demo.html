@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html"  charset="UTF-8" />
+    <title>无标题文档</title>
+    <script type="text/javascript" src="#" ></script>
+    <script type="text/javascript" src="#"></script>
+
+</head>
+<script src="js/jquery-1.8.2.min.js" type="text/javascript"></script>
+<body>
+<form id="add_form">
+    <div>
+        <input type="text" name="caizhong"  value="双色球"   id="qg_ssq"/>
+        <input type="checkbox" name="qihao" value="20100727" id="qihao" />
+    </div>
+    <div>
+        <input type="submit" name="add_submit" value="添加" id="add_submit" />
+
+    </div>
+</form>
+<input type="button" name="del_button" value="删除" id="del_button"/>
+
+<script type="text/javascript">
+   $(function () {
+       /*
+        这是添加按钮的动作：
+        */
+       $('form#add_form').submit(function() {
+           var caizhong=$('input#qg_ssq').val();
+           var qihao=$('input#qihao').val();
+           alert($(this).serialize());
+           $.ajax(
+                   {
+                       url: 'add_data.php',
+                       method: 'get',
+                       data: $(this).serialize(),
+
+                       success: function()
+                       {
+                           window.open("add_data.php?caizhong="+caizhong+"&qihao="+qihao);
+
+
+                       }
+                   });
+       });
+
+       /*
+        这是删除的动作：
+        */
+       $('input#del_button').click(function() {
+
+           var choice=confirm("您确认要删除吗？", function() { }, null);
+           if(choice){
+               var caizhong=$('input#qg_ssq').val();
+               var qihao=$('input#qihao').val();
+               alert($(this).serialize());
+               $.ajax(
+                       {
+                           url: 'add_data.php',
+                           method: 'get',
+                           data: $(this).serialize(),
+
+                           success: function()
+                           {
+                               window.open("add_data.php?caizhong="+caizhong+"&qihao="+qihao);
+
+
+                           }
+                       });
+           };
+
+       });
+   });
+
+
+</script>
+
+</body>
+</html>

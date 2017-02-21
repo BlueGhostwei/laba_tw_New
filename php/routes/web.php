@@ -82,8 +82,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pay', ['as' => 'website.pay', 'uses' => 'PayController@index']);
         Route::get('/alipay/webnotify', ['as' => 'website.pay', 'uses' => 'PayController@webnotify']);
         Route::get('/alipay/webreturn', ['as' => 'website.pay', 'uses' => 'PayController@webreturn']);//网页支付
-        Route::get('/mobile_pay', ['as' => 'website.mobile_pay', 'uses' => 'PayController@mobile_pay']);
-        Route::get('/alipay/alipayNotify', ['as' => 'website.alipayNotify', 'uses' => 'PayController@alipayNotify']);
+        Route::get('/mobile_pay', ['as' => 'website.mobile_pay', 'uses' => 'PayController@mobile_pay']);//手机支付
+        Route::get('/alipay/alipayNotify', ['as' => 'website.alipayNotify', 'uses' => 'PayController@alipayNotify']);//手机回调
+        //微信支付
+        //网银支付
+        
 
 
 

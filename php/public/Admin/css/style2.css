@@ -53,7 +53,7 @@ input{	color:#666;	}
 .w_txt1{	adisplay:inline-block;	margin-right:114px;	overflow:hidden;	min-width:50px;	}
 .txt1{		width:840px;		height:55px;	line-height:57px;	float:left;	border:none;	padding:0 20px;	margin:0;	font-size:16px;	color:#999999;
 	border:1px solid #C1C1C1;	border-right:none;	border-radius:6px 0 0 6px;	outline:none;
-	background:url(/images/sub1.png) no-repeat right 13px top 18px;
+	background:url(../images/sub1.png) no-repeat right 13px top 18px;
 	float:none;	display:block;	width:96%;	padding:0 2%;	atext-indent:20px;	}
 .sub1{		width:114px;	height:57px;	line-height:57px;	float:left;	text-align:center;	font-size:20px;	color:#fff;	
 	border-radius:0 6px 6px 0;	border:none;	background:#FF4A50;	cursor:pointer;	
@@ -72,6 +72,7 @@ input{	color:#666;	}
 .search_1{	afloat:right;	font-size:14px;	height:30px;	line-height:30px;	margin:0px 20px 0 130px;	display:block;	padding-top:30px;	}
 .search_1 form{	float:right;	}
 .search_1 span{		}
+.search_1 .l{	margin-bottom:5px;	}
 .txt2{	width:128px;	height:28px;	line-height:30px;	overflow:hidden;	padding:0 5px;	border:1px solid #e5e5e5;	background:url(../images/ico_date.png) no-repeat 114px center #fff;
 	margin:0 10px;	}
 .txt3{	width:208px;	height:28px;	float:left;	line-height:30px;	overflow:hidden;	border:1px solid #e5e5e5;	border-right:none;		background:#fff;	padding:0 5px;	margin:0 0 0 8px;	}
@@ -162,6 +163,8 @@ table.table_in1 thead th, table.table_in1 thead td{		padding:0 0px;		}
 .nav_hdorder .tab li a{		height:40px;	line-height:40px;	text-align:center;	float:left;	padding:0 30px;	font-size:16px;	}
 .nav_hdorder .tab li.cur a,
 .nav_hdorder .tab li a:hover{	background:#2c9fdd;	border-radius:5px;	color:#fff;		}
+.main img.link{	width:15px;	height:15px;	}
+
 
 .sel1{	height:30px;	line-height:30px;	border:1px solid #ccc;	background:#fff;	padding:0 0px 0 10px;	font-size:14px;	text-align:center;	float:left;	}
 .txt5{	width:163px;	height:28px;	line-height:30px;	border:1px solid #ccc;	background:#fff;	padding:0 10px 0 10px;	font-size:14px;		margin-left:10px;
@@ -193,19 +196,32 @@ table.table_in1 thead th, table.table_in1 thead td{		padding:0 0px;		}
 .sbox_1_item .m ul li a{	float:left;		height:25px;	line-height:25px;	padding:0 10px;	color:#333;	background:#fff;	border-radius:3px;	}
 .sbox_1_item .m ul li a.cur{	color:#fff;	background:#2D9FDD;	}
 .sbox_1_item .r{	awidth:6.7%;	float:right;	display:inline-block;	margin:0 20px 0 10px;	}
-.sbox_1_item .r a{	margin:24px 0 0 0;	width:60px;	height:22px;	line-height:22px;	float:left;	background:url(/images/more1.gif) no-repeat 0 0 #fff;
+.sbox_1_item .r a{	margin:24px 0 0 0;	width:60px;	height:22px;	line-height:22px;	float:left;	background:url(../images/more1.gif) no-repeat 0 0 #fff;
 	font-size:12px;	color:#999999;	text-indent:10px;	}
 .sbox_1_b{		width:128px;	height:28px;	line-height:28px;	border:1px solid #E5E5E5;	border-top:1px solid #fff;	margin:0 auto;	text-align:center;
 	position:relative;	top:-1px;	z-index:10;		font-size:14px;	color:#6e7991;	}
-.sbox_1_b i{	background:url(/images/sub3.png) no-repeat center center #fff;	float:left;	width:17px;	height:17px;	margin:6px 0 0 20px;	}
+.sbox_1_b i{	background:url(../images/sub3.png) no-repeat center center #fff;	float:left;	width:17px;	height:17px;	margin:6px 0 0 20px;	}
 .sbox_1_b strong{	float:left;	margin-left:15px;	font-weight:400;	}
+
+/*	2017.2.20 改	*/
+.sbox_1_item .m ul li{		margin:0 5px 5px 0;		}
+.sbox_1_item .m ul li a{	position:relative;	background:#E5E5E5;	padding:0 18px 0 10px;	}
+.sbox_1_item .m ul li.add{	margin-left:20px;	}
+.sbox_1_item .m ul li.add a{	position:relative;	color:#fff;	background:#2D9FDD;	padding:0 10px 0 10px;	}
+.sbox_1_item .m ul li a i.del{	font-style:normal;	position:absolute;	right:1px;	top:1px;	display:block;	text-align:center;	font-size:10px;
+	width:10px;	height:10px;	line-height:10px;
+	background:url(../images/del2.png) no-repeat center center;	overflow:hidden;	color:#ff0;	}
+.sbox_1_item .m ul li a.cur i.del{	background:url(../images/del2_on.png) no-repeat center center;	}
+
+.sbox_2 .m li a i{	display:none;	}
+
 
 .sbox_2{	background:#F7F8FA;	margin:20px 2.5% 0;	border:1px solid #E5E5E5;	aheight:39px;	line-height:39px;	font-size:14px;		}
 .sbox_2 .l{		float:left;		color:#333333;	font-weight:400;	margin:0 0 0 20px;	}
 .sbox_2 .m{		afloat:left;		margin-left:10px;
 	display:block;	margin-left:80px;	}
 .sbox_2 .m li{	float:left;		margin:7px 5px 0 0;	}
-.sbox_2 .m li a{	float:left;	height:25px;	line-height:25px;	padding:0 30px 0 10px;	color:#fff;	background:url(/images/del1.png) no-repeat 88% 9px #2D9FDD;
+.sbox_2 .m li a{	float:left;	height:25px;	line-height:25px;	padding:0 30px 0 10px;	color:#fff;	background:url(../images/del1.png) no-repeat 88% 9px #2D9FDD;
 	border-radius:3px;}
 .sbox_2 .r{		float:right;	margin:0 20px 0 5px;	}
 .sbox_2 .r b{	color:#ff0000;	font-weight:400;	}
@@ -279,7 +295,7 @@ table.table_in1_2 select{	padding:0 6px 0 10px;	}
 table.table_in3{	width:100%;		margin:1px 1px 0;	background:#fff;	}
 .table_in3 tr{	margin-bottom:2px;	}
 .table_in3 tr th{	height:40px;	vertical-align:middle;	text-align:center;	font-size:14px;		background:#F2F2F2;	font-weight:400;	}
-.table_in3 tr td{	aheight:60px;	vertical-align:middle;	text-align:center;	font-size:14px;	padding:10px 0;	line-height:25px;	}
+.table_in3 tr td{	height:60px;	vertical-align:middle;	text-align:center;	font-size:14px;	padding:10px 0;	line-height:25px;	}
 .table_in3 tr td:nth-child(1) img{	    width:40px;	height:20px;	overflow:hidden;	margin-right:10px;	}
 .table_in3 tr td:nth-child(1){	width:22%; 	}
 .table_in3 tr td:nth-child(2){	width:25%; 	}
@@ -311,7 +327,7 @@ select.sel_2{	border:1px solid #E5E5E5;	border-radius:5px;	height:30px;	line-hei
 .left_div .txt6{	width:43%;	}
 .left_div .tarea_1{	width:92%;		}
 .left_div span{		margin-right:15px;	}
-#right_pic{		abackground:url(/images/phone.jpg) no-repeat 0 0;	width:218px;	width:23%;	aheight:470px;	float:right;	margin-top:15px;
+#right_pic{		abackground:url(../images/phone.jpg) no-repeat 0 0;	width:218px;	width:23%;	aheight:470px;	float:right;	margin-top:15px;
 	background-size:contain;	margin-bottom:25px;	}
 #right_pic img{	width:100%;	height:auto;	max-width:218px;	float:right;	}
 
@@ -335,7 +351,7 @@ select.sel_2{	border:1px solid #E5E5E5;	border-radius:5px;	height:30px;	line-hei
 
 /*	秒拍任务_搜索到顶	*/
 .sub1_2{	font-size:16px;	}
-.ndt_mps{	margin-top:-10px;	background:url(/images/bg_line2.gif) repeat-x 0 0 #fff;	}
+.ndt_mps{	margin-top:-10px;	background:url(../images/bg_line2.gif) repeat-x 0 0 #fff;	}
 .mps{		font-size:14px;	padding:16px 30px 0;	}
 .mps_t{		background:#F7F8FA;	border:1px solid #e5e5e5;	padding:6px 10px;	line-height:26px;	}
 .mps_t label{		margin-right:10px;	}
@@ -344,7 +360,7 @@ select.sel_2{	border:1px solid #E5E5E5;	border-radius:5px;	height:30px;	line-hei
 .mps_t .r{			float:right;	}
 .mps_t .r span{	float:left;	margin-right:1px;	line-height:24px;	cursor:pointer;	}
 .mps_t .r span.sp1{		border:1px solid #ccc;	padding:0px 10px;	background:#fff;	font-size:12px;	}
-.mps_t .r span.sp2{		border:1px solid #ccc;	padding:0px 30px 0 10px;	font-size:12px;	background:url(/images/arr2.gif) no-repeat right 9px center #fff;	}
+.mps_t .r span.sp2{		border:1px solid #ccc;	padding:0px 30px 0 10px;	font-size:12px;	background:url(../images/arr2.gif) no-repeat right 9px center #fff;	}
 
 .mps_m{		margin-top:0px;	background:#fff;	}
 .mps_item{		padding:30px 0;	border-bottom:1px dotted #E6E6E6;		}
