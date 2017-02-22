@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Request;
+use Illuminate\Http\Request;
 use Config;
 use DB;
 use Input;
@@ -12,6 +12,7 @@ use Validator;
 
 class CategoryController extends Controller
 {
+
     /**
      *网络类型
      * 入口级别
@@ -23,44 +24,34 @@ class CategoryController extends Controller
     {
         $media_type = Config::get('mediatype');
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        $price=Config::get('price');
+        $price = Config::get('price');
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
             foreach ($result as $key => $vel) {
-                if ($vel['name'] == "覆盖区域") {
+                $category_id=$vel['category_id'];
+                $set_cate_data = Category::where(['media_id'=> $category_id])->get()->toArray();
+                if (!empty($set_cate_data)) {
+                    $result[$key]['data']=$set_cate_data;
+                }
+                if ($vel['category_id'] == "3") {
                     $result[$key]['data'] = $provinces;
                 }
-                if($vel['name']=='会员价'){
+                if ($vel['category_id'] == '5') {
                     $result[$key]['data'] = $price;
                 }
             }
-            //dd($result);
         }
         //查询省市
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        return view('Admin.category.from', ['midia_type' => $media_type,'result_data'=>$result, 'provinces' => $provinces]);
+        return view('Admin.category.from', ['midia_type' => $media_type, 'result_data' => $result, 'provinces' => $provinces]);
     }
-
-    public function store(Request $request)
-    {
-        $media_type = Config::get('mediatype');
-
-
-        return view('Admin.category.store', ['midia_type' => $media_type]);
-    }
-
-    public function show()
-    {
-
-        return view('Admin.category.show');
-    }
-
     //添加分类
     public function create_category(Request $request)
     {
+
         $category = new Category();
-        $validate = Validator::make($request->all(), $category->rules()['update_info']);
+        $validate = Validator::make($request->all(), $category->rules()['create']);
         $messages = $validate->messages();
         if ($validate->fails()) {
             $msg = $messages->toArray();
@@ -79,7 +70,7 @@ class CategoryController extends Controller
     //删除分类
     public function cate_dele()
     {
-        return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => ""], JSON_UNESCAPED_UNICODE);
+        $id=Input::get('cate_id');
         $cate = Category::find($id);
         if ($cate) {
             $cate->delete();
@@ -89,5 +80,14 @@ class CategoryController extends Controller
         }
 
 
+    }
+    //创建媒体
+   public function media_from(){
+       $media_type = Config::get('mediatype');
+       
+       return view('Admin.category.media_from',['media_type'=>$media_type]);
+   }
+    public function media_List(){
+        echo 34123;die;
     }
 }

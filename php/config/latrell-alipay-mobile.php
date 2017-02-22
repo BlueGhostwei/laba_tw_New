@@ -14,5 +14,5 @@ return [
 	'public_key_path' => __DIR__ . '/key/public_key.pem',
 
 	// 异步通知连接。
-	'notify_url' => url('/alipay/alipayNotify')
+	'notify_url' => __DIR__.'/alipay/alipayNotify'
 ];

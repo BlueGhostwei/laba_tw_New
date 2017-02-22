@@ -8,8 +8,8 @@ return [
 	'sign_type' => 'MD5',
 
 	// 服务器异步通知页面路径。
-	'notify_url' =>url('/alipay/webnotify'),
+	'notify_url' =>__DIR__.'/alipay/webnotify',
 
 	// 页面跳转同步通知页面路径。
-	'return_url' =>url('/alipay/webreturn')
+	'return_url' =>__DIR__.'/alipay/webreturn'
 ];

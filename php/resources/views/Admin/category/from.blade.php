@@ -24,8 +24,8 @@
                                                 <ul class="sortable">
                                                     <li data_id="0"><a class="cur" href="">全国</a></li>
                                                     @if(isset($vel['data']) && $vel['data'] !=null)
-                                                        @foreach($vel['data'] as $key =>$vel)
-                                                            <li data_id="{{$vel->id}}"><a href="">{{$vel->name}}</a>
+                                                        @foreach($vel['data'] as $key =>$rsk)
+                                                            <li data_id="{{$rsk->id}}"><a href="">{{$rsk->name}}</a>
                                                             </li>
                                                         @endforeach
                                                     @else
@@ -37,18 +37,29 @@
                                         </div>
                                     @else
                                         <div class="sbox_1_item clearfix">
-                                                <span class="l" data="option_1" category_id="{{$vel['category_id']}}">
+                                                <span class="l" data="option_1">
                                                     <strong>{{$vel['name']}}</strong></span>
                                             <div class="m">
                                                 <ul class="sortable">
                                                     <li><a href="" class="cur">不限</a></li>
-                                                    @foreach($vel['data'] as $key=>$vel)
-                                                        <li data_id="{{$vel['id]}}"><a href=""><i class="del"></i></a></li>
+                                                    @if(isset($vel['data']) && $vel['data'] !=null)
+                                                        @foreach($vel['data'] as $kst=>$rvb)
+                                                            @if($rvb['name']==50 || $rvb['name']==1000)
+                                                                <li data_id="{{$rvb['id']}}"><a href="">{{$rvb['name']}}
+                                                                        以上<i
+                                                                                class="del"></i></a></li>
+                                                            @else
+                                                                <li data_id="{{$rvb['id']}}"><a href="">{{$rvb['name']}}
+                                                                        <i
+                                                                                class="del"></i></a></li>
+                                                            @endif
                                                         @endforeach
-                                                    <li><a href="">全国门户<i class="del"></i></a></li>
-                                                    <li><a href="">垂直行业<i class="del"></i></a></li>
-                                                    <li><a href="">地方门户<i class="del"></i> </a></li>
-                                                    <li class="add"><a href="" target="_blank">添加</a></li>
+                                                    @else
+                                                        <li><a href="">示例分类<i class="del"></i></a></li>
+                                                    @endif
+                                                    <li class="add" category_id="{{$vel['category_id']}}"><a href=""
+                                                                                                             target="_blank">添加</a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -141,7 +152,6 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="sbox_1_b"><i></i><strong>高级搜索</strong></div>
                     </div>
                 </div>
             </div>
@@ -150,9 +160,9 @@
     <div class="xinzengfenlei" style="display: none">
         <div class="XZFL"><p>媒体类型:</p>
             <select name="select" id="select">
-                @if(isset($midia_type) && !empty($midia_type))
-                    @foreach($midia_type as $k=>$v)
-                        {{--<option media_id="{{$v['media_id']}}">{{$v['media_name']}}</option>--}}
+                @if(isset($result_data) && $result_data != null)
+                    @foreach($result_data as $ky =>$v)
+                        <option media_id="{{$v['category_id']}}">{{$v['name']}}</option>
                     @endforeach
                 @else
                     <option>网络媒体</option>
@@ -167,23 +177,51 @@
         <div class="IF3"><p>分类名称:</p>
             <input type="text" name="media_name" id="media_name" class="IFN2"/>
         </div>
-        <div class="IF3"><p>是否发布:</p>
-            <input type="radio" name="radio_true" checked id="radio1" value="0"/>
+        {{--<div class="IF3" id="wrap"><p>是否发布:</p>
+            <input type="radio" name="radio1" checked id="radio1" value="0"/>
             &nbsp;是&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="radio_false" id="radio2" value="1"/>
+            <input type="radio" name="radio1" id="radio2" value="1"/>
             &nbsp;否
-        </div>
-        <div class="IF3"><p>排序:</p>
+        </div>--}}
+        {{--<div class="IF3"><p>排序:</p>
             <input type="text" name="Sorting" id="FLsorting" class="FLn1" value=""/>
-        </div>
+        </div>--}}
         <div class="IF3">
             <input type="submit" name="media_button" id="media_button" value="确    认" class="LGButton3"
                    style="margin-top:15%;"/>
         </div>
         <p>&nbsp;</p>
     </div>
-
     <script type="text/javascript">
+        var _token = $('input[name="_token"]').val();
+        $('#media_button').click(function () {
+            var select_id = $('#select option:selected').attr('media_id');
+            var media_name = $('input[name="media_name"]').val();
+            $.ajax({
+                url: '{{route('category.save')}}',
+                data: {
+                    'name':media_name,
+                    'media_id': select_id,
+                    '_token': _token
+                },
+                type: 'post',
+                dataType: "json",
+                stopAllStart: true,
+                success: function (data) {
+                    if (data.sta == '0') {
+                        layer.msg('保存成功', {icon: 1});
+                        window.location.reload();
+                    } else {
+                        layer.msg('保存失败');
+                    }
+                },
+                error: function () {
+                    layer.msg('网络发生错误');
+                }
+            });
+            return false;
+        });
+
         $(".sbox_1_item .m ul li a").click(function () {
             $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
             var option = $(this).parents(".m").prev("span").attr("data");
@@ -199,20 +237,15 @@
             }
             return false;
         });
-
-
         //$(".sbox_1_w").sortable();										/*	网站类型、入口级别 上下拖拽	*/
         $(".sortable").sortable();
         /*	分类 左右拖拽	*/
         //$(".sortable").sortable({"cancel":"li.add,li:first-child"});		/*	分类 左右拖拽	*/
         $(".sortable").disableSelection();
-
-
         $(".sbox_1_item .m ul li a i").click(function () {            /*	点击 右上角x 移除分类	*/
             //询问框
             var curl = $(this).parents("li");//获取li的下标
-            var cate_id = "";//获取分类id
-            var _token = $('input[name="_token"]').val();
+            var cate_id = $(this).parents("li").attr('data_id');//获取分类id
             layer.confirm('确认删除？', {
                 btn: ['确认', '取消'] //按钮
             }, function () {
@@ -220,7 +253,7 @@
                 $.ajax({
                     url: '{{route('category.cate_dele')}}',
                     data: {
-                        'id': cate_id,
+                        'cate_id': cate_id,
                         '_token': _token
                     },
                     type: 'post',
@@ -230,7 +263,6 @@
                         if (data.sta == '0') {
                             curl.remove();//移除结构
                             layer.msg('删除成功', {icon: 1});
-                            // layer.msg(data.msg || '请求成功');
                         } else {
                             layer.msg(data.msg || '请求失败');
                         }
@@ -246,6 +278,13 @@
             });
         });
         $(".sbox_1_item .m ul li.add a").unbind("click").click(function () {            /*	移除 添加按钮 点击事件并绑定新事件	*/
+            //获取当前单击添加的类型id
+            var category_id = $(this).parent("li").attr('category_id');
+            $("#select option").map(function () {
+                if ($(this).attr('media_id') == category_id) {
+                    $(this).attr("selected", "selected");
+                }
+            }).get().join(", ");
             layer.open({
                 type: 1,
                 skin: 'layui-layer-rim', //加上边框
@@ -254,7 +293,6 @@
             });
             return false;
         });
-
 
         $(".sbox_2 .m").on("click", "li a", function () {
 

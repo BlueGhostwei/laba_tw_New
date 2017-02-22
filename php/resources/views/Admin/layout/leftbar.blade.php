@@ -162,13 +162,13 @@
         </li>
         <li>
             <div class="header">
-                <span class="label" id="sd1">平台管理</span>
+                <span class="label" id="sd1">资源管理</span>
                 <span class="arrow up"></span>
             </div>
             <ul class="menu">
-                <li><a href="{{route('category.index')}}"><div class="nd1n">网络媒体</div></a></li>
-                <li><a href="{{route('category.index')}}"><div class="nd1n">网络媒体</div></a></li>
-               {{-- <li><a href="#"><div class="nd2n">户外大牌</div></a></li>--}}
+                <li><a href="{{route('category.index')}}"><div class="nd1n">新闻发布</div></a></li>
+                <li><a href="{{route('category.media_from')}}"><div class="nd1n">新增媒体</div></a></li>
+                <li><a href="{{route('category.media_List')}}"><div class="nd1n">媒体列表</div></a></li>
             </ul>
         </li>
     </ul>

@@ -15,8 +15,6 @@ class Category extends Model
      */
     protected $fillable = [
         'name',
-        'status',
-        'num',
         'media_id'//媒体类型：新闻发布，论坛等
     ];
 
@@ -29,10 +27,8 @@ class Category extends Model
     {
         return [
             'create' => [
-                'name' => "required|min:3|max:20|unique:" . $this->getTable(),
+                'name' => "required|max:20|unique:" . $this->getTable(),
                 'media_id' => 'required',
-                'status' => 'required',
-                'num' => "required"
             ]
         ];
     }

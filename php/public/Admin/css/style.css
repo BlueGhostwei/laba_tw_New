@@ -52,7 +52,7 @@ body{ background:#204186}
 .arrow.up { background-image: url(../img/arrow_u.png); }
 .arrow.down { background-image: url(../img/arrow_d.png); }
 .sidebar-panel li ul{ display:none}
-.sidebar-panel li ul li { background-color: #1a2e59; width:205px;color: #919fbe; padding-left:40px; border-bottom:1px dashed #14264c }
+.sidebar-panel li ul li { background-color: #1a2e59; color: #919fbe; padding-left:40px; border-bottom:1px dashed #14264c }
 .sidebar-panel li ul li a{color: #919fbe;line-height:45px;font-size:14px; padding-left:25px;}
 .sidebar-panel li ul li:hover{color: #fff;}
 .sidebar-panel li ul li:last-child { border-bottom: none; }
