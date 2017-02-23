@@ -74,6 +74,7 @@ class UploadController extends Controller
     public function index()
     {
         // 有效文件
+        
         $key = Input::get('fileKey', 'file');
         $file = Input::file($key);
         if (!$file || !$file->isValid()) return Response::json(array('sta' => 0, 'msg' => '无效的文件'));

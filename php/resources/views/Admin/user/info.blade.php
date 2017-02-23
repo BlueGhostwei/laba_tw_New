@@ -125,6 +125,7 @@
                             processData: false,
                             contentType: false
                         }).done(function(ret){
+
                             if(ret.sta == 1){
                                 $("#user_pic_img").attr("src", ret.url ) ;
                                $('input[name="user_image"]').val(ret.md5);

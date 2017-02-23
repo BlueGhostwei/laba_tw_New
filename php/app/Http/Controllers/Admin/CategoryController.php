@@ -13,6 +13,7 @@ use Validator;
 class CategoryController extends Controller
 {
 
+    
     /**
      *网络类型
      * 入口级别
@@ -84,8 +85,27 @@ class CategoryController extends Controller
     //创建媒体
    public function media_from(){
        $media_type = Config::get('mediatype');
-       
-       return view('Admin.category.media_from',['media_type'=>$media_type]);
+       $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
+       $price = Config::get('price');
+       if (!empty($media_type)) {
+           $get_arr = $media_type[0];
+           $result = array_get($get_arr, 'classification');
+           foreach ($result as $key => $vel) {
+               $category_id=$vel['category_id'];
+               $set_cate_data = Category::where(['media_id'=> $category_id])->get()->toArray();
+               if (!empty($set_cate_data)) {
+                   $result[$key]['data']=$set_cate_data;
+               }
+               if ($vel['category_id'] == "3") {
+                   $result[$key]['data'] = $provinces;
+               }
+               if ($vel['category_id'] == '5') {
+                   $result[$key]['data'] = $price;
+               }
+           }
+       }
+       //dd($result);
+       return view('Admin.category.media_from',['media_type'=>$media_type,'media_info'=>$result]);
    }
     public function media_List(){
         echo 34123;die;

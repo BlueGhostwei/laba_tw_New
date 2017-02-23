@@ -23,13 +23,13 @@
                                             <div class="m">
                                                 <ul class="sortable">
                                                     <li data_id="0"><a class="cur" href="">全国</a></li>
-                                                    @if(isset($vel['data']) && $vel['data'] !=null)
+                                                    @if(isset($vel['data']) &&  !empty($vel['data']))
                                                         @foreach($vel['data'] as $key =>$rsk)
                                                             <li data_id="{{$rsk->id}}"><a href="">{{$rsk->name}}</a>
                                                             </li>
                                                         @endforeach
                                                     @else
-                                                        <li data_id="0"><a class="cur" href="">全国</a></li>
+                                                        <li data_id="0"><a class="cur" href="">暂无</a></li>
                                                     @endif
                                                 </ul>
                                             </div>
@@ -165,27 +165,13 @@
                         <option media_id="{{$v['category_id']}}">{{$v['name']}}</option>
                     @endforeach
                 @else
-                    <option>网络媒体</option>
-                    <option>户外媒体</option>
-                    <option>平面媒体</option>
-                    <option>电视媒体</option>
-                    <option>广播媒体</option>
-                    <option>记者媒体</option>
+                    <option>暂无媒体类型</option>
                 @endif
             </select>
         </div>
         <div class="IF3"><p>分类名称:</p>
             <input type="text" name="media_name" id="media_name" class="IFN2"/>
         </div>
-        {{--<div class="IF3" id="wrap"><p>是否发布:</p>
-            <input type="radio" name="radio1" checked id="radio1" value="0"/>
-            &nbsp;是&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="radio1" id="radio2" value="1"/>
-            &nbsp;否
-        </div>--}}
-        {{--<div class="IF3"><p>排序:</p>
-            <input type="text" name="Sorting" id="FLsorting" class="FLn1" value=""/>
-        </div>--}}
         <div class="IF3">
             <input type="submit" name="media_button" id="media_button" value="确    认" class="LGButton3"
                    style="margin-top:15%;"/>
