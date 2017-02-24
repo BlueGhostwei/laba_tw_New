@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Category extends Model
+use Eloquent;
+class Category extends Eloquent
 {
     protected $table = 'category';
 
@@ -29,7 +29,7 @@ class Category extends Model
             'create' => [
                 'name' => "required|max:20|unique:" . $this->getTable(),
                 'media_id' => 'required',
-            ]
+            ],
         ];
     }
 
