@@ -150,7 +150,6 @@
                     layer.msg('请输入正确的手机号码');
                     return false
                 }
-                debugger
                 $.ajax({
                     url:'{{route('member.info')}}',
                     data: {
