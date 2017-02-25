@@ -54,6 +54,7 @@ class CreateMediaCommunityTable extends Migration
             $table->integer('mb_price')->nullable()->comment('会员价格');
             //自动维护的创建修改时间
             $table->timestamps();
+           
 
         });
     }

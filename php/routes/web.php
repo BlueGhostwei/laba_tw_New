@@ -57,6 +57,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('Admin/category/media_from',['as'=>'category.media_from','uses'=>'CategoryController@media_from']);  //创建媒体
         Route::post('Admin/category/media_save',['as'=>'category.media_save','uses'=>'CategoryController@media_save']);  //保存媒体
         Route::get('Admin/category/media_List',['as'=>'category.media_List','uses'=>'CategoryController@media_List']);  //媒体列表
+        Route::get('Admin/category/media_List_update/{id}',['as'=>'category.media_List_update','uses'=>'CategoryController@media_List_update']);  //媒体修改
+        Route::get('Admin/category/media_List_dele',['as'=>'category.media_List_dele','uses'=>'CategoryController@media_List_dele']);  //媒体删除
         //首页
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
        //网络媒体

@@ -60,7 +60,27 @@ class Media_community extends Eloquent
                 "pf_price"=>"required",
                 "px_price"=>"required",
                 "mb_price"=>"required",
-
+            ],
+            'media_update_rule'=>[
+                "media_type"=>"required",
+                "documents_type"=>"required",
+                "media_name"=>"required|min:2|max:20",
+                "network"=>"required",
+                "Entrance_level"=>"required",
+                "Entrance_form"=>"required",
+                "coverage"=>"required",
+                "channel"=>"required",
+                "principal"=>"required|min:2",
+                "user_Eail"=>"required|email",
+                "user_QQ"=>"required",
+                "address"=>"required",
+                "Zip_code"=>"required",
+                "documents_img"=>"required",
+                "Website_Description"=>"required",
+                "media_md5"=>"required",
+                "pf_price"=>"required",
+                "px_price"=>"required",
+                "mb_price"=>"required",
             ]
         ];
     }
