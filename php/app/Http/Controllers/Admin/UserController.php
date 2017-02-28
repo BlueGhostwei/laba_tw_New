@@ -45,12 +45,14 @@ class UserController extends Controller
         $remember = Input::get('remember', false);
         //判断用户手机号码
         if (Controller::isMobile(Input::get('username')) == false) {
-            return json_encode(["msg" => "请输入正确的手机号码", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
+            return Redirect::back()->withErrors('请输入正确的手机号码')->withInput();
+           //return json_encode(["msg" => "", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
         }
         //验证用户
         $set_user = User::where(['username' => Input::get("username"), 'deleted_at' => null])->get()->toArray();
         if (empty($set_user)) {
-            return json_encode(["msg" => "用户不存在，请注册", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
+            return Redirect::back()->withErrors('用户不存在，请注册')->withInput();
+            //return json_encode(["msg" => "", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
         }
         //判断用户状态是否锁定
 
@@ -64,12 +66,11 @@ class UserController extends Controller
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);//验证码错误！
+            return Redirect::back()->withErrors($validator->errors())->withInput();//验证码错误！
         } else {
             //通过验证
             $rst = Auth::attempt(['username' => $username, 'password' => $password], $remember);
             if ($rst == true) {
-
                 return redirect()->intended('/');//登录成功，跳转页面
             } else {
                 return Redirect::back()->withErrors('用户名或者密码错误')->withInput();
