@@ -22,8 +22,8 @@ body{ background:#204186}
 .sidepanel-open-button{width:20px; height:60px; float:left; background:url(../img/menu3.png) no-repeat}
 
 /*隐藏*/
-.menuntda{ width:70px; height:60px; float:left; display:none;background:url(../img/menu1.png) no-repeat;}
-.sidepanel{ width:260px; height:100%; float:right; display:none;right:0;top:0px; position: fixed; background:#1d3978;z-index: 9999;overflow: auto;}
+.menuntda{ width:70px; height:60px; display:none; float:left;background:url(../img/menu1.png) no-repeat;}
+.sidepanel{ width:260px; height:100%; float:right;right:0;top:0px;position:absolute; background:#1d3978;z-index: 9999;overflow: auto;overflow-x:hidden;overflow-y:hidden;}
 .IMenuda{width:20px; height:60px;float:left;background:url(../img/menu3da.png) no-repeat}
 .IT_nt1{ width:40px; height:40px; margin:7px;float:left; position:relative; background:url(../img/IT_nt1.png) no-repeat;}
 .IT_nt2{ width:40px; height:40px; margin:7px;float:left; position:relative; background:url(../img/IT_nt2.png) no-repeat;}
@@ -31,7 +31,7 @@ body{ background:#204186}
 .IT_nt4{ width:40px; height:40px; margin:7px 10px 7px 45px;float:left;}
 .IIO_nt{ background:url(../img/IIO_nt.png) no-repeat; width:200px; line-height:60px; color:#ccc; font-size:14px; padding-left:50px;}
 .IIO_nt span{ color:#ff0000; margin:0 5px;}
-.ITorder{ width:260px; height:550px; float:left; margin-bottom:50px;}
+.ITorder{ width:260px; height:490px; float:left; margin-bottom:10px;}
 .ITorder li{ float:left; width:220px; height:60px; padding:15px 20px 5px 20px;}
 .IOimg{ width:50px; height:50px; float:left; position:relative; margin-right:20px;}
 .IOimg img{ width:50px; height:50px;}
@@ -52,7 +52,7 @@ body{ background:#204186}
 .arrow.up { background-image: url(../img/arrow_u.png); }
 .arrow.down { background-image: url(../img/arrow_d.png); }
 .sidebar-panel li ul{ display:none}
-.sidebar-panel li ul li { background-color: #1a2e59; color: #919fbe; padding-left:40px; border-bottom:1px dashed #14264c }
+.sidebar-panel li ul li { background-color: #1a2e59; aawidth:205px;color: #919fbe; padding-left:40px; border-bottom:1px dashed #14264c }
 .sidebar-panel li ul li a{color: #919fbe;line-height:45px;font-size:14px; padding-left:25px;}
 .sidebar-panel li ul li:hover{color: #fff;}
 .sidebar-panel li ul li:last-child { border-bottom: none; }
@@ -61,6 +61,8 @@ body{ background:#204186}
 .sidebar-panel li ul li a:not(.selected):active{cursor: pointer; cursor: pointer;color:#fff;}
 .sidebar-panel li ul li:not(.selected):hover{background:url(../img/menu1.jpg);cursor: pointer; color:#fff;}
 .sidebar-panel li ul li:not(.selected):active{ background:url(../img/menu1.jpg);cursor: pointer; color:#fff;}
+.menu li.cur{ background:url(../img/menu1.jpg);cursor: pointer;color:#fff;}
+.menu li.cur a{color:#fff;}
 #sd1{ background:url(../img/label.png) no-repeat;}
 #sd2{ background:url(../img/labe2.png) no-repeat;}
 #sd3{ background:url(../img/labe3.png) no-repeat;}
@@ -138,7 +140,7 @@ body{ background:#204186}
 	left: 55%;	
 	position: fixed;
 	bottom: 5px;
-	background: #fff url(../images/bg_float_top.gif) no-repeat center -2px;
+	background: #fff url(images/bg_float_top.gif) no-repeat center -2px;
 	margin-left: 500px;
 	width: 18px;
 	padding: 16px 0 0;
@@ -158,6 +160,7 @@ body{ background:#204186}
 }
 #go_top a { text-decoration: none; }
 #go_top a:hover { color: #f60; }
+
 
 /*公共DIV*/
 .content{margin-left: 245px;height:auto;}
@@ -179,11 +182,11 @@ body{ background:#204186}
 .IF2{ width:90%; height:auto; margin:auto;}
 .IF3{ width:100%; height:auto; float:left; margin:10px 0;line-height:32px;font-size:14px;}
 .IF3 p{color:#333;font-size:15px; line-height:32px; float:left; width:100px;text-align: right;padding-right: 20px;}
+.IF3 span{ color:#ff0000; padding-left:10px;}
+.IF3 select{ width:200px;height:33px;line-height:30px;font-size:14px; color:#666;border:1px solid #ccc;padding:0 5px 0 5px;}
 .IFN1{width:200px; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
 .IFN2{width:40%; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
 .IFN3{width:75%; height:120px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
-.IF3 span{ color:#ff0000; padding-left:10px;}
-.IF3 select{ width:200px;height:33px;line-height:30px;font-size:14px; color:#666;border:1px solid #ccc;padding:0 5px 0 5px;}
 .IFN4{ float:left; width:73%; border:1px dashed #ccc; padding:15px;}
 .IFN4 span{color:#666;font-size:14px; line-height:30px; float:left; width:100%}
 .IFN5{ width:auto; height:35px; float:left; border:1px solid #ccc;border-radius:5px; background:#f7f8fa;}
@@ -336,7 +339,7 @@ body{ background:#204186}
 .FLnt1 span,.FLnt1 span a{ font-size:12px; color: #ccc;line-height:74px;}
 
 .FLmeiti1{ width: 100%;border-bottom:1px dashed #2C9FDD;line-height: 50px;font-weight:700; color: #000; font-size: 18px;}
-.FLmeiti2{width:91%; height:auto; margin:auto; padding-top:5%;}
+.FLmeiti2{width:91%; height:auto; margin:auto; padding-top:2%;}
 .IFMeiTi{ width:100%; height:auto; float:left; margin:10px 0;line-height:32px;font-size:14px;}
 .IFMeiTi p{color:#333;font-size:15px; line-height:32px; float:left; width:100px;text-align: right;padding-right: 20px;}
 .IFMeiTi li{ width: auto; margin-right:25px; float: left;}
@@ -344,29 +347,47 @@ body{ background:#204186}
 .FLn3{width:28%; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
 .FLn4{width:25%; height:30px; border:1px solid #ccc; line-height:30px;padding:0 5px 0 5px; font-size:14px; color:#666;}
 
+.XTnews_list{width:78%; float:left; text-indent:30px; text-align:left;height:60px;font-size:15px; line-height:60px;}
+.XTRnews_list{width:18%; float:right;margin-right:2%; text-align:right;color:#999;height:60px;line-height:60px;}
 
+.XTxiaoxi{ width:88%; height:auto; margin:auto; padding:30px 0; overflow: hidden; max-width: 100%;}
+.XTread{ width: 100%; float: left;height:auto; background: #fff}
+.XTxiaoxi h1{text-align:center; width: 100%; float:left; font-size: 20px; font-weight: 400; line-height: 40px;}
+.XTxiaoxi span{text-align:center; width: 100%;float:left;font-size: 14px; font-weight: 400;  color: #ccc; border-bottom: 1px dashed #ccc; padding-bottom: 10px; margin-bottom: 20px;}
+.XTxiaoxi p{ line-height: 25px; font-size: 15px; color: #666; margin: 10px 0; }
+.sxiap {float: left;height: 50px;margin-top:2%; width:100%;}
+.sxiap p{ width:50%; float:left;}
 
+/*忘记密码  必要样式*/
+.web-width{width:86%;margin:0 auto;}
+.clears{ clear:both;}
+.for-liucheng{width:550px;margin:20px auto; height:60px;padding:20px 0 0 0; position:relative;}
+.liulist{float:left;width:25%; height:7px; background:#ccc;}
+.liutextbox{ position:absolute;width:100%;left:0;top:10px;}
+.liutextbox .liutext{float:left;width:25%; text-align:center;}
+.liutextbox .liutext em{ display:inline-block;width:25px; height:25px;-moz-border-radius: 25px; -webkit-border-radius: 25px;border-radius:25px; background:#ccc; text-align:center; font-size:14px; line-height:25px; font-style:normal; font-weight:bold;color:#fff;}
+.liutextbox .liutext strong{ display:inline-block;height:35px; line-height:35px; font-weight:400;font-size:14px;}
+.liulist.for-cur{ background:#ff6800;}
+.liutextbox .for-cur em{ background:#ff6800;}
+.liutextbox .for-cur em img{ margin-top:7px;}
+.liutextbox em img{ margin-top:7px;}
+.liutextbox .for-cur strong{color:#ff6800;}
+.forget-pwd{width:400px;margin:20px auto;}
+.yanzma{ margin:0 15px; float:left; }
+.yanzma a{color:#ccc}
+.Bpass_name{width:250px; height:35px; border:1px solid #ccc; line-height:35px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
+.Bpass_{width:100px; height:35px; border:1px solid #ccc; line-height:35px;padding:0 5px 0 5px; font-size:14px; color:#666; float:left;}
+.Bp_zh{ width:100%; height:auto; float:left; margin:10px 0;line-height:32px;font-size:14px;}
+.Bp_zh p{color:#333;font-size:15px; line-height:32px; float:left; width:85px;text-align: right;padding-right: 20px;}
+.Bp_zh select{ width:200px;height:33px;line-height:30px;font-size:14px; color:#666;border:1px solid #ccc;padding:0 5px 0 5px; float:left;}
+.sel-yzyx{ display:none;}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.forget-pwd dd em{ width:30px; height:30px; border-radius:50px; background:#73b400; float:left;}
+.forget-pwd dd em img{ margin:7px;}
+.forget-pwd dd strong{ font-size:20px;color:#ff6800; font-weight:400; padding-left:15px;float: left;}
+.forget-pwd dd i{ font-size:13px; color:#ccc; line-height:25px;padding-left:15px;float: left;}
+.forget-pwd dd p{font-size:14px; color:#333; line-height:25px;padding-left:15px;float: left;}
+.forget-pwd dd p a{ color:#73b400}
 
 
 

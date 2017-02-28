@@ -60,6 +60,7 @@
             $.ajax({
                 url: '{{route('send.sms')}}',
                 data: {
+                    'type':"register",
                     'moblie_number': moblie_number,
                     '_token': _token
                 },

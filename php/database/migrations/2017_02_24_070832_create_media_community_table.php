@@ -38,7 +38,7 @@ class CreateMediaCommunityTable extends Migration
             $table->tinyInteger('network')->nullable()->comment('网络类型');
             $table->tinyInteger('Entrance_level')->nullable()->comment('入口级别');
             $table->tinyInteger('Entrance_form')->nullable()->comment('入口形式');
-            $table->tinyInteger('coverage')->nullable()->comment('覆盖区域');
+            $table->char('coverage',20)->nullable()->comment('覆盖区域');
             $table->tinyInteger('channel')->nullable()->comment('频道类型');
             $table->string('principal',20)->nullable()->comment('媒体负责人');
             $table->char('mobile_number',15)->nullable()->comment('媒体负责人联系电话');

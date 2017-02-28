@@ -15,11 +15,6 @@
 //游客路由
 Route::group(['middleware' => 'guest'], function () {
     Route::group(['namespace' => 'Admin'], function () {
-
-
-
-
-
         //验证码
         Route::get('yanzheng/test',['as'=>'captcha.test','uses'=>'CaptchaController@index']);
         //生成
@@ -38,8 +33,18 @@ Route::group(['middleware' => 'guest'], function () {
         //Route::post('Admin/send/sms',['as'=>'send.sms','uses'=>'UserController@postRegister']);
         Route::post('Admin/send/sms',['as'=>'send.sms','uses'=>'SMSController@index']);
         //找回密码
-        Route::get('Admin/find_password', ['as' => 'Admin.find_password', 'uses' => 'PasswordController@getIndex']);
+        Route::get('Admin/password', ['as' => 'Admin.find_password', 'uses' => 'PasswordController@getIndex']);
+        Route::get('Admin/password/pass_find', ['as' => 'Admin.pass_find', 'uses' => 'PasswordController@pass_find']);
+        Route::get('Admin/password/pass_find_second', ['as' => 'Admin.pass_find_second', 'uses' => 'PasswordController@pass_find_second']);
+        Route::post('Admin/password/pass_find_send', ['as' => 'Admin.pass_find_send', 'uses' => 'PasswordController@pass_find_send']);
+        Route::get('Admin/password/pass_Overlay', ['as' => 'Admin.pass_Overlay', 'uses' => 'PasswordController@pass_find_Overlay']);
+        Route::get('Admin/password/pass_info', ['as' => 'Admin.pass_info', 'uses' => 'PasswordController@pass_info']);
+        Route::post('Admin/password/pass_Overlay','PasswordController@pass_find_update');
+        Route::post('Admin/password/getuser', ['as' => 'Admin.pass.getuser', 'uses' => 'PasswordController@getuser']);
+        Route::post('password/email', ['as' => 'pass.email', 'uses' => 'PasswordController@send_email']);//邮件
         Route::post('Admin/find_password', 'PasswordController@postIndex');
+
+       // Route::resource('Admin/find_password','PasswordController');
     });
 
 });

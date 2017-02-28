@@ -17,7 +17,7 @@
     </div>
     <div class="login-container">
         <img class="login-img-card" src="/images/avatar/jaman-01.jpg" alt="login thumb" />
-        <form action="{{ route('password.email') }}" method="post" class="form-signin">
+        <form action="{{--{{ route('password.email') }}--}}" method="post" class="form-signin">
             {{ csrf_field() }}
             <input type="text" name="email" value="{{ old('email') }}" id="inputEmail" class="form-control floatlabel " placeholder="请输入邮箱" required autofocus>
             <button class="btn btn-primary btn-block btn-signin" type="submit">发送重置密码邮件</button>

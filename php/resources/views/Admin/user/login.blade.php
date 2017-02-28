@@ -23,7 +23,7 @@
                 </div>
                 <div class="LGnt1"><p>密&nbsp;&nbsp;&nbsp;&nbsp;码:</p>
                     <input type="password" name="user_password" id="password"  class="LGnt2"/>
-                    <i><a href="{{route('Admin.find_password')}}">忘记密码？</a></i>
+                    <i><a href="{{route('Admin.pass_find')}}">忘记密码？</a></i>
                 </div>
                 <div class="LGnt1"><p>验证码:</p>
                     <input type="text" name="user_code" id="textfield"  class="LGnt3"/>
@@ -47,3 +47,8 @@
 </div>
 </body>
 </html>
+@foreach ($errors->all() as $error)
+    <script type="text/javascript">
+        layer.msg("{{$error}}");
+    </script>
+@endforeach
