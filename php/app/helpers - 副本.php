@@ -167,15 +167,17 @@ function acl($role = '', $action = '')
 function mla($actionNames)
 {
     if (empty($actionNames)) return '';
-    $rootNameSpace = "App\Http\Controllers\Admin";
+
+
+    $rootNameSpace = "App\Http\Controllers";
     $currentAction = Route::currentRouteAction();
     $currentActionParse = explode('@', $currentAction);
+
     $active = false;
     $access = false;
 
     // active
     foreach ($actionNames as $v) {
-        dd($v);
         // 排除
         if (is_int(stripos($v, '!'))) {
             $v = '!' . $rootNameSpace . strtr($v, ['!' => '']);

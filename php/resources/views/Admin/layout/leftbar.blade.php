@@ -90,14 +90,13 @@
         <div class="IObu"><input type="submit" name="button" id="button" value="下一步" class="TOUbutton"/></div>
     </div>
 </div>
-<div class="sidebar clearfix">
+<div class="sidebar clearfix  " >
     <ul class="sidebar-panel nav">
-
-        <li>
-            <div class="header">
+        <li >
+            <div class="header" >
                 <span class="label" id="sd1">网络媒体</span>
                 <span class="arrow up"></span>					</div>
-            <ul class="menu">
+            <ul class="menu  ">
                 <li><a href="{{route('media.release')}}"><div class="nd1n">新闻发布</div></a></li>
                 <li><a href="{{route('media.market')}}"><div class="nd2n">百科营销</div></a></li>
                 <li><a href="{{route('media.Short_video')}}"><div class="nd3n">短视频</div></a></li>

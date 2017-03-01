@@ -44,7 +44,7 @@
                                                     <li><a href="" class="cur">不限</a></li>
                                                     @if(isset($vel['data']) && $vel['data'] !=null)
                                                         @foreach($vel['data'] as $kst=>$rvb)
-                                                            @if($rvb['name']==50 || $rvb['name']==1000)
+                                                            @if($rvb['name']=="50" || $rvb['name']=="1000")
                                                                 <li data_id="{{$rvb['id']}}"><a href="">{{$rvb['name']}}
                                                                         以上<i
                                                                                 class="del"></i></a></li>

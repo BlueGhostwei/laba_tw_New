@@ -49,10 +49,9 @@ Route::group(['middleware' => 'guest'], function () {
 
 });
 //需要登陆并需要权限登陆（acl）的路由
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth','acl']], function () {
    // echo 34342;die;
     Route::group(['namespace' => 'Admin'], function () {
-
         //平台分类管理
         Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
         Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );
