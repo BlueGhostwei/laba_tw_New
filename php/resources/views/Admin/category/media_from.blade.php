@@ -9,7 +9,6 @@
         <div class="Invoice">
             <div class="INa1dd">
                 <div class="main" style="margin-top:20px;">
-
                     <!--	分类管理	-->
                     <div class="hdorder radius1" style=" float: left; margin-bottom:50px;">
                         <h3 class="title1"><strong><a href="#">媒体资源管理</a></strong>
@@ -37,7 +36,6 @@
 
                                             <input type="text" name="media_name" id="FLnome1" class="IFN2"/>
                                         </div>
-
                                         <div class="IF3"><p>媒体LOGO:</p>
                                             <form id="form_logo" method="post">
                                                 {{ csrf_field() }}
@@ -45,6 +43,16 @@
                                                      style="width: 120px;height: 80px"/><br>
                                                 <input name="media_logo_md5" id="media_md5" type="hidden" value=""/>
                                                 <input id="media_logo_img" name="file" accept="image/*" type="file"
+                                                       style="display: none"/>
+                                            </form>
+                                        </div>
+                                        <div class="IF3" ><p>入口示意图</p>
+                                            <form id="diagram" method="post">
+                                                {{ csrf_field() }}
+                                                <img id="diagram_show" src="{{url('Admin/images/z_add.png')}}"
+                                                     style="width: 120px;height: 80px"/><br>
+                                                <input name="diagram_img_md5" id="diagram_img_md5" type="hidden" value=""/>
+                                                <input id="diagram_img" name="file" accept="image/*" type="file"
                                                        style="display: none"/>
                                             </form>
                                         </div>
@@ -176,7 +184,6 @@
     </div>
     <script type="text/javascript" src="{{url('Admin/js/jquery-2.1.1.min.js')}}"></script>
     <script type="text/javascript">
-
         $(function () {
             //证件上传
             $('#Documents_img').click(function () {
@@ -235,6 +242,34 @@
                             return false;
                         }
                     });
+                });
+            });
+            //入口示意图
+            $("#diagram_show").click(function () {
+                $("#diagram_img").click();  //隐藏了input:file样式后，点击头像就可以本地上传
+                $("#diagram_img").change(function () {
+                    //创建FormData对象
+                    var data = new FormData();
+                    $.each($('#diagram_img')[0].files, function (i, file) {
+                        data.append('file', file);
+                    });
+                    $.ajax({
+                        url: '{{url('upload')}}',
+                        type: 'POST',
+                        data: data,
+                        dataType: 'JSON',
+                        cache: false,
+                        processData: false,
+                        contentType: false
+                    }).done(function (ret) {
+                        if (ret.sta == 1) {
+                            $("#diagram_show").attr("src", ret.url);
+                            $('#diagram_img_md5').val(ret.md5);
+                        } else {
+                            //layer.msg('logo上传失败');
+                            return false;
+                        }
+                    });
 
                 });
             });
@@ -254,6 +289,7 @@
             var documents_img = $('input[name="documents_img"]').val();//证件照
             var Website_Description = $('textarea[name="Website_Description"]').val();//媒体简介
             var media_md5 = $('#media_md5').val();
+            var diagram_img=$('#diagram_img_md5').val();
             var pf_price = $('#pf_price').val();
             var px_price = $('#px_price').val();
             var mb_price = $('#mb_price').val();
@@ -297,6 +333,7 @@
                     "documents_img":documents_img,
                     "Website_Description":Website_Description,
                     "media_md5":media_md5,
+                    'diagram_img':diagram_img,
                     "pf_price":pf_price,
                     "px_price":px_price,
                     "mb_price":mb_price,
@@ -310,15 +347,12 @@
                 dataType: "json",
                 stopAllStart: true,
                 success: function (data) {
+                    debugger
                     if (data.sta == '0') {
-                        if(data.msg=="保存成功"){
-                            layer.msg('保存成功', {icon: 1});
-                        }else{
-                            layer.msg(data.msg);
-                        }
-
-                        //重定向到列表页
-                        /* window.location.reload();*/
+                        layer.msg('保存成功', {icon: 1});
+                        setTimeout(function () {
+                            window.location.href="{{route('category.media_List')}}"
+                        }, 2000);
                     } else {
                         layer.msg(data.msg);
                     }

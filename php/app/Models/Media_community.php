@@ -57,6 +57,7 @@ class Media_community extends Eloquent
                 "documents_img"=>"required",
                 "Website_Description"=>"required",
                 "media_md5"=>"required",
+                "diagram_img"=>"required",
                 "pf_price"=>"required",
                 "px_price"=>"required",
                 "mb_price"=>"required",

@@ -20,6 +20,7 @@
                                 <table class="table_in1 cur">
                                     <thead>
                                     <tr>
+                                        <th>序号</th>
                                         <th>媒体名称</th>
                                         <th>媒体LOGO</th>
                                         <th>网站类型</th>
@@ -38,6 +39,7 @@
                                     @if(isset($data_list) && !empty($data_list))
                                         @foreach($data_list as $key =>$vel)
                                             <tr>
+                                                <td>1</td>
                                                 <td>{{$vel->media_name}}</td>
                                                 <td style="max-width: 60px;">
                                                     <img src="{{md52url($vel->media_md5)}}"/>

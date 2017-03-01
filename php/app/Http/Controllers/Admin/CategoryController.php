@@ -16,8 +16,6 @@ use Validator;
 
 class CategoryController extends Controller
 {
-
-
     /**
      *网络类型
      * 入口级别
@@ -29,7 +27,7 @@ class CategoryController extends Controller
     {
         $media_type = Config::get('mediatype');
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        $price = Config::get('price');
+       /* $price = Config::get('price');*/
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
@@ -42,9 +40,9 @@ class CategoryController extends Controller
                 if ($vel['category_id'] == "3") {
                     $result[$key]['data'] = $provinces;
                 }
-                if ($vel['category_id'] == '5') {
+               /* if ($vel['category_id'] == '5') {
                     $result[$key]['data'] = $price;
-                }
+                }*/
             }
         }
         //查询省市
@@ -52,7 +50,11 @@ class CategoryController extends Controller
         return view('Admin.category.from', ['midia_type' => $media_type, 'result_data' => $result, 'provinces' => $provinces]);
     }
 
-    //添加分类
+    /**
+     * @param Request $request
+     * @return mixed
+     * 添加分类
+     */
     public function create_category(Request $request)
     {
 
@@ -77,7 +79,6 @@ class CategoryController extends Controller
      * @param Request $request
      * @return mixed
      *自定义验证规则
-     *
      */
 
     public function media_save(Request $request)
@@ -100,6 +101,7 @@ class CategoryController extends Controller
             "documents_img.required" => "选择要上传的证件照片",
             "Website_Description.required" => "请输入媒体简介",
             "media_md5.required" => "请上传媒体LOGO",
+            "diagram_img.required" => "请上传入口示意图",
             "pf_price.required" => "请输入平台价格",
             "px_price.required" => "请输入代理价格",
             "mb_price.required" => "请输入会员价格",
@@ -142,7 +144,10 @@ class CategoryController extends Controller
         }
     }
 
-    //删除分类
+    /**
+     * @return mixed
+     * /删除分类
+     */
     public function cate_dele()
     {
         $id = Input::get('cate_id');
@@ -155,7 +160,10 @@ class CategoryController extends Controller
         }
     }
 
-    //创建媒体
+    /**
+     * @return mixed
+     * 创建媒体
+     */
     public function media_from()
     {
         $media_type = Config::get('mediatype');
