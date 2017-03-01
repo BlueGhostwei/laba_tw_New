@@ -43,13 +43,14 @@ class MediaController extends Controller
             }
         }
         $data_list = DB::table('media_community')
-            ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'coverage', 'media_md5', 'media_name', 'pf_price', 'px_price', 'mb_price')->orderBy('id','desc')->paginate(10);
+            ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img','media_name', 'pf_price', 'px_price', 'mb_price')->orderBy('id','desc')->paginate(10);
         foreach ($data_list as $key => $vel) {
             $vel->coverage = DB::table('region')->where('id', $vel->coverage)->select('id', 'name')->get()->toArray();
             //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
             $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->select('name', 'id')->get()->toArray();
             $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->select('name', 'id')->get()->toArray();
             $vel->channel = DB::table('category')->where('id', 0)->select('name', 'id')->get()->toArray();
+            $vel->standard = DB::table('category')->where('id', $vel->standard)->select('name', 'id')->get()->toArray();
         }
         //dd($data_list);
         return view('Admin.media.index',['result_data'=>$result,'media_list'=>$data_list]);

@@ -48,6 +48,7 @@ class CreateMediaCommunityTable extends Migration
             $table->string('Zip_code',10)->nullable()->comment('邮编地址 ');
             $table->string('documents_img',150)->nullable()->comment('证件照片');
             $table->string('Website_Description',500)->nullable()->comment('媒体简介');
+            $table->string('standard',50)->nullable()->comment('正文链接');
             $table->string('media_md5',150)->nullable()->comment('媒体logo');
             $table->string('diagram_img',150)->nullable()->comment('入口示意图');
             $table->integer('pf_price')->nullable()->comment('平台价格');

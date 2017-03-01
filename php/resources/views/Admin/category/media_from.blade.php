@@ -298,6 +298,7 @@
             var Entrance_form="";
             var coverage="";
             var channel="";
+            var standard="";
             //获取所有选中的分类信息
             $('.sbox_1_item ul li .cur').each(function (key, vel) {
                  var set_name=$(this).closest('ul').attr('set_name');
@@ -315,6 +316,9 @@
                 }
                 if (set_name == 'channel') {
                      channel = $(this).parent('li').attr('data_id');
+                }
+                if (set_name == 'standard') {
+                    standard = $(this).parent('li').attr('data_id');
                 }
             });
             //ajax提交申请
@@ -341,13 +345,13 @@
                     "Entrance_level":Entrance_level,
                     "Entrance_form":Entrance_form,
                     "coverage":coverage,
-                    "channel":channel
+                    "channel":channel,
+                    'standard':standard
                 },
                 type: 'post',
                 dataType: "json",
                 stopAllStart: true,
                 success: function (data) {
-                    debugger
                     if (data.sta == '0') {
                         layer.msg('保存成功', {icon: 1});
                         setTimeout(function () {

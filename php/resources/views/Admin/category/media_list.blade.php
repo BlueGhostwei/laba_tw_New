@@ -6,7 +6,7 @@
     <div class="content">
         <div class="Invoice">
             <div class="INa1dd">
-                <div class="main" style="margin-top:20px;">、
+                <div class="main" style="margin-top:20px;">
                     <!--	分类管理	-->
                     <div class="hdorder radius1">
                         <h3 class="title1"><strong><a href="#">媒体资源管理</a></strong>
@@ -72,7 +72,13 @@
                                                         <td>{{$vl->name}}</td>
                                                     @endforeach
                                                 @endif
-                                                <td style="max-width: 90px;">带图片、文字、网网址网址址链接</td>
+                                                @if(empty($vel->standard))
+                                                    <td>不限</td>
+                                                @else
+                                                    @foreach($vel->standard as $ky =>$vl)
+                                                        <td>{{$vl->name}}</td>
+                                                    @endforeach
+                                                @endif
                                                 @if(empty($vel->coverage))
                                                     <td>不限</td>
                                                 @else

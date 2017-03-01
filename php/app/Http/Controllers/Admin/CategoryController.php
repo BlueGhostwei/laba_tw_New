@@ -199,13 +199,15 @@ class CategoryController extends Controller
         $user_id=Auth::id();
         //$media_type = Config::get('mediatype');
         $data_list = DB::table('media_community')->where('user_id',$user_id)
-            ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'coverage', 'media_md5', 'media_name', 'pf_price', 'px_price', 'mb_price')->paginate(10);
+            ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'coverage','standard', 'media_md5', 'media_name', 'pf_price', 'px_price', 'mb_price')->paginate(10);
         foreach ($data_list as $key => $vel) {
+
             $vel->coverage = DB::table('region')->where('id', $vel->coverage)->select('id', 'name')->get()->toArray();
             $vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
             $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->select('name', 'id')->get()->toArray();
             $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->select('name', 'id')->get()->toArray();
             $vel->channel = DB::table('category')->where('id', 0)->select('name', 'id')->get()->toArray();
+            $vel->standard = DB::table('category')->where('id', $vel->standard)->select('name', 'id')->get()->toArray();
         }
         //dd($data_list);
         return view('Admin.category.media_list', ['data_list' => $data_list]);

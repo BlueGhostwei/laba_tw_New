@@ -36,7 +36,7 @@
                                                 </div>
                                                 <span class="r"><a href="">更多</a></span>
                                             </div>
-                                        @else
+                                        @elseif($vel['set_name']!="standard")
                                             <div class="sbox_1_item clearfix">
                                                 <span class="l" data="option_1"><strong>{{$vel['name']}}</strong></span>
                                                 <div class="m">
@@ -104,7 +104,7 @@
                                             <tr>
                                                 <td>{{count($media_list)-$key}}</td>
                                                 <td class="sbox_3_t1">
-                                                    <img src="{{md52url($vel->media_md5)}}" style="width: 120px;height:50px"/>
+                                                    <img src="{{md52url($vel->media_md5)}}" style="width: 100px;height:30px"/>
                                                     {{$vel->media_name}}
                                                 </td>
                                                 @if(empty($vel->Entrance_form))
@@ -122,12 +122,14 @@
                                                     @endforeach
                                                 @endif
                                                 @if(empty($vel->standard))
-
+                                                    <td>不限</td>
+                                                @else
+                                                    @foreach($vel->standard as $ky =>$vl)
+                                                        <td>{{$vl->name}}</td>
+                                                    @endforeach
                                                 @endif
-                                                <td class="sbox_3_t4">不能带图片、网址、
-                                                    二维码、联系方式等
-                                                </td>
-                                                <td class="sbox_3_t5"></td>
+
+                                                <td class="sbox_3_t5"><img src="{{md52url($vel->diagram_img)}}" style="width: 50px;height:20px"></td>
                                                 <td class="sbox_3_t6">{{$vel->pf_price}}</td>
                                                 <td class="sbox_3_t7">{{$vel->px_price}}</td>
                                                 <td class="sbox_3_t8">{{$vel->mb_price}}</td>
@@ -171,24 +173,6 @@
                                                 <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
                                                 <td class="WIna6">新浪网XXXXXXXXXXXXXX</td>
                                                 <td class="WIna7">80元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网*****</td>
-                                                <td class="WIna7">100元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网*****</td>
-                                                <td class="WIna7">100元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网*****</td>
-                                                <td class="WIna7">100元</td>
                                                 <td class="WIna8"><a href="">×</a></td>
                                             </tr>
                                             </tbody>
@@ -261,7 +245,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="WMain3"><p><i class="LGntas"></i></p>
-                                                            <label><input type="checkbox" name="admit" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
+                                                              <label><input type="checkbox" name="admit" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
                                                         </div>
                                                     </li>
                                                 </ul>
