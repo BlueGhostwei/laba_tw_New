@@ -3,7 +3,7 @@
 @section('title', '角色列表')
 
 @section('content')
-    <div class="main-container">
+    {{--<div class="main-container">
         <div class="container-fluid">
             @include('Admin.layout.breadcrumb', [
                 'title' => '角色列表',
@@ -11,7 +11,7 @@
                     '权限配置'=>'',
                     '角色列表' => ''
                 ]
-            ])
+            ])--}}
             <style>
                 .widget-head {
                     margin-bottom: 15px;
@@ -84,7 +84,7 @@
                             </div>
 
                         </div>
-                        <div class=" widget_next_block {{mla('AclUserController@user_role')}}">
+                        <div class=" widget_next_block {{--{{mla('AclUserController@user_role')}}--}}">
                             <form role="form" method="post" id="Form-Add-Class" action="{{ url( 'user_role') }}"
                                   method="post">
                                 {{ csrf_field() }}
@@ -109,58 +109,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-@endsection
-
-@section('footer_related')
-    <script src="/js/bootbox.js"></script>
-    <script src="/js/sweetalert.js"></script>
-    <script type="text/javascript">
-        /*jQuery(document).ready(function ($) {
-            $('.btn-toolbar').on('click', '.m-user-delete', function (e) {
-                e.preventDefault();
-                var _this = this;
-                var token = '{{ csrf_token() }}';
-                var url = $(this).attr('href');
-                swal({
-                    title: "确定删除?",
-                    text: "删除后将不能恢复！!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    closeOnConfirm: false,
-                    closeOnCancel: true
-                }, function (isConfirm) {
-                    if (!isConfirm) return;
-
-                    $.ajax({
-                        type: "delete",
-                        url: url,
-                        data: "_token=" + token,
-                        success: function(json) {
-                            if (json.state == 1) {
-                                swal({
-                                    title: '删除成功',
-                                    text: json.message,
-                                    type: 'success',
-                                }, function() {
-                                    window.location.reload();
-                                });
-                            }
-                            else {
-                                swal("删除失败!", json.message, "error");
-                            }
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
-                });
-            })
-        });*/
-    </script>
 
 @endsection
+
+

@@ -15,6 +15,8 @@
 //游客路由
 Route::group(['middleware' => 'guest'], function () {
     Route::group(['namespace' => 'Admin'], function () {
+        //生成_token
+        Route::any('get_token',['as'=>'set.token','uses'=>'UserController@Set_token']);
         //验证码
         Route::get('yanzheng/test',['as'=>'captcha.test','uses'=>'CaptchaController@index']);
         //生成
@@ -27,10 +29,10 @@ Route::group(['middleware' => 'guest'], function () {
         //登陆注册
         Route::get('Admin/user/login', ['as' => 'user.login', 'uses' => 'UserController@getLogin']);
         Route::post('Admin/user/post_login',['as' => 'user.post_login', 'uses' => 'UserController@post_login']);
+        Route::get('Admin/user/_postLogin',['as' => 'user._postLogin', 'uses' => 'UserController@_postLogin']);
         Route::get('Admin/user/register', ['as' => 'user.register', 'uses' => 'UserController@getRegister']);
-        Route::post('Admin/user/register', 'UserController@postRegister');
+        Route::post('Admin/user/register', 'UserController@postRegister');//注册提交
         //sms短信接口
-        //Route::post('Admin/send/sms',['as'=>'send.sms','uses'=>'UserController@postRegister']);
         Route::post('Admin/send/sms',['as'=>'send.sms','uses'=>'SMSController@index']);
         //找回密码
         Route::get('Admin/password', ['as' => 'Admin.find_password', 'uses' => 'PasswordController@getIndex']);
@@ -45,6 +47,9 @@ Route::group(['middleware' => 'guest'], function () {
         Route::post('Admin/find_password', 'PasswordController@postIndex');
 
        // Route::resource('Admin/find_password','PasswordController');
+
+
+
     });
 
 });
@@ -76,6 +81,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
+        Route::get('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);
         Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
@@ -97,8 +103,11 @@ Route::group(['middleware' => ['auth','acl']], function () {
 
 
 
-
-        // 权限配置
+        Route::get('acl/resource/index', ['as' => 'acl.resource.index', 'uses' => 'AclResourceController@index']);
+        Route::get('acl/role/edit/{id}', ['as' => 'acl.role.edit', 'uses' => 'AclRoleController@edit']);
+        Route::get('acl/role/update/{id}', ['as' => 'acl.role.update', 'uses' => 'AclRoleController@update']);
+        Route::get('acl/role/index', ['as' => 'acl.role.index', 'uses' => 'AclRoleController@index']);
+        // 权限配置inde
         Route::resource('/acl/resource', 'AclResourceController');
         Route::resource('/acl/role', 'AclRoleController');
         Route::resource('/acl/user', 'AclUserController');

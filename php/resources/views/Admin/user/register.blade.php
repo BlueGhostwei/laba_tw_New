@@ -93,7 +93,6 @@
         });
         var timeout = 60;
         var int1;
-
         function setTiming() {
             if (timeout >= 1) {
                 clearTimeout(int1);
@@ -257,7 +256,8 @@
             </div>
             <div class="LGnt6"><p>验证码:</p>
                 <input type="text" name="user_code" id="user_code" class="LGnt3"/>
-                <div class="LGnt4"><input type="submit" name="button" id="send_sms_button" value="获取验证码" class="LGn3"/>
+                <div class="LGnt4">
+                    <input type="submit" name="button" id="send_sms_button" value="获取验证码" class="LGn3"/>
                 </div>
             </div>
             <div class="LGntnn6">

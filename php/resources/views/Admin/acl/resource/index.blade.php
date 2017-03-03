@@ -3,16 +3,16 @@
 @section('title', '权限列表')
 
 @section('content')
-    <div class="main-container">
+   {{-- <div class="main-container">
         <div class="container-fluid">
             @include('Admin.layout.breadcrumb', [
                 'title' => '权限列表',
                 'breadcrumb' => [
                     '权限列表' => ''
                 ]
-            ])
+            ])--}}
 
-            <div class="row">
+            <div class="row  {{mla('AclResourceController')}}">
                 <div class="box-widget widget-module">
                     <div class="widget-container">
                         <div class=" widget-block">
@@ -45,11 +45,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-@endsection
-
-@section('footer_related')
     <script src="/js/bootbox.js"></script>
     <script src="/js/sweetalert.js"></script>
     <script type="text/javascript">

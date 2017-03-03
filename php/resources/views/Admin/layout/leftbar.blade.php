@@ -170,6 +170,17 @@
                 <li><a href="{{route('category.media_List')}}"><div class="nd1n">媒体列表</div></a></li>
             </ul>
         </li>
+        <li>
+            <div class="header">
+                <span class="label" id="sd1">权限管理</span>
+                <span class="arrow up"></span>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ route('acl.resource.index') }}"><div class="nd1n">权限列表</div></a></li>
+                <li><a href="{{ route('acl.role.index') }}"><div class="nd1n">角色列表</div></a></li>
+
+            </ul>
+        </li>
     </ul>
 </div>
 <script type="text/javascript">

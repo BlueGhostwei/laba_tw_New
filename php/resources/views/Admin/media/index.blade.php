@@ -1,16 +1,12 @@
 @extends('Admin.layout.main')
 @section('title', '首页')
 @section('header_related')
-    <script type="text/javascript" charset="utf-8" src="{{url('Admmin/js/ueditor.config.js')}}"></script>
-    <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor.all.min.js')}}"> </script>
-    <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/zh-cn.js')}}"></script>
 @endsection
 @section('content')
     <div class="content">
         <div class="Invoice">
             <div class="INa1dd">
                 <div class="ndt">
-
                     <!--	新闻任务	-->
                     <div class="radius1">
                         <h3 class="title1"><strong><a href="#">新闻任务</a></strong></h3>
@@ -289,7 +285,7 @@
                                                                 <span>请选择开始时间24小时后，7天之内的时间</span>
                                                             </div>
                                                             <div class="WMain3 WMain3_1"><p><i class="LGntas">*</i>内容编辑:</p>
-                                                                <script id="editor" name="zw" type="text/plain"></script>
+                                                                <script id="container" name="content" type="text/plain" style="width:90%;height:500px"></script>
                                                             </div>
                                                         </div>
                                                         <div class="WMain3 WMain3_1"><p><i class="LGntas">*</i>新闻备注:</p>
@@ -342,6 +338,9 @@
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+                var ue = UE.getEditor('container');
+            </script>
             <script type="text/javascript">
                 /*	日历	*/
                 var picker1 = new Pikaday({

@@ -107,18 +107,16 @@ function ma($identifier = null)
 function acl($role = '', $action = '')
 {
     if (!Auth::check()) return false;
-    $namespace = "App\\Http\\Controllers";
+    $namespace = "App\\Http\\Controllers\\Admin";
     !$action && $action = Route::current()->getActionName();
     $action = strtr($action, [$namespace . '\\' => '']);;
     !$role && $role = Auth::user()->role;
     $aclRole = AclRole::where('role', $role)->get(['resource'])->toArray();
     $aclRole = Arr::pluck($aclRole, 'resource');
-    //dd($aclRole);
     // 首页
     if ($action == 'DashboardController@index') {
         return true;
     }
-
     // 最高权限, 或包含当前路由
     if (in_array('*', $aclRole) || in_array($action, $aclRole)) {
         return true;
@@ -164,7 +162,7 @@ function acl($role = '', $action = '')
  *
  * @return string
  */
-function mla($actionNames)
+function mla(...$actionNames)
 {
     if (empty($actionNames)) return '';
     $rootNameSpace = "App\Http\Controllers\Admin";
@@ -172,10 +170,8 @@ function mla($actionNames)
     $currentActionParse = explode('@', $currentAction);
     $active = false;
     $access = false;
-
     // active
     foreach ($actionNames as $v) {
-        dd($v);
         // 排除
         if (is_int(stripos($v, '!'))) {
             $v = '!' . $rootNameSpace . strtr($v, ['!' => '']);

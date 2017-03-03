@@ -290,7 +290,7 @@ class PasswordController extends Controller
                // $msg="尊敬的用户";
                 Mail::raw($msg,function($message){
                     $message->subject('亚媒社密码找回');
-                    $message->to("1987105819@qq.com");
+                    $message->to(Input::get('user_email'));
                 });
                 $array=array(
                     'username'=>Input::get('username'),
