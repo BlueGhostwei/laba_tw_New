@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
        //网络媒体
         Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);
+        Route::post('Admin/media/release','MediaController@index');
         Route::get('Admin/media/market',['as'=>'media.market','uses'=>'MediaController@Encyclopedia']);//百科
         Route::get('Admin/media/Short_video',['as'=>'media.Short_video','uses'=>'MediaController@Short_video']);//短视频
         Route::get('Admin/media/Public_Wechat',['as'=>'media.Public_Wechat','uses'=>'MediaController@Public_Wechat']);//公众号

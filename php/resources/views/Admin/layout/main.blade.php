@@ -9,10 +9,11 @@
     <link href="{{url('Admin/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('Admin/css/style.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('Admin/css/style2.css')}}" rel="stylesheet" type="text/css" />
-
+    <script type="text/javascript" src="{{url('Admin/js/jquery-2.1.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('Admin/js/layer.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.min.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/plugins.js')}}"></script>
-    <script src="{{url('Admin/js/jquery.touchslider.min.js')}}"  type="text/javascript"></script>
+    <script type="text/javascript" src="{{url('Admin/js/jquery.touchslider.min.js')}}"  ></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.SuperSlide.2.1.1.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.dataTables.min.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/echarts.min.js')}}"></script>

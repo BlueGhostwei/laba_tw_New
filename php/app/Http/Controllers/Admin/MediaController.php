@@ -45,7 +45,17 @@ class MediaController extends Controller
         $keyword=Input::get('keyword');
         if($keyword){
             $category_id=Input::get('category_id');
-            
+            $data_id=Input::get('data_id');
+            switch ($category_id){
+                    case "0":
+                          $data_list = DB::table('media_community')->where(['network'=>function($query){
+                              $query->leftJoin('category','media_id','=','network')->select('category.id as category_id','category.name');
+                          }])->orderBy('id','desc')->paginate(10)->toArray();
+                          dd($data_list);
+                    break;
+
+            }
+
             $data_list="";
         }else{
             $data_list = DB::table('media_community')

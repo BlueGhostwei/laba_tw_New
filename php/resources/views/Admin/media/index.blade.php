@@ -1,6 +1,7 @@
 @extends('Admin.layout.main')
 @section('title', '首页')
 @section('header_related')
+
 @endsection
 @section('content')
     <div class="content">
@@ -10,10 +11,9 @@
                     <!--	新闻任务	-->
                     <div class="radius1">
                         <h3 class="title1"><strong><a href="#">新闻任务</a></strong></h3>
-
                         <div class="sbox_1 clearfix">
-
                             <div class="sbox_1_w">
+                                {{ csrf_field() }}
                                 @if(isset($result_data) && $result_data != null)
                                     @foreach($result_data as $key =>$vel)
                                         @if($vel['category_id']==3)
@@ -307,6 +307,7 @@
                                         </div>
                                         <script>
                                             $(function () {
+                                                var _token= $('input[name="_token"]').val();
                                                 $(".WMain1 .tab a").click(function () {
                                                     $(this).addClass('on').siblings().removeClass('on');
                                                     var index = $(this).index();
@@ -342,6 +343,7 @@
                 var ue = UE.getEditor('container');
             </script>
             <script type="text/javascript">
+                var _token= $('input[name="_token"]').val();
                 /*	日历	*/
                 var picker1 = new Pikaday({
                     field: document.getElementById('datepicker1'),
@@ -373,6 +375,7 @@
                     } else {
                         $(".sbox_2 .m").append(li);
                     }
+                    debugger
                     //请求数据，加载页面
                     $.ajax({
                         url:'{{route('media.release')}}',
@@ -386,6 +389,7 @@
                         dataType: "json",
                         stopAllStart: true,
                         success: function (data) {
+                            debugger
                             if (data.sta == '0') {
                                 layer.msg(data.msg || '请求成功');
                             } else {
@@ -394,13 +398,8 @@
                         },
                         error: function () {
                             layer.msg(data.msg || '网络发生错误');
-                            return false;
                         }
                     });
-
-
-
-
 
                     return false;
                 });

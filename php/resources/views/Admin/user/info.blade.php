@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{url('Admin/js/zoom/css/bootstrap-grid.min.css')}}">
     <link rel="stylesheet" href="{{url('Admin/js/zoom/dist/zoomify.min.css')}}">
     <link rel="stylesheet" href="{{url('Admin/js/zoom/css/style.css')}}">
-    <script src="{{url('Admin/js/layer.js')}}"></script>
+
 @endsection
 @section('content')
     <div class="content">
@@ -88,7 +88,7 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="{{url('Admin/js/jquery-2.1.1.min.js')}}"></script>
+
     <script type="text/javascript">
         $(function () {
             $(".lanrenzhijia .tab a").click(function () {
