@@ -90,7 +90,7 @@ class UserController extends Controller
 
 
     //ios登陆
-    public function _postLogin()
+    public function Api_postLogin()
     {
         $username = Input::get('username');
         $password = Input::get('password');

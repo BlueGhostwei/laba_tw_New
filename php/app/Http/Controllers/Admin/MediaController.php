@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Config;
 use DB;
+use Input;
 use App\Models\Category;
 class MediaController extends Controller
 {
@@ -19,6 +20,7 @@ class MediaController extends Controller
      */
     public function index()
     {
+
         /**
          * 获取分类信息，与媒体信息
          */
@@ -37,21 +39,32 @@ class MediaController extends Controller
                 if ($vel['category_id'] == "3") {
                     $result[$key]['data'] = $provinces;
                 }
-               /* if ($vel['category_id'] == '5') {
-                    $result[$key]['data'] = $price;
-                }*/
             }
         }
-        $data_list = DB::table('media_community')
-            ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img','media_name', 'pf_price', 'px_price', 'mb_price')->orderBy('id','desc')->paginate(10);
-        foreach ($data_list as $key => $vel) {
-            $vel->coverage = DB::table('region')->where('id', $vel->coverage)->select('id', 'name')->get()->toArray();
-            //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
-            $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->select('name', 'id')->get()->toArray();
-            $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->select('name', 'id')->get()->toArray();
-            $vel->channel = DB::table('category')->where('id', 0)->select('name', 'id')->get()->toArray();
-            $vel->standard = DB::table('category')->where('id', $vel->standard)->select('name', 'id')->get()->toArray();
+
+        $keyword=Input::get('keyword');
+        if($keyword){
+            $category_id=Input::get('category_id');
+            
+            $data_list="";
+        }else{
+            $data_list = DB::table('media_community')
+                ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img','media_name', 'pf_price', 'px_price', 'mb_price')->orderBy('id','desc')->paginate(10);
+            foreach ($data_list as $key => $vel) {
+                $vel->coverage = DB::table('region')->where('id', $vel->coverage)->select('id', 'name')->get()->toArray();
+                //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
+                $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->select('name', 'id')->get()->toArray();
+                $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->select('name', 'id')->get()->toArray();
+                $vel->channel = DB::table('category')->where('id', 0)->select('name', 'id')->get()->toArray();
+                $vel->standard = DB::table('category')->where('id', $vel->standard)->select('name', 'id')->get()->toArray();
+            }
         }
+
+
+        //
+        //拼接sql查询
+
+
         //dd($data_list);
         return view('Admin.media.index',['result_data'=>$result,'media_list'=>$data_list]);
     }

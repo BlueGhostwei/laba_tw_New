@@ -16,7 +16,7 @@
 Route::group(['middleware' => 'guest'], function () {
     Route::group(['namespace' => 'Admin'], function () {
         //生成_token
-        Route::any('get_token',['as'=>'set.token','uses'=>'UserController@Set_token']);
+        Route::any('Admin/get_token',['as'=>'set.token','uses'=>'UserController@Set_token']);
         //验证码
         Route::get('yanzheng/test',['as'=>'captcha.test','uses'=>'CaptchaController@index']);
         //生成
@@ -29,7 +29,7 @@ Route::group(['middleware' => 'guest'], function () {
         //登陆注册
         Route::get('Admin/user/login', ['as' => 'user.login', 'uses' => 'UserController@getLogin']);
         Route::post('Admin/user/post_login',['as' => 'user.post_login', 'uses' => 'UserController@post_login']);
-        Route::get('Admin/user/_postLogin',['as' => 'user._postLogin', 'uses' => 'UserController@_postLogin']);
+        Route::post('Admin/user/Api_postLogin',['as' => 'user.Api_postLogin', 'uses' => 'UserController@Api_postLogin']);
         Route::get('Admin/user/register', ['as' => 'user.register', 'uses' => 'UserController@getRegister']);
         Route::post('Admin/user/register', 'UserController@postRegister');//注册提交
         //sms短信接口
@@ -99,18 +99,22 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('/mobile_pay', ['as' => 'website.mobile_pay', 'uses' => 'PayController@mobile_pay']);//手机支付
         Route::get('/alipay/alipayNotify', ['as' => 'website.alipayNotify', 'uses' => 'PayController@alipayNotify']);//手机回调
         //微信支付
+
         //网银支付
 
 
 
-        Route::get('acl/resource/index', ['as' => 'acl.resource.index', 'uses' => 'AclResourceController@index']);
+       /* Route::get('acl/resource/index', ['as' => 'acl.resource.index', 'uses' => 'AclResourceController@index']);
         Route::get('acl/role/edit/{id}', ['as' => 'acl.role.edit', 'uses' => 'AclRoleController@edit']);
-        Route::get('acl/role/update/{id}', ['as' => 'acl.role.update', 'uses' => 'AclRoleController@update']);
-        Route::get('acl/role/index', ['as' => 'acl.role.index', 'uses' => 'AclRoleController@index']);
+        Route::post('acl/role/update', ['as' => 'acl.role.update', 'uses' => 'AclRoleController@update']);
+        Route::get('acl/role/index', ['as' => 'acl.role.index', 'uses' => 'AclRoleController@index']);*/
         // 权限配置inde
-        Route::resource('/acl/resource', 'AclResourceController');
-        Route::resource('/acl/role', 'AclRoleController');
-        Route::resource('/acl/user', 'AclUserController');
+        //Route::resource('acl/resource', 'AclResourceController');
+       // Route::resource('acl/role', 'AclRoleController');
+        Route::resource('acl/role','AclRoleController');
+        Route::resource('acl/resource','AclResourceController');
+        Route::resource('acl/user','AclUserController');
+      //  Route::resource('acl/user', 'AclUserController');
         Route::any('user_role', 'AclUserController@user_role');
         Route::get('/system/logs', ['as' => 'system.logs', 'uses' => 'SystemController@logs']);
         Route::get('/system/action', ['as' => 'system.action', 'uses' => 'SystemController@action']);

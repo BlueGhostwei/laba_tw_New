@@ -110,6 +110,7 @@ class AclRoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+     
         $this->validate($request, [
             'resource' => 'required'
         ]);

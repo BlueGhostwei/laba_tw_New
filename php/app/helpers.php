@@ -117,6 +117,7 @@ function acl($role = '', $action = '')
     if ($action == 'DashboardController@index') {
         return true;
     }
+   // dd($aclRole);
     // 最高权限, 或包含当前路由
     if (in_array('*', $aclRole) || in_array($action, $aclRole)) {
         return true;

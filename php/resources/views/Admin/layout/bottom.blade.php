@@ -42,8 +42,17 @@
     .clr{	clear:both;	}
     #f_nav {	background:#000;	text-align:center;	padding:10px 0;	text-align:center;	line-height:1.8;	}
     #f_nav a{	color:#fff;		padding:0px 10px;	}
+    #f_nav strong{	color:#E53935;	}
 </style>
-
+<div class="float_serv">
+    <ul>
+        <li class="serv_1"><a title="xxxx1" href=""></a></li>
+        <li class="serv_2"><a title="xxxx2" href=""></a></li>
+        <li class="serv_3"><a title="xxxx3" href=""></a></li>
+        <li class="serv_4"><a title="电话：135 0000 0000" href=""></a></li>
+        <li class="serv_5"><a title="xxxx5" href=""></a></li>
+    </ul>
+</div>
 {{--
 <div class="clr" id="f_nav">
     <a href="login.php">登录</a>

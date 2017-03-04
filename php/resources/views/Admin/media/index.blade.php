@@ -18,10 +18,10 @@
                                     @foreach($result_data as $key =>$vel)
                                         @if($vel['category_id']==3)
                                             <div class="sbox_1_item clearfix">
-                                                <span class="l" data="option_4" category_id="{{$vel['category_id']}}">
+                                                <span class="l" data="option_4" >
                                                     <strong>{{$vel['name']}}</strong></span>
                                                 <div class="m">
-                                                    <ul>
+                                                    <ul category_id="{{$vel['category_id']}}">
                                                         <li><a href="" class="cur">不限</a></li>
                                                         @if(isset($vel['data']) &&  !empty($vel['data']))
                                                             @foreach($vel['data'] as $key =>$rsk)
@@ -39,7 +39,7 @@
                                             <div class="sbox_1_item clearfix">
                                                 <span class="l" data="option_1"><strong>{{$vel['name']}}</strong></span>
                                                 <div class="m">
-                                                    <ul>
+                                                    <ul category_id="{{$vel['category_id']}}">
                                                         @if(isset($vel['data']) && $vel['data'] !=null)
                                                             <li><a href="" class="cur">不限</a></li>
                                                             @foreach($vel['data'] as $kst=>$rvb)
@@ -100,41 +100,41 @@
                                             <tbody>
                                             @if(isset($media_list) && !empty($media_list))
                                                 @foreach($media_list as $key =>$vel)
-                                            <tr>
-                                                <td>{{count($media_list)-$key}}</td>
-                                                <td class="sbox_3_t1">
-                                                    <img src="{{md52url($vel->media_md5)}}" style="width: 100px;height:30px"/>
-                                                    {{$vel->media_name}}
-                                                </td>
-                                                @if(empty($vel->Entrance_form))
-                                                    <td>不限</td>
-                                                @else
-                                                    @foreach($vel->Entrance_form as $ky =>$vl)
-                                                        <td>{{$vl->name}}</td>
-                                                    @endforeach
-                                                @endif
-                                                @if(empty($vel->Entrance_level))
-                                                    <td>不限</td>
-                                                @else
-                                                    @foreach($vel->Entrance_level as $ky =>$vl)
-                                                        <td>{{$vl->name}}</td>
-                                                    @endforeach
-                                                @endif
-                                                @if(empty($vel->standard))
-                                                    <td>不限</td>
-                                                @else
-                                                    @foreach($vel->standard as $ky =>$vl)
-                                                        <td>{{$vl->name}}</td>
-                                                    @endforeach
-                                                @endif
+                                                    <tr>
+                                                        <td>{{count($media_list)-$key}}</td>
+                                                        <td class="sbox_3_t1">
+                                                            <img src="{{md52url($vel->media_md5)}}" style="width: 100px;height:30px"/>
+                                                            {{$vel->media_name}}
+                                                        </td>
+                                                        @if(empty($vel->Entrance_form))
+                                                            <td>不限</td>
+                                                        @else
+                                                            @foreach($vel->Entrance_form as $ky =>$vl)
+                                                                <td>{{$vl->name}}</td>
+                                                            @endforeach
+                                                        @endif
+                                                        @if(empty($vel->Entrance_level))
+                                                            <td>不限</td>
+                                                        @else
+                                                            @foreach($vel->Entrance_level as $ky =>$vl)
+                                                                <td>{{$vl->name}}</td>
+                                                            @endforeach
+                                                        @endif
+                                                        @if(empty($vel->standard))
+                                                            <td>不限</td>
+                                                        @else
+                                                            @foreach($vel->standard as $ky =>$vl)
+                                                                <td>{{$vl->name}}</td>
+                                                            @endforeach
+                                                        @endif
 
-                                                <td class="sbox_3_t5"><img src="{{md52url($vel->diagram_img)}}" style="width: 50px;height:20px"></td>
-                                                <td class="sbox_3_t6">{{$vel->pf_price}}</td>
-                                                <td class="sbox_3_t7">{{$vel->px_price}}</td>
-                                                <td class="sbox_3_t8">{{$vel->mb_price}}</td>
-                                            </tr>
+                                                        <td class="sbox_3_t5"><img src="{{md52url($vel->diagram_img)}}" style="width: 50px;height:20px"></td>
+                                                        <td class="sbox_3_t6">{{$vel->pf_price}}</td>
+                                                        <td class="sbox_3_t7">{{$vel->px_price}}</td>
+                                                        <td class="sbox_3_t8">{{$vel->mb_price}}</td>
+                                                    </tr>
                                                 @endforeach
-                                              @else
+                                            @else
                                                 <tr>
                                                     <td>1</td>
                                                     <td class="sbox_3_t1">
@@ -296,7 +296,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="WMain3"><p><i class="LGntas"></i></p>
-                                                              <label><input type="checkbox" name="admit" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
+                                                            <label><input type="checkbox" name="admit" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -361,16 +361,47 @@
                 $(".sbox_1_item .m ul li a").click(function () {
                     $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
                     var option = $(this).parents(".m").prev("span").attr("data");
-                    var value = $.trim($(this).html());
                     var li = "<li data='" + option + "'><a href=''>" + value + "</a></li>";
+                    var category_id=$(this).closest('ul').attr('category_id');
+                    var data_id=$(this).parent('li').attr('data_id')
+                    var value = $.trim($(this).html());
                     if (value == "不限") {
                         $(".sbox_2 .m li[data='" + option + "']").remove();
                     } else if ($(".sbox_2 .m li[data='" + option + "']").length > 0) {
-//		$(".sbox_2 .m li[data='"+option+"']").remove();
+                    //$(".sbox_2 .m li[data='"+option+"']").remove();
                         $(".sbox_2 .m li[data='" + option + "']").find("a").html(value);
                     } else {
                         $(".sbox_2 .m").append(li);
                     }
+                    //请求数据，加载页面
+                    $.ajax({
+                        url:'{{route('media.release')}}',
+                        data: {
+                            'keyword':"category_id",
+                            'category_id':category_id,
+                            'data_id':data_id,
+                            '_token':_token
+                        },
+                        type: 'post',
+                        dataType: "json",
+                        stopAllStart: true,
+                        success: function (data) {
+                            if (data.sta == '0') {
+                                layer.msg(data.msg || '请求成功');
+                            } else {
+                                layer.msg(data.msg || '请求失败');
+                            }
+                        },
+                        error: function () {
+                            layer.msg(data.msg || '网络发生错误');
+                            return false;
+                        }
+                    });
+
+
+
+
+
                     return false;
                 });
                 $(".sbox_2 .m").on("click", "li a", function () {
@@ -382,6 +413,7 @@
                     return false;
                 });
                 $(".sbox_1_item .r a").click(function () {
+
                     if ($(this).attr("data") == "on") {
                         $(this).attr("data", "off");
                         $(this).parent().siblings(".m").find("ul").css("height", "25px");

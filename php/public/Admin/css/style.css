@@ -389,10 +389,58 @@ body{ background:#204186}
 .forget-pwd dd p{font-size:14px; color:#333; line-height:25px;padding-left:15px;float: left;}
 .forget-pwd dd p a{ color:#73b400}
 
+#TSxiugei{ color: #ff0000 }
+.xiugainame{ text-align: left;font-size: 16px; font-weight: 400; color: #000; width: 580px; padding: 0 10px; background: #eee; line-height: 40px;border-radius:8px 8px 0 0;}
+.xiugai_info{width:600px;margin:0 auto;display:none; }
+body .xiugai_info_w{	border-radius:8px;}
+body .xiugai_info_w .layui-layer-title{	border-radius:8px 8px 0 0;	background:#fff;	height:0; border-bottom:none;}
+.xg_Button{ width:100px; line-height:30px; border:1px solid #fff;border-radius:5px; font-size:16px; color:#fff; background:#ff4a50;float:left; margin: 0 30px 50px 30%;}
+.zz_Button{ width:100px; line-height:30px; border:1px solid #fff;border-radius:5px; font-size:16px; color:#fff; background:#9c9c9c;float:left;}
 
+.reset_Right {LINE-HEIGHT: 16px; PADDING-LEFT: 10px; FLOAT: right;border-bottom:1px solid #ccc; width:700px;}
+.yzshenfen{width:86%;margin:0 auto; }
 
+.mibao{	margin:40px auto 0;min-width:450px;	}
+.mibao .WMain3{	margin:10px 100px 15px 120px;	float:none;	clear:both;	}
+.mibao .WMain3 p{	width:160px;	text-align:right;	margin-right:17px;	}
+.mibao .WMain3>div{	margin-left:177px;		font-size:12px;	color:#999999;	padding:10px 0 0 0;		line-height:22px;	}
+.mibao .txt6{	width:41%;	padding:0 2%;	}
+.mibao .sub5{	amargin-left:122px;	display:block;	margin:0 auto;	}
+.mibao .sel_2{	width:45%;	padding:0 2%;	height:32px;	line-height:32px;	}
+.mibao .WMain3 .img_up{		position:relative;	padding:0;	}
 
+.HYrukou{width: 235px;height: auto;background: rgba(255,255,255,10);right: 24px; top: 60px;display: none; position:absolute;box-shadow: 3px 3px 3px #e5e5e5; z-index: 5555; border-left:2px solid rgba(229,229,229,0.3)}
+.HYrukou li{ float: left; line-height: 40px; text-align: left; border-bottom: 1px solid #eee;width: 100%; }
+.HYrukou a{ font-size: 15px;width: 205px;}
+.HYrukou a:hover{ color: #204186; font-weight: 700; background: #f9f9f9}
 
+.xieyi{background:rgba(0,0,0,0.5); width: 100%; height: 100%; display: none;}
+.xieyi1{ width:880px; height: auto;position: absolute; text-align:center; background: #fff; left:50%;top: 0%; z-index: 300;margin-top:8%;margin-left: -420px; border-radius:15px  }
+.xy_heard{ width:100%; line-height: 50px; background:rgba(248,248,248,0.9);border-radius:15px 15px 0 0;float:left; }
+.xy_heard p{ font-size: 18px; color: #666; text-indent: 20px; text-align: left; width: 90%; float:left;}    
+.xy_heard span{ float: right; width:7%; text-align: right; margin-right: 1%;font-size: 18px;}
+.sdne{width:870px; height:580px;float:left; padding: 10px;}
+.sdne p{font-size: 14px; color: #666; line-height: 25px; width:98%; padding: 8px 1%;}
 
-
-
+ #scroll-1 {
+        width:850px; height:580px;float:left; padding: 10px;
+        overflow:auto;
+    }
+    #scroll-1 div {width:870px; height:580px;
+    }    #scroll-1::-webkit-scrollbar {
+        width:10px;
+        height:10px;
+    }
+    #scroll-1::-webkit-scrollbar-button    {
+        background-color:#fff;
+    }
+    #scroll-1::-webkit-scrollbar-track     {
+        background:#fff;
+    }
+    #scroll-1::-webkit-scrollbar-track-piece {
+        background:url(http://www.lyblog.net/wp/wp-content/themes/mine/img/stripes_tiny_08.png);
+    }
+    #scroll-1::-webkit-scrollbar-thumb{
+        background:#ccc;
+        border-radius:4px;
+    }

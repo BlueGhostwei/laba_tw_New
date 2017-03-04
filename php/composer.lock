@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "56660cab848c18f5d0e34351620227a9d0ca9f45"
+                "reference": "5a841a209d4b9f1c30a349280d49673f2e63ece5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/barryvdh/laravel-ide-helper/56660cab848c18f5d0e34351620227a9d0ca9f45.zip",
-                "reference": "56660cab848c18f5d0e34351620227a9d0ca9f45",
+                "url": "https://packagist.phpcomposer.com/files/barryvdh/laravel-ide-helper/5a841a209d4b9f1c30a349280d49673f2e63ece5.zip",
+                "reference": "5a841a209d4b9f1c30a349280d49673f2e63ece5",
                 "shasum": ""
             },
             "require": {
@@ -70,7 +70,7 @@
                 "phpstorm",
                 "sublime"
             ],
-            "time": "2017-02-14T15:45:07+00:00"
+            "time": "2017-02-20T10:52:55+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",
