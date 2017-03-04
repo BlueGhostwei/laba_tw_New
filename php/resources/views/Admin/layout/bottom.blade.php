@@ -1,27 +1,33 @@
 <script type="text/javascript">
     /*	日历	*/
-    var picker1 = new Pikaday({
-        field: document.getElementById('datepicker1'),
-        firstDay: 1,
-        minDate: new Date('2000-01-01'),
-        maxDate: new Date('2020-12-31'),
-        yearRange: [2000,2020]
-    });
-    var picker2 = new Pikaday({
-        field: document.getElementById('datepicker2'),
-        firstDay: 1,
-        minDate: new Date('2000-01-01'),
-        maxDate: new Date('2020-12-31'),
-        yearRange: [2000,2020]
-    });
-    var picker3 = new Pikaday({
-        field: document.getElementById('datepicker3'),
-        firstDay: 1,
-        minDate: new Date('2000-01-01'),
-        maxDate: new Date('2020-12-31'),
-        yearRange: [2000,2020]
-    });
-
+	if( $('#datepicker1').length>0 && typeof(picker1)!="object" ){
+		var picker1 = new Pikaday({
+			field: document.getElementById('datepicker1'),
+			firstDay: 1,
+			minDate: new Date('2000-01-01'),
+			maxDate: new Date('2020-12-31'),
+			yearRange: [2000,2020]
+		});
+	console.log(typeof(picker1));
+	}
+	if( $('#datepicker2').length>0 && typeof(picker2)!="object" ){
+		var picker2 = new Pikaday({
+			field: document.getElementById('datepicker2'),
+			firstDay: 1,
+			minDate: new Date('2000-01-01'),
+			maxDate: new Date('2020-12-31'),
+			yearRange: [2000,2020]
+		});
+	}
+	if( $('#datepicker3').length>0 && typeof(picker3)!="object" ){
+		var picker3 = new Pikaday({
+			field: document.getElementById('datepicker3'),
+			firstDay: 1,
+			minDate: new Date('2000-01-01'),
+			maxDate: new Date('2020-12-31'),
+			yearRange: [2000,2020]
+		});
+	}
 </script>
 <div class="foot">
     <p>@2016-2020版权所有</p>
