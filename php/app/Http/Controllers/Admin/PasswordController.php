@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
@@ -289,8 +288,8 @@ class PasswordController extends Controller
                 $msg="尊敬的用户，您的验证码是：".$rand_code;
                // $msg="尊敬的用户";
                 Mail::raw($msg,function($message){
-                    $message->subject('亚媒社密码找回');
-                    $message->to(Input::get('user_email'));
+                    $message->subject('亚媒社');
+                    $message->to(trim(Input::get('user_email')));
                 });
                 $array=array(
                     'username'=>Input::get('username'),
@@ -300,7 +299,7 @@ class PasswordController extends Controller
                     'type'=>'find_pass',
                 );
                 Redis::set('pass_email',json_encode($array));
-                return json_encode(['msg' => '邮件发送成功', 'sta' => 0, 'data' => ''], JSON_UNESCAPED_UNICODE);
+                return json_encode(['msg' => '邮件发送成功', 'sta' => 0, 'data' => $rand_code], JSON_UNESCAPED_UNICODE);
             }else{
                 return json_encode(['msg' => '邮件发送失败，用户未绑定邮箱或邮箱错误', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
             }

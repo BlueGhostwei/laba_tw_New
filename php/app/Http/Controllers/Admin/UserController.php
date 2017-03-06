@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Validation\Rules\In;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 use Validator;
 use Redirect;
@@ -19,9 +21,11 @@ class UserController extends Controller
      * @return mixed
      * 生成token
      */
-    public function Set_token(){
-        return json_encode(['msg'=>'','sta'=>"0",'data'=> csrf_token()]);
+    public function Set_token()
+    {
+        return json_encode(['msg' => '', 'sta' => "0", 'data' => csrf_token()]);
     }
+
     /**
      * @return mixed
      * 登录页面
@@ -109,7 +113,7 @@ class UserController extends Controller
         //通过验证
         $rst = Auth::attempt(['username' => $username, 'password' => $password], $remember);
         if ($rst == true) {
-            $set_data = User::where(['username' =>$username , 'deleted_at' => null])->select('*')->get()->toArray();
+            $set_data = User::where(['username' => $username, 'deleted_at' => null])->select('*')->get()->toArray();
             $data = ([
                 'id' => $set_data[0]['id'],
                 'rst' => $rst,
@@ -129,6 +133,7 @@ class UserController extends Controller
         Auth::logout();
         return Redirect::route('user.login');
     }
+
     public function _getLogout()
     {
         Auth::logout();
@@ -205,20 +210,23 @@ class UserController extends Controller
      */
     public function _user_info()
     {
-        $user=Auth::user();
-        $user->user_avatar=md52url($user->user_avatar);
-        return  json_encode($user);
+        $user = Auth::user();
+        $user->user_avatar = md52url($user->user_avatar);
+        return json_encode($user);
     }
 
     /**
      * @return mixed
      *
      */
-    public function safety_set(){
-         return view('Admin.user.safety_set');
+    public function safety_set()
+    {
+        return view('Admin.user.safety_set');
     }
-    public function  safety_pass(){
-        return view('Admin.user.user_update');
+
+    public function safety_update($data)
+    {
+        return view('Admin.user.user_update', ['type' => $data]);
     }
 
 
@@ -231,10 +239,73 @@ class UserController extends Controller
     {
         $id = Auth::id();
         $type = Input::get('type');
-        $Old_pass=Input::get('old_pass');
-        $New_pass=Input::get('new_pass');
+        $Old_pass = Input::get('old_pass');
+        $New_pass = Input::get('new_pass');
+        $user_Eail=Input::get('user_Eail');
+        $user_code=Input::get('user_code');
         $user = User::find($id);
-        if (!empty($type) && $type == "update_info") {
+        switch ($type) {
+            case "update_info";
+                if ($user) {
+                    if (!empty($request->user_Eail)) {
+                        $validate = Validator::make($request->all(), $user->rules()['update_info']);
+                        $messages = $validate->messages();
+                        if ($validate->fails()) {
+                            $msg = $messages->toArray();
+                            foreach ($msg as $k => $v) {
+                                return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''], JSON_UNESCAPED_UNICODE);
+                            }
+                        }
+                    }
+                    $result = User::where('id', $id)->update([
+                        'user_avatar' => $request->user_avatar,
+                        'company_name' => $request->company_name,
+                        'user_phone' => $request->user_phone,
+                        'nickname' => $request->nickname,
+                        'contact_person' => $request->contact_person,
+                        'user_Eail' => "$request->user_Eail",
+                        'user_QQ' => $request->user_QQ
+                    ]);
+                    if ($result) {
+                        return json_encode(['msg' => '更新资料成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    } else {
+                        return json_encode(['msg' => '更新资料失败', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    }
+                }
+                break;
+            case "update_pass";
+                if (!empty($Old_pass)) {
+                    if (Hash::check($Old_pass, $user->password) == false) {
+                        return json_encode(['msg' => '旧密码错误，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    }
+                    User::where('id', $user->id)->update(['password' => bcrypt($New_pass)]);
+                    Auth::logout();
+                    return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return json_encode(['msg' => '旧密码不能为空，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }
+                break;
+            case "update_email";
+                $get_email=Redis::get('pass_email');
+                $rv=json_decode($get_email,true);
+                if($user_Eail==$rv['user_Eail'] && $user_code==$rv['user_code']){
+                    $end_time=$rv['send_time'];
+                    $endtime = date('Y-m-d H:i:s', $end_time + 180);
+                    $this_time = date('Y-m-d H:i:s', time());
+                    $second = intval((strtotime($this_time) - strtotime($endtime)) % 86400);
+                    if ($second <> 0 && $second < 0) { //小于零
+                        User::where('id',Auth::id())->update(['user_Eail'=>$user_Eail]);
+                        Redis::del('pass_email');
+                        return json_encode(['msg' => '邮箱绑定成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    }else{
+                        Redis::del('pass_email');
+                        return json_encode(['msg' => '验证码已过期，请重新获取', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    }
+                }
+                break;
+
+        }
+       /* if (!empty($type) && $type == "update_info") {
             if ($user) {
                 if (!empty($request->user_Eail)) {
                     $validate = Validator::make($request->all(), $user->rules()['update_info']);
@@ -261,19 +332,18 @@ class UserController extends Controller
                     return json_encode(['msg' => '更新资料失败', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
                 }
             }
-        }elseif($type=='update_pass'){
-            if(!empty($Old_pass)){
-                   if(Hash::check($Old_pass,$user->password)==false){
-                       return json_encode(['msg' => '旧密码错误，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                   }
-                   User::where('id',$user->id)->update(['password'=>bcrypt($New_pass)]);
-                   Auth::logout();
-                   return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-            }else{
+        } elseif ($type == 'update_pass') {
+            if (!empty($Old_pass)) {
+                if (Hash::check($Old_pass, $user->password) == false) {
+                    return json_encode(['msg' => '旧密码错误，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }
+                User::where('id', $user->id)->update(['password' => bcrypt($New_pass)]);
+                Auth::logout();
+                return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+            } else {
                 return json_encode(['msg' => '旧密码不能为空，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
-
-        }
+        }*/
     }
 
     /**

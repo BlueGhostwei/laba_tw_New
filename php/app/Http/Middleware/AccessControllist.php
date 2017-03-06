@@ -18,6 +18,7 @@ class AccessControllist
     public function handle($request, Closure $next)
     {
 
+     
         if (!acl()) {
             if ($request->ajax()) {
                 return Response::json([

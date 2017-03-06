@@ -46,7 +46,7 @@
 									<i class="ok">已设置</i>
 								</span>
 								<span class="sp4">
-									<a href="{{route('member.safety_pass')}}">修改</a>
+									<a href="{{route('member.safety_update',"pass")}}">修改</a>
 								</span>
                                             </li>
                                             <li><span class="sp1">绑定手机</span>
@@ -77,7 +77,7 @@
 
 								</span>
 								<span class="sp4">
-									<a href="">修改</a>
+									<a href="{{route('member.safety_update',"email")}}">修改</a>
 								</span>
                                             </li>
                                             <li><span class="sp1">密保问题</span>
@@ -110,8 +110,6 @@
                                             </li>
                                         </ul>
                                     </div>
-
-
                                 </div>
 
                             </div>
