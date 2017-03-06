@@ -232,7 +232,7 @@
         </li>
         <li>
             <div class="header">
-                <span class="label" id="sd2">记者报料</span>					</div>
+                <span class="label" id="sd2">记者预约</span>					</div>
         </li>
         <li>
             <div class="header">

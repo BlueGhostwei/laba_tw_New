@@ -48,9 +48,15 @@ class MediaController extends Controller
             $data_id=Input::get('data_id');
             switch ($category_id){
                     case "0":
-                          $data_list = DB::table('media_community')->where(['network'=>function($query){
-                              $query->leftJoin('category','media_id','=','network')->select('category.id as category_id','category.name');
-                          }])->orderBy('id','desc')->paginate(10)->toArray();
+                        $data_list = DB::table('media_community')->leftJoin('category',function($join){
+                            $join->on('media_community.network', '=', 'category.id')
+                            ->where('category.id','=',"media_community.network");
+                        })
+                            ->orderBy('media_community.id','desc')->paginate(10)->toArray();
+                        /*  $data_list = DB::table('media_community')->leftJoin('category','media_community.network', '=', 'category.media_id')
+                              ->where(['media_community.network'=>$data_id,'media_community.media_type'=>$category_id])
+                              ->select('category.id ','category.name')
+                              ->orderBy('media_community.id','desc')->paginate(10)->toArray();*/
                           dd($data_list);
                     break;
 

@@ -15,7 +15,7 @@
                     <div class="lanrenzhijia">
                         <div class="tab">
                             <a href="javascript:;" class="on">资料编辑</a>
-                            <a href="javascript:;">安全设置</a>
+                            <a href="{{route('member.safety_set')}}"><li>安全设置</li></a>
                         </div>
                         <div class="Hcontent">
                             <ul>
@@ -80,7 +80,6 @@
                                         <span>资料更完整，账号更安全。完善资料将帮助我们更好的提供服务。</span>
                                     </div>
                                 </li>
-                                <li>安全设置</li>
                             </ul>
                         </div>
                     </div>
@@ -91,7 +90,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $(".lanrenzhijia .tab a").click(function () {
+           /* $(".lanrenzhijia .tab a").click(function () {
                 $(this).addClass('on').siblings().removeClass('on');
                 var index = $(this).index();
                 number = index;
@@ -109,7 +108,7 @@
                     $('.lanrenzhijia .tab a:eq(' + number + ')').addClass('on').siblings().removeClass('on');
                     $('.lanrenzhijia .Hcontent ul li:eq(' + number + ')').show().siblings().hide();
                 }
-            }
+            }*/
             //分界线
             $("#user_pic").click(function () {
                 $("#user_avatar").click();  //隐藏了input:file样式后，点击头像就可以本地上传

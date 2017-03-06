@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
+        Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
+        Route::get('Admin/user/safety_pass',['as'=>'member.safety_pass','uses'=>'UserController@safety_pass']);
         Route::get('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);
         Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值

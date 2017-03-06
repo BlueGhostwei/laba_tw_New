@@ -211,6 +211,18 @@ class UserController extends Controller
     }
 
     /**
+     * @return mixed
+     *
+     */
+    public function safety_set(){
+         return view('Admin.user.safety_set');
+    }
+    public function  safety_pass(){
+        return view('Admin.user.user_update');
+    }
+
+
+    /**
      * @param Request $request
      * @return mixed
      *
@@ -219,14 +231,10 @@ class UserController extends Controller
     {
         $id = Auth::id();
         $type = Input::get('type');
-        $Old_pass=Input::get('Old_Pass');
-        $New_pass=Input::get('New_Pass');
+        $Old_pass=Input::get('old_pass');
+        $New_pass=Input::get('new_pass');
+        $user = User::find($id);
         if (!empty($type) && $type == "update_info") {
-            $user = User::find($id);
-            if(!empty($Old_pass) && Hash::check($Old_pass,$user->password)){
-                User::where('id',$user->id)->update(['password'=>bcrypt($New_pass)]);
-            }
-
             if ($user) {
                 if (!empty($request->user_Eail)) {
                     $validate = Validator::make($request->all(), $user->rules()['update_info']);
@@ -253,6 +261,18 @@ class UserController extends Controller
                     return json_encode(['msg' => '更新资料失败', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
                 }
             }
+        }elseif($type=='update_pass'){
+            if(!empty($Old_pass)){
+                   if(Hash::check($Old_pass,$user->password)==false){
+                       return json_encode(['msg' => '旧密码错误，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                   }
+                   User::where('id',$user->id)->update(['password'=>bcrypt($New_pass)]);
+                   Auth::logout();
+                   return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }else{
+                return json_encode(['msg' => '旧密码不能为空，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }
+
         }
     }
 
