@@ -92,7 +92,7 @@
 
 								</span>
 								<span class="sp4">
-									<a href="">修改</a>
+									<a href="{{route('member.safety_update',"security")}}">修改</a>
 								</span>
                                             </li>
                                             <li><span class="sp1">证件信息</span>
