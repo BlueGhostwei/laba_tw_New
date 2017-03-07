@@ -79,41 +79,47 @@
                                 @elseif($type=='security')
                                 <div class="tab1_body">
                                     <div class="safe_2 clearfix">
-                                        <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>会员帐号：</p>
-                                            gzanteng@qq.com
-                                        </div>
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>兴趣爱好类：</p>
                                             <select class="sel_2">
-                                                <option value="">请选择问题</option>
-                                                <option value="">请选择问题请选择问题1</option>
-                                                <option value="">请选择问题2</option>
+                                                <option value="" data_id="0">请选择问题</option>
+                                                @if(isset($data_con) && !empty($data_con['home']))
+                                                       @foreach($data_con['home'] as $ky =>$rst)
+                                                        <option value="{{$rst['id']}}" data_id="{{$rst['id']}}">{{$rst['question_name']}}</option>
+                                                        @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>您的回答：</p>
-                                            <input type="text" name="textfield" id="textfield" class="txt6">
+                                            <input type="text" name="answer"  class="txt6">
                                         </div>
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>家庭工作类：</p>
                                             <select class="sel_2">
-                                                <option value="">请选择问题</option>
-                                                <option value="">请选择问题请选择问题1</option>
-                                                <option value="">请选择问题2</option>
+                                                <option value=""  data_id="0">请选择问题</option>
+                                                @if(isset($data_con) && !empty($data_con['hobby']))
+                                                    @foreach($data_con['hobby'] as $ky =>$rst)
+                                                        <option value="{{$rst['id']}}" data_id="{{$rst['id']}}">{{$rst['question_name']}}</option>
+                                                    @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>您的回答：</p>
-                                            <input type="text" name="textfield" id="textfield" class="txt6">
+                                            <input type="text" name="answer" class="txt6">
                                         </div>
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>教育杂项类：</p>
                                             <select class="sel_2">
-                                                <option value="">请选择问题</option>
-                                                <option value="">请选择问题请选择问题1</option>
-                                                <option value="">请选择问题2</option>
+                                                <option value="" data_id="0">请选择问题</option>
+                                                @if(isset($data_con) && !empty($data_con['education']))
+                                                    @foreach($data_con['education'] as $ky =>$rst)
+                                                        <option value="{{$rst['id']}}" data_id="{{$rst['id']}}">{{$rst['question_name']}}</option>
+                                                    @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>您的回答：</p>
-                                            <input type="text" name="textfield" id="textfield" class="txt6">
+                                            <input type="text" name="answer" class="txt6">
                                         </div>
                                         <div class="WMain3 WMain3_2 clearfix" style="margin-top:50px;">
-                                            <input type="submit" value="提交" class="sub5">
+                                            <input type="button" id=submit_button value="提交" class="sub5">
                                         </div>
                                         <div class="clr"></div>
                                     </div>
@@ -165,6 +171,20 @@
                     data['type']="update_email";
                     data['user_Eail']= $('input[name="user_Eail"]').val();
                     data['user_code'] = $('input[name="user_code"]').val();
+                }else if(type=='security'){
+                    //获取分类信息
+                    data['type']="security";
+                    data['question']={};
+                    $( ".sel_2 option:selected" ).each(function(i) {
+                        if($(this).val()==''){
+                            layer.msg("请完善问题");
+                        }
+                        data['question'][i]=$(this).val();
+                    });
+                    data['answer'] ={};
+                    $("input:text[name='answer']").each(function(i){
+                        data['answer'][i]=$(this).val();
+                    });
                 }
                 $.ajax({
                     url:"{{route('member.info')}}",

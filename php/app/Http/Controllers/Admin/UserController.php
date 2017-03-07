@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Security;
 use Illuminate\Validation\Rules\In;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 use Validator;
@@ -226,7 +227,11 @@ class UserController extends Controller
 
     public function safety_update($data)
     {
-        return view('Admin.user.user_update', ['type' => $data]);
+        if($data=='security'){
+            $data_con=config('security');
+            //dd($data_con);
+        }
+        return view('Admin.user.user_update', ['type' => $data,'data_con'=>$data_con]);
     }
 
 
@@ -303,47 +308,31 @@ class UserController extends Controller
                     }
                 }
                 break;
-
-        }
-       /* if (!empty($type) && $type == "update_info") {
-            if ($user) {
-                if (!empty($request->user_Eail)) {
-                    $validate = Validator::make($request->all(), $user->rules()['update_info']);
-                    $messages = $validate->messages();
-                    if ($validate->fails()) {
-                        $msg = $messages->toArray();
-                        foreach ($msg as $k => $v) {
-                            return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''], JSON_UNESCAPED_UNICODE);
+            case "security";
+                 $questin=Input::get('question');
+                 $answer=Input::get('answer');
+                 if(count($questin)==3 && count($answer)==3 ){
+                     $user_id=Auth::id();//用户id
+                     foreach ($questin as $key =>$vel){
+                        if($vel==0){
+                          return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
                         }
-                    }
-                }
-                $result = User::where('id', $id)->update([
-                    'user_avatar' => $request->user_avatar,
-                    'company_name' => $request->company_name,
-                    'user_phone' => $request->user_phone,
-                    'nickname' => $request->nickname,
-                    'contact_person' => $request->contact_person,
-                    'user_Eail' => "$request->user_Eail",
-                    'user_QQ' => $request->user_QQ
-                ]);
-                if ($result) {
-                    return json_encode(['msg' => '更新资料成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return json_encode(['msg' => '更新资料失败', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                }
-            }
-        } elseif ($type == 'update_pass') {
-            if (!empty($Old_pass)) {
-                if (Hash::check($Old_pass, $user->password) == false) {
-                    return json_encode(['msg' => '旧密码错误，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                }
-                User::where('id', $user->id)->update(['password' => bcrypt($New_pass)]);
-                Auth::logout();
-                return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-            } else {
-                return json_encode(['msg' => '旧密码不能为空，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-            }
-        }*/
+                         $save_data['user_id']=$user_id;
+                         $save_data['ques_id']=$vel;
+                         $save_data['answer']=$answer[$key];
+                         $security=new Security();
+                         $result=$security->create($save_data);
+                         if($result){
+                             //更新用户表密保字段
+                             User::where('id',$user_id)->update(['security'=>'1']);
+                             return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                       }else{
+                             return json_encode(['msg' => '请求失败，请刷新页面重试', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                         }
+                     }
+                 }
+                break;
+        }
     }
 
     /**
