@@ -186,6 +186,7 @@
                         data['answer'][i]=$(this).val();
                     });
                 }
+                debugger
                 $.ajax({
                     url:"{{route('member.info')}}",
                     data: data,
@@ -207,6 +208,7 @@
                 });
 
             });
+
             $('#code_button').click(function () {
                 //发送邮箱验证码
                 var username = "{{Auth::user()->username}}";

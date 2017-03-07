@@ -67,7 +67,7 @@
                                         <div class="LGnt6"><p><i class="LGntas">*</i>邮箱:</p>
                                             <input type="text" name="user_Eail" id="user_Eail" class="LGnt2"
                                                    value="@if(isset(Auth::user()->user_Eail) && Auth::user()->user_Eail!=null){{Auth::user()->user_Eail}}@endif"/>
-                                            <span>绑定</span>
+                                            <a href="{{route('member.safety_update',"email")}}"><span>绑定</span></a>
                                         </div>
                                         <i style=" padding-left:80px; font-size:12px; color:#999; float:left;">温馨提示：请填写有效邮箱地址，以便接受通知及订单信息，建议使用QQ，hotmail等邮箱</i>
                                         <div style="margin-top:40px; float:left; width:100%">

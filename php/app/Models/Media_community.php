@@ -87,7 +87,7 @@ class Media_community extends Eloquent
             ]
         ];
     }
-    public function category(){
+    /*public function category(){
         return $this->hasOne('App\category','media_id');
-    }
+    }*/
 }

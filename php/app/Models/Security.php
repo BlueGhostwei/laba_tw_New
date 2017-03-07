@@ -7,6 +7,10 @@ use Eloquent;
 
 class Security extends Eloquent
 {
+    /**
+     * @var string
+     * 表名称
+     */
     protected  $table="security";
     /**
      * @var array

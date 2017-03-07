@@ -364,8 +364,6 @@
                     $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
                     var option = $(this).parents(".m").prev("span").attr("data");
                     var li = "<li data='" + option + "'><a href=''>" + value + "</a></li>";
-                    var category_id=$(this).closest('ul').attr('category_id');
-                    var data_id=$(this).parent('li').attr('data_id')
                     var value = $.trim($(this).html());
                     if (value == "不限") {
                         $(".sbox_2 .m li[data='" + option + "']").remove();
@@ -375,22 +373,43 @@
                     } else {
                         $(".sbox_2 .m").append(li);
                     }
-                    debugger
+                    var opt= getDataArr();
                     //请求数据，加载页面
                     $.ajax({
                         url:'{{route('media.release')}}',
                         data: {
                             'keyword':"category_id",
-                            'category_id':category_id,
-                            'data_id':data_id,
+                            'data': [
+                                    {"category_id": opt[0]["category_id"], "data_id": opt[0]["data_id"]},
+                                    {"category_id": opt[1]["category_id"], "data_id": opt[1]["data_id"]},
+                                    {"category_id": opt[2]["category_id"], "data_id": opt[2]["data_id"]},
+                                    {"category_id": opt[3]["category_id"], "data_id": opt[3]["data_id"]},
+                                    {"category_id": opt[4]["category_id"], "data_id": opt[4]["data_id"]},
+                                    {"category_id": opt[5]["category_id"], "data_id": opt[5]["data_id"]}
+                                ],
                             '_token':_token
                         },
                         type: 'post',
                         dataType: "json",
                         stopAllStart: true,
-                        success: function (data) {
-                            debugger
+                        success: function (data) {;
+                           debugger
                             if (data.sta == '0') {
+                                //页面渲染
+                                 result += '<tr>'+
+                                        '<td>4</td>'+
+                                       '<td class="sbox_3_t1">'+
+                                        '<img src="http://www.weixin_laravel.com/files/c3/38/7c/c3387c4cfae9d429b39d73a43a2663de001.jpg" style="width: 100px;height:30px">今日新闻'+
+                                      ' </td>'+
+                                        '<td>图文混排</td>'+
+                                        '<td>二级频道首页</td>'+
+                                        '<td>不能带图片</td>'+
+                                        '<td class="sbox_3_t5"><img src="http://www.weixin_laravel.com/files/17/49/9f/17499ffd101c838727a4426c389fc15f001.jpg" style="width: 50px;height:20px"></td>'+
+                                        '<td class="sbox_3_t6">250</td>'+
+                                        '<td class="sbox_3_t7">250</td>'+
+                                        '<td class="sbox_3_t8">200</td>'+
+                                        '</tr>';
+
                                 layer.msg(data.msg || '请求成功');
                             } else {
                                 layer.msg(data.msg || '请求失败');
@@ -403,6 +422,22 @@
 
                     return false;
                 });
+                function getDataArr(){
+                    var opt_1 = [];
+                    $(".sbox_1_item").each(function(){
+                        var index = $(this).index(".sbox_1_item");
+                        opt_1[index] = [];
+                        var category_id = $(this).find(".m>ul").attr("category_id");
+                        if( $(this).find(".m>ul").find("a.cur").parent().attr("data_id") ){
+                            var data_id = $(this).find(".m>ul").find("a.cur").parent().attr("data_id");
+                        }else{
+                            var data_id = "";
+                        }
+                        opt_1[index]["category_id"] = category_id;
+                        opt_1[index]["data_id"] = data_id;
+                    });
+                    return opt_1;
+                }
                 $(".sbox_2 .m").on("click", "li a", function () {
                     var option = $(this).parent("li").attr("data");
                     var value = $.trim($(this).html());

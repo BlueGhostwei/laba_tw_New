@@ -134,7 +134,7 @@ class CategoryController extends Controller
             $result = Media_community::where('id',Input::get('media_id'))->update($new );
         }else{
             $result = Media_community::create($request->only($media->getFillable()));
-            Media_community::where('id',$result->id)->update(['user_id'=>$user_id]);
+           // Media_community::where('id',$result->id)->update(['user_id'=>$user_id]);
         }
         if ($result) {
 
@@ -196,9 +196,8 @@ class CategoryController extends Controller
      */
     public function media_List()
     {
-        $user_id=Auth::id();
         //$media_type = Config::get('mediatype');
-        $data_list = DB::table('media_community')->where('user_id',$user_id)
+        $data_list = DB::table('media_community')
             ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'coverage','standard', 'media_md5', 'media_name', 'pf_price', 'px_price', 'mb_price')->paginate(10);
         foreach ($data_list as $key => $vel) {
 

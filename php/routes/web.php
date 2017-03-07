@@ -15,14 +15,9 @@
 //游客路由
 Route::group(['middleware' => 'guest'], function () {
     Route::group(['namespace' => 'Admin'], function () {
-        //生成_token
-        Route::any('Admin/get_token',['as'=>'set.token','uses'=>'UserController@Set_token']);
-        //验证码
-        Route::get('yanzheng/test',['as'=>'captcha.test','uses'=>'CaptchaController@index']);
-        //生成
-        Route::get('yanzheng/mews',['as'=>'captcha.mews','uses'=>'CaptchaController@mews']);
-        //验证验证码
-        Route::any('yanzheng/cpt',['as'=>'captcha.cpt','uses'=>'CaptchaController@cpt']);
+        Route::get('yanzheng/test',['as'=>'captcha.test','uses'=>'CaptchaController@index']);//验证码
+        Route::get('yanzheng/mews',['as'=>'captcha.mews','uses'=>'CaptchaController@mews']);  //生成
+        Route::any('yanzheng/cpt',['as'=>'captcha.cpt','uses'=>'CaptchaController@cpt']); //验证验证码
         //微信登陆
         Route::get('auth/weixin', 'WeixinController@redirectToProvider');
         Route::get('auth/weixin/callback', 'WeixinController@handleProviderCallback');
@@ -55,7 +50,6 @@ Route::group(['middleware' => 'guest'], function () {
 });
 //需要登陆并需要权限登陆（acl）的路由
 Route::group(['middleware' => ['auth','acl']], function () {
-   // echo 34342;die;
     Route::group(['namespace' => 'Admin'], function () {
         //平台分类管理
         Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
@@ -84,7 +78,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
         Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
-        Route::get('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);
+
         Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
@@ -122,5 +116,9 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('/system/logs', ['as' => 'system.logs', 'uses' => 'SystemController@logs']);
         Route::get('/system/action', ['as' => 'system.action', 'uses' => 'SystemController@action']);
         Route::get('/system/login-history', ['as' => 'system.login-history', 'uses' => 'SystemController@loginHistory']);
+        //ios Api
+        Route::any('Admin/get_token',['as'=>'set.token','uses'=>'UserController@Set_token']); //生成_token
+        Route::post('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
+        Route::get('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
     });
 });

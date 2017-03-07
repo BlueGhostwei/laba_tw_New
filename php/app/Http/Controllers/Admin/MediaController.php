@@ -8,6 +8,8 @@ use Config;
 use DB;
 use Input;
 use App\Models\Category;
+use PhpParser\Node\Stmt\DeclareDeclare;
+
 class MediaController extends Controller
 {
     /**
@@ -26,13 +28,14 @@ class MediaController extends Controller
          */
         $media_type = Config::get('mediatype');
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-       /* $price = Config::get('price');*/
+        /* $price = Config::get('price');*/
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
             foreach ($result as $key => $vel) {
                 $category_id = $vel['category_id'];
-                $set_cate_data = Category::where(['media_id' => $category_id])->select('id','name','media_id')->get()->toArray();
+                $set_cate_data = Category::where(['media_id' => $category_id])
+                    ->select('id', 'name', 'media_id')->get()->toArray();
                 if (!empty($set_cate_data)) {
                     $result[$key]['data'] = $set_cate_data;
                 }
@@ -41,48 +44,39 @@ class MediaController extends Controller
                 }
             }
         }
-
-        $keyword=Input::get('keyword');
-        if($keyword){
-            $category_id=Input::get('category_id');
-            $data_id=Input::get('data_id');
-            switch ($category_id){
-                    case "0":
-                        $data_list = DB::table('media_community')->leftJoin('category',function($join){
-                            $join->on('media_community.network', '=', 'category.id')
-                            ->where('category.id','=',"media_community.network");
-                        })
-                            ->orderBy('media_community.id','desc')->paginate(10)->toArray();
-                        /*  $data_list = DB::table('media_community')->leftJoin('category','media_community.network', '=', 'category.media_id')
-                              ->where(['media_community.network'=>$data_id,'media_community.media_type'=>$category_id])
-                              ->select('category.id ','category.name')
-                              ->orderBy('media_community.id','desc')->paginate(10)->toArray();*/
-                          dd($data_list);
-                    break;
-
-            }
-
-            $data_list="";
-        }else{
+        //member会员价
+        $keyword = Input::get('keyword');
+        if ($keyword) {
+            $media_cate = Input::get('data');
             $data_list = DB::table('media_community')
-                ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img','media_name', 'pf_price', 'px_price', 'mb_price')->orderBy('id','desc')->paginate(10);
-            foreach ($data_list as $key => $vel) {
-                $vel->coverage = DB::table('region')->where('id', $vel->coverage)->select('id', 'name')->get()->toArray();
-                //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
-                $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->select('name', 'id')->get()->toArray();
-                $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->select('name', 'id')->get()->toArray();
-                $vel->channel = DB::table('category')->where('id', 0)->select('name', 'id')->get()->toArray();
-                $vel->standard = DB::table('category')->where('id', $vel->standard)->select('name', 'id')->get()->toArray();
-            }
+                ->where('network', $media_cate[0]['data_id'])
+                ->orWhere('Entrance_level',$media_cate[1]['data_id'])
+                ->orWhere('Entrance_form', $media_cate[2]['data_id'])
+                ->orWhere('coverage',$media_cate[3]['data_id'])
+                ->orWhere('channel', $media_cate[4]['data_id'])
+                ->orderBy('id', 'desc')->paginate(10);
+                $data_list = $this->to_sql($data_list);
+           return json_encode(['msg'=>'请求成功','sta'=>'0','data'=>$data_list]);
+        } else {
+            $data_list = DB::table('media_community')
+                ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
+                ->orderBy('id', 'desc')->paginate(10);
+            $data_list = $this->to_sql($data_list);
         }
+        return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
+    }
 
-
-        //
-        //拼接sql查询
-
-
-        //dd($data_list);
-        return view('Admin.media.index',['result_data'=>$result,'media_list'=>$data_list]);
+    protected function to_sql($data_list)
+    {
+        foreach ($data_list as $key => $vel) {
+            $vel->coverage = DB::table('region')->where('id', $vel->coverage)->select('id', 'name')->get()->toArray();
+            //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
+            $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->select('name', 'id')->get()->toArray();
+            $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->select('name', 'id')->get()->toArray();
+            $vel->channel = DB::table('category')->where('id', $vel->channel)->select('name', 'id')->get()->toArray();
+            $vel->standard = DB::table('category')->where('id', $vel->standard)->select('name', 'id')->get()->toArray();
+        }
+        return $data_list;
     }
 
     //百科营销

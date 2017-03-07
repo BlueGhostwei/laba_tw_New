@@ -229,9 +229,14 @@ class UserController extends Controller
     {
         if($data=='security'){
             $data_con=config('security');
-            //dd($data_con);
+            return view('Admin.user.user_update', ['type' => $data,'data_con'=>$data_con]);
         }
-        return view('Admin.user.user_update', ['type' => $data,'data_con'=>$data_con]);
+        return view('Admin.user.user_update', ['type' => $data]);
+
+    }
+
+    public function _data_con(){
+        return json_encode(['msg'=>'','sta'=>"0",'data'=>config('security')]);
     }
 
 
