@@ -249,14 +249,19 @@ aatable.dataTable{	border-collapse:collapse;	}
 .sbox_3_table table thead{	background:#F7F8FA;	border:1px solid #e5e5e5;	height:38px;	line-height:38px;	}
 .sbox_3_table table th{		font-weight:400;	text-align:center;	vertical-align:middle;	font-size:14px;		color:#333;	}
 .sbox_3_table table td{		font-weight:400;	text-align:center;	vertical-align:middle;	padding:25px 0;	}
+
 td.sbox_3_t1{	font-size:16px;		}
-td.sbox_3_t2{		font-size:14px;	}
-td.sbox_3_t3{		font-size:14px;	}
-td.sbox_3_t4{		font-size:14px;		width:16%;	}
+td.sbox_3_t2{	font-size:14px;	}
+td.sbox_3_t3{	font-size:14px;	}
+td.sbox_3_t4{	font-size:14px;		width:16%;	}
 .sbox_3_t5{			}
-td.sbox_3_t6,td.sbox_3_t7,td.sbox_3_t8{	color:#f00;		font-size:16px;	}
+.sbox_3_table table td.red{		color:#f00;	font-size:16px;	}
 .sbox_3_b{		width:120px;	height:28px;	line-height:28px;	color:#333;	font-size:14px;	margin:20px auto 0;	text-align:center;	}
 .sbox_3_b .more{	float:left;	width:120px;	height:28px;	line-height:28px;		background:#EEEEEE;	border:1px solid #E6E6E6;	border-radius:30px;		}
+
+.sbox_3_table table tr.choose{	background:#3d6983;	}
+.sbox_3_table table tr.choose td{	color:#fff;	}
+.sbox_3_table table tr.choose td.color{		color:#f00;	}
 
 .sbox_4{		}
 .sbox_4 .WIn2{		margin:45px 2.5% 0;	width:auto;	}
