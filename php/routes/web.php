@@ -43,8 +43,6 @@ Route::group(['middleware' => 'guest'], function () {
 
        // Route::resource('Admin/find_password','PasswordController');
 
-
-
     });
 
 });
@@ -118,6 +116,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('/system/login-history', ['as' => 'system.login-history', 'uses' => 'SystemController@loginHistory']);
         //ios Api
         Route::any('Admin/get_token',['as'=>'set.token','uses'=>'UserController@Set_token']); //生成_token
+        Route::any('Admin/set_cate',['as'=>'set.set_cate','uses'=>'MediaController@set_cate']); //发布新闻分类列表
         Route::post('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
         Route::get('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
     });

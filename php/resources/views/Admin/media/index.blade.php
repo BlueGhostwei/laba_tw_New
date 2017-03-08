@@ -392,7 +392,8 @@
                         type: 'post',
                         dataType: "json",
                         stopAllStart: true,
-                        success: function (data) {;
+                        success: function (data) {
+                           data.msg
                            debugger
                             if (data.sta == '0') {
                                 //页面渲染

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Config;
 use DB;
+use App\Models\Media_community;
 use Input;
 use App\Models\Category;
 use PhpParser\Node\Stmt\DeclareDeclare;
@@ -26,24 +27,9 @@ class MediaController extends Controller
         /**
          * 获取分类信息，与媒体信息
          */
-        $media_type = Config::get('mediatype');
-        $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        /* $price = Config::get('price');*/
-        if (!empty($media_type)) {
-            $get_arr = $media_type[0];
-            $result = array_get($get_arr, 'classification');
-            foreach ($result as $key => $vel) {
-                $category_id = $vel['category_id'];
-                $set_cate_data = Category::where(['media_id' => $category_id])
-                    ->select('id', 'name', 'media_id')->get()->toArray();
-                if (!empty($set_cate_data)) {
-                    $result[$key]['data'] = $set_cate_data;
-                }
-                if ($vel['category_id'] == "3") {
-                    $result[$key]['data'] = $provinces;
-                }
-            }
-        }
+        $get_ret=$this->set_cate();
+        $ret_josn=json_decode($get_ret,true);
+        $result=$ret_josn['data'];
         //member会员价
         $keyword = Input::get('keyword');
         if ($keyword) {
@@ -62,8 +48,32 @@ class MediaController extends Controller
                 ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
                 ->orderBy('id', 'desc')->paginate(10);
             $data_list = $this->to_sql($data_list);
+            dd($data_list);
         }
         return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
+    }
+
+
+    public function set_cate(){
+        $media_type = Config::get('mediatype');
+        $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
+        /* $price = Config::get('price');*/
+        if (!empty($media_type)) {
+            $get_arr = $media_type[0];
+            $result = array_get($get_arr, 'classification');
+            foreach ($result as $key => $vel) {
+                $category_id = $vel['category_id'];
+                $set_cate_data = Category::where(['media_id' => $category_id])
+                    ->select('id', 'name', 'media_id')->get()->toArray();
+                if (!empty($set_cate_data)) {
+                    $result[$key]['data'] = $set_cate_data;
+                }
+                if ($vel['category_id'] == "3") {
+                    $result[$key]['data'] = $provinces;
+                }
+            }
+        }
+        return json_encode(['msg'=>'','sta'=>'0','data'=>$result]);
     }
 
     protected function to_sql($data_list)
@@ -82,6 +92,11 @@ class MediaController extends Controller
     //百科营销
     public function Encyclopedia()
     {
+        //获取所有媒体
+
+        $media=Media_community::select('*')->orderBy('id','desc')->paginate(10);
+        dd($media);
+
         return view('Admin.media.market');
     }
 
