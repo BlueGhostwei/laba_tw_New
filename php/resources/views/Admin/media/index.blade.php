@@ -1,7 +1,8 @@
 @extends('Admin.layout.main')
 @section('title', '首页')
 @section('header_related')
-
+	<link rel="stylesheet" href="{{url('Admin/js/layui/css/layui.css')}}"  media="all">
+	<script src="{{url('Admin/js/layui/layui.js')}}" charset="utf-8"></script>
 @endsection
 @section('content')
     <div class="content">
@@ -72,13 +73,20 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="sbox_3">
+							</div>
+						</div>
+								
+						<div class="sbox_3">
                                     <h4>
                                         <strong class="l">共<b>6573</b>条资源</strong>
                                 <span class="r">每页显示
-                                    <select class="" id="">
+                                    <select class="" id="page_nums">
                                         <option value="10">10</option>
                                         <option value="5">5</option>
+                                        <option value="4">4</option>
+                                        <option value="3">3</option>
+                                        <option value="2">2</option>
+                                        <option value="1">1</option>
                                     </select>条记录
                                 </span>
                                     </h4>
@@ -156,10 +164,15 @@
                                             @endif
                                             </tbody>
                                         </table>
-                                        <div class="sbox_3_b"><a href="" class="more">加载更多</a></div>
+                                        <div class="sbox_3_b" style="width:auto;height:auto;">
+											<a href="" class="more"  style="display:none;">加载更多</a>
+											<div id="demo1"></div>
+										</div>
+										
+										
                                     </div>
-                                </div>
-                                <div class="sbox_4 clearfix">
+						</div>
+						<div class="sbox_4 clearfix">
                                     <div class="WIn2">
                                         <h2>已选媒体</h2>
                                         <table width="100%" border="0">
@@ -173,8 +186,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                                <div class="sbox_5" style=" ">
+						</div>
+						<div class="sbox_5" style=" ">
                                     <div class="WIn2">
                                         <h2>新闻内容</h2>
                                         <div class="WMain1">
@@ -342,12 +355,12 @@
                                         </script>
 
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
             <script type="text/javascript">
                 var ue = UE.getEditor('container');
             </script>
@@ -369,7 +382,7 @@
                     yearRange: [2000, 2020]
                 });
 
-             $('#wrapper_i tr').click(function(){
+             $('#wrapper_i').on("click","tr",function(){
                 $(this).css("background-color","#3d6983");
                  var rst_id = $(this).attr('rst_id');
                   var sta='';
@@ -401,7 +414,7 @@
                                       '<td class="WIna5"><img src="'+_get.media_md5+'">新浪网</td>'+
                                      '<td class="WIna6">'+_get.Website_Description+'</td>'+
                                      '<td class="WIna7">'+_get.mb_price+'元</td>'+
-                                     '<td class="WIna8"><a href="">×</a></td>'+
+                                     '<td class="WIna8"><a href="" class="del">×</a></td>'+
                                      '</tr>';
                              $('#select_media').append(result);
                          } else {
@@ -415,6 +428,18 @@
                  });
                  return false
              });
+			 
+			//点击已选媒体的x删除事件
+			$("#select_media").on("click","tr td a.del",function(){
+				var rst_id = $(this).closest("tr").attr("rst_id");
+				$(this).closest("tr").remove();
+				$("#wrapper_i tr[rst_id=" + rst_id + "]").css("background-color","");
+				console.log(rst_id);
+				return false;
+			});
+			 
+			 
+			 
                 $(".sbox_1_item .m ul li a").click(function () {
                     $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
                     var option = $(this).parents(".m").prev("span").attr("data");
@@ -465,7 +490,7 @@
                                 //页面渲染
                                 for(var i=0; i< sum; i++){
                                     result += '<tr rst_id="'+get_data[i].id+'">' +
-                                            '<td>4</td>' +
+                                            '<td>'+get_data[i].id+'</td>' +
                                             '<td class="sbox_3_t1">' +
                                             '<img src="'+get_data[i].media_md5+'"  style="width: 100px;height:30px">'+get_data[i].media_name+'</td>' +
                                             '<td class="sbox_3_t2">'+get_data[i].Entrance_form[0].name+'</td>' +
@@ -479,6 +504,33 @@
                                 }
                                 $('#wrapper_i').html("");
                                 $('#wrapper_i').append(result);
+								
+//layui分页		默认显示内容分页
+$page_data = $("#wrapper_i tr");
+data_len = $page_data.length;
+layui.use(['laypage', 'layer'], function(){
+	var laypage = layui.laypage
+		,layer = layui.layer
+		,nums = 3; //每页出现的数据量  
+		
+	var render = function(curr){
+		var str = '', last = curr*nums - 1;
+		last = last >= data_len ? (data_len - 1) : last;
+		for(var i = (curr*nums - nums); i <= last; i++){
+			str += $page_data.eq(i).prop("outerHTML");
+		}
+		return str;
+	};
+	
+	laypage({
+		cont: 'demo1'
+		,pages: Math.ceil(data_len / nums) //得到总页数
+		,jump: function(obj){
+			$("#wrapper_i").html(render(obj.curr));
+		}
+	});
+});
+			
                             } else {
                                 layer.msg(data.msg || '请求失败');
                             }
@@ -529,6 +581,63 @@
                     }
                     return false;
                 });
+				
+
+//layui分页		默认显示内容分页
+var $page_data = $("#wrapper_i tr");
+var data_len = $page_data.length;
+layui.use(['laypage', 'layer'], function(){
+	var laypage = layui.laypage
+		,layer = layui.layer
+		,nums = 10; //每页出现的数据量  
+		
+	var render = function(curr){
+		var str = '', last = curr*nums - 1;
+		last = last >= data_len ? (data_len - 1) : last;
+		for(var i = (curr*nums - nums); i <= last; i++){
+			str += $page_data.eq(i).prop("outerHTML");
+		}
+		return str;
+	};
+	
+	laypage({
+		cont: 'demo1'
+		,pages: Math.ceil(data_len / nums) //得到总页数
+		,jump: function(obj){
+			$("#wrapper_i").html(render(obj.curr));
+		}
+	});
+});
+
+//layui分页		点击 select 改变每页显示条数
+$("#page_nums").change(function(){
+	var val = $(this).val();
+	console.log(val);
+	
+	layui.use(['laypage', 'layer'], function(){
+		var laypage = layui.laypage
+			,layer = layui.layer
+			,nums = val; //每页出现的数据量  
+			
+		var render = function(curr){
+			var str = '', last = curr*nums - 1;
+			last = last >= data_len ? (data_len - 1) : last;
+			for(var i = (curr*nums - nums); i <= last; i++){
+				str += $page_data.eq(i).prop("outerHTML");
+			}
+			return str;
+		};
+		
+		laypage({
+			cont: 'demo1'
+			,pages: Math.ceil(data_len / nums) //得到总页数
+			,jump: function(obj){
+				$("#wrapper_i").html(render(obj.curr));
+			}
+		});
+	});
+});
+
             </script>
 @endsection
 

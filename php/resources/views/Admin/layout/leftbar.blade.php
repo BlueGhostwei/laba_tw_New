@@ -150,9 +150,9 @@
         <li>
             <div class="header">
                 <span class="label" id="sd1">网络媒体</span>
-                <span class="arrow up"></span>					</div>
+                <span class="arrow up"></span>
+			</div>
             <ul class="menu">
-                <ul class="menu  ">
                     <li><a href="{{route('media.release')}}">
                             <div class="nd1n">新闻发布</div>
                         </a></li>
@@ -183,7 +183,6 @@
                     <li><a href="">
                             <div class="nd10n">问答营销</div>
                         </a></li>
-                </ul>
             </ul>
         </li>
         <li>
