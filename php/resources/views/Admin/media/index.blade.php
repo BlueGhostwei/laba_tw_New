@@ -100,7 +100,7 @@
                                             <tbody id="wrapper_i">
                                             @if(isset($media_list) && !empty($media_list))
                                                 @foreach($media_list as $key =>$vel)
-                                                    <tr>
+                                                    <tr  rst_id="{{$vel->id}}">
                                                         <td>{{count($media_list)-$key}}</td>
                                                         <td class="sbox_3_t1">
                                                             <img src="{{md52url($vel->media_md5)}}"
@@ -163,42 +163,18 @@
                                     <div class="WIn2">
                                         <h2>已选媒体</h2>
                                         <table width="100%" border="0">
-                                            <tbody>
-                                            <tr class="WIna1">
+                                            <tbody id="select_media">
+                                            <tr class="WIna1" rst_id="0">
                                                 <td class="WIna2">媒体名称</td>
                                                 <td class="WIna3">介绍</td>
                                                 <td class="WIna4">价格</td>
                                                 <td class="WIna4">删除</td>
                                             </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网XXXXXXXXXXXXXX</td>
-                                                <td class="WIna7">80元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网*****</td>
-                                                <td class="WIna7">100元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网*****</td>
-                                                <td class="WIna7">100元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="WIna5"><img src="{{url('Admin/img/bn66.png')}}">新浪网</td>
-                                                <td class="WIna6">新浪网*****</td>
-                                                <td class="WIna7">100元</td>
-                                                <td class="WIna8"><a href="">×</a></td>
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <div class="sbox_5">
+                                <div class="sbox_5" style=" ">
                                     <div class="WIn2">
                                         <h2>新闻内容</h2>
                                         <div class="WMain1">
@@ -393,6 +369,52 @@
                     yearRange: [2000, 2020]
                 });
 
+             $('#wrapper_i tr').click(function(){
+                $(this).css("background-color","#3d6983");
+                 var rst_id = $(this).attr('rst_id');
+                  var sta='';
+                 $("#select_media").find('tr').each(function () {
+                     if($(this).attr('rst_id')==rst_id){
+                         $(this).remove();
+                         sta="1";
+                     }
+                 });
+                 if(sta=='1'){
+                     $(this).css("background-color","");
+                     return false
+                 }
+                 $.ajax({
+                     url:'{{route('media.release')}}',
+                     data: {
+                         'key':'media',
+                         "media_id":rst_id,
+                         '_token':_token
+                     },
+                     type: 'post',
+                     dataType: "json",
+                     stopAllStart: true,
+                     success: function (data) {
+                         var result='';
+                         var _get=data.data;
+                         if (data.sta == '0') {
+                             result +='<tr rst_id="'+_get.id+'">'+
+                                      '<td class="WIna5"><img src="'+_get.media_md5+'">新浪网</td>'+
+                                     '<td class="WIna6">'+_get.Website_Description+'</td>'+
+                                     '<td class="WIna7">'+_get.mb_price+'元</td>'+
+                                     '<td class="WIna8"><a href="">×</a></td>'+
+                                     '</tr>';
+                             $('#select_media').append(result);
+                         } else {
+                             layer.msg(data.msg || '请求失败');
+                         }
+                     },
+                     error: function () {
+                         layer.msg(data.msg || '网络发生错误');
+                         return false;
+                     }
+                 });
+                 return false
+             });
                 $(".sbox_1_item .m ul li a").click(function () {
                     $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
                     var option = $(this).parents(".m").prev("span").attr("data");
@@ -406,12 +428,22 @@
                     } else {
                         $(".sbox_2 .m").append(li);
                     }
-                    var opt = getDataArr();
+                    var  opt = getDataArr();
+                    var  key ='category_id';
+                    var  dt=[];
+                    for(var i=0;i< opt.length;i++){
+                       if(opt[i].data_id != ''){
+                           dt[i]=opt[i].data_id
+                       }
+                    }
+                    if(dt ==''){
+                     return false;
+                    }
                     //请求数据，加载页面
                     $.ajax({
                         url: '{{route('media.release')}}',
                         data: {
-                            'keyword': "category_id",
+                            'keyword':key,
                             'data': [
                                 {"category_id": opt[0]["category_id"], "data_id": opt[0]["data_id"]},
                                 {"category_id": opt[1]["category_id"], "data_id": opt[1]["data_id"]},
@@ -432,7 +464,7 @@
                             if (data.sta == '0') {
                                 //页面渲染
                                 for(var i=0; i< sum; i++){
-                                    result += '<tr>' +
+                                    result += '<tr rst_id="'+get_data[i].id+'">' +
                                             '<td>4</td>' +
                                             '<td class="sbox_3_t1">' +
                                             '<img src="'+get_data[i].media_md5+'"  style="width: 100px;height:30px">'+get_data[i].media_name+'</td>' +
@@ -447,7 +479,6 @@
                                 }
                                 $('#wrapper_i').html("");
                                 $('#wrapper_i').append(result);
-                               // layer.msg(data.msg || '请求成功');
                             } else {
                                 layer.msg(data.msg || '请求失败');
                             }
@@ -456,7 +487,6 @@
                             layer.msg(data.msg || '网络发生错误');
                         }
                     });
-
                     return false;
                 });
                 function getDataArr() {

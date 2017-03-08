@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Config;
 use DB;
 use App\Models\Media_community;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Validation\Rules\In;
 use Input;
 use App\Models\Category;
 use PhpParser\Node\Stmt\DeclareDeclare;
@@ -23,13 +25,15 @@ class MediaController extends Controller
      */
     public function index()
     {
-
         /**
          * 获取分类信息，与媒体信息
          */
-        /* $get_ret=$this->set_cate();
-         $ret_josn=json_decode($get_ret,true);
-         $result=$ret_josn['data'];*/
+        $key=Input::get('key');
+        if($key=="media"){
+           $media_id=Input::get('media_id');
+           $result=$this->get_media($media_id);
+           return json_encode(['msg'=>"请求成功",'sta'=>"0",'data'=>$result]);
+        }
         $media_type = Config::get('mediatype');
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
         /* $price = Config::get('price');*/
@@ -48,24 +52,30 @@ class MediaController extends Controller
                 }
             }
         }
-
-        //member会员价
         $keyword = Input::get('keyword');
         if ($keyword) {
-            $media_cate = Input::get('data');
-            $data_list = DB::table('media_community')
-                ->where('network', $media_cate[0]['data_id'])
-                ->orWhere('Entrance_level', $media_cate[1]['data_id'])
-                ->orWhere('Entrance_form', $media_cate[2]['data_id'])
-                ->orWhere('coverage', $media_cate[3]['data_id'])
-                ->orWhere('channel', $media_cate[4]['data_id'])
-                ->orderBy('id', 'desc')->paginate(10);
-            foreach ($data_list as $k => $v) {
-                $data_list[$k]->media_md5 = md52url($v->media_md5);
-                $data_list[$k]->documents_img = md52url($v->documents_img);
-                $data_list[$k]->diagram_img = md52url($v->diagram_img);
+            if ($keyword == "0") {
+                $data_list = DB::table('media_community')
+                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
+                    ->orderBy('id', 'desc')->paginate(10);
+                $data_list = $this->to_sql($data_list);
+                return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
+            } else {
+                $media_cate = Input::get('data');
+                $data_list = DB::table('media_community')
+                    ->where('network', $media_cate[0]['data_id'])
+                    ->orWhere('Entrance_level', $media_cate[1]['data_id'])
+                    ->orWhere('Entrance_form', $media_cate[2]['data_id'])
+                    ->orWhere('coverage', $media_cate[3]['data_id'])
+                    ->orWhere('channel', $media_cate[4]['data_id'])
+                    ->orderBy('id', 'desc')->paginate(10);
+                foreach ($data_list as $k => $v) {
+                    $data_list[$k]->media_md5 = md52url($v->media_md5);
+                    $data_list[$k]->documents_img = md52url($v->documents_img);
+                    $data_list[$k]->diagram_img = md52url($v->diagram_img);
+                }
+                $data_list = $this->to_sql($data_list);
             }
-            $data_list = $this->to_sql($data_list);
             return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
         } else {
             $data_list = DB::table('media_community')
@@ -77,6 +87,21 @@ class MediaController extends Controller
     }
 
 
+    /**
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     *
+     */
+    protected  function get_media($id){
+        $set_meaid=Media_community::where('id',$id)->select('id','media_md5','media_name','Website_Description','mb_price')->first();
+        $set_meaid->media_md5=md52url($set_meaid->media_md5);
+        return $set_meaid;
+    }
+
+    /**
+     * @return mixed
+     *
+     */
     public function set_cate()
     {
         $media_type = Config::get('mediatype');

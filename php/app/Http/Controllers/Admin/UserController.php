@@ -234,6 +234,7 @@ class UserController extends Controller
         return view('Admin.user.user_update', ['type' => $data]);
 
     }
+    
 
     public function _data_con(){
         return json_encode(['msg'=>'','sta'=>"0",'data'=>config('security')]);
