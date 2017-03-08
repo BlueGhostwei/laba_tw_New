@@ -331,11 +331,9 @@ class UserController extends Controller
                          if($result){
                              //更新用户表密保字段
                              User::where('id',$user_id)->update(['security'=>'1']);
-                             return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                       }else{
-                             return json_encode(['msg' => '请求失败，请刷新页面重试', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                         }
+                       }
                      }
+                     return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
                  }
                 break;
         }
