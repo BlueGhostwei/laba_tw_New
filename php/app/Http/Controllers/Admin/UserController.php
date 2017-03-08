@@ -319,6 +319,7 @@ class UserController extends Controller
                  $answer=Input::get('answer');
                  if(count($questin)==3 && count($answer)==3 ){
                      $user_id=Auth::id();//用户id
+                     Security::where('user_id',$user_id)->delete();
                      foreach ($questin as $key =>$vel){
                         if($vel==0){
                           return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
