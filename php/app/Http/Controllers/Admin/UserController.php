@@ -149,6 +149,14 @@ class UserController extends Controller
         return json_encode(["msg" => "请求成功", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
     }
 
+    public function _checkLogin(){
+        if(Auth::check()){
+            return json_encode(["msg" => "已登录", "sta" => "1", "data" => ""], JSON_UNESCAPED_UNICODE);
+        }else{
+            return json_encode(["msg" => "未登录", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
 
     /**
      * @param Request $request
@@ -219,8 +227,13 @@ class UserController extends Controller
      */
     public function _user_info()
     {
-        $user = Auth::user();
-        $user->user_avatar = md52url($user->user_avatar);
+        //$user = Auth::user();
+        $user = User::where('id',Auth::id())->get()->toArray();
+        $user = $user[0];
+        foreach ($user as $k =>$v){
+            $user[$k]=!empty($user[$k])?$v:"";
+        }
+
         return json_encode($user);
     }
 
@@ -356,6 +369,10 @@ class UserController extends Controller
     {
         return view('Admin.user.top-up');
     }
+
+//    public function test(){
+//       echo Get_Set_Name(3);
+//    }
 
 
 }

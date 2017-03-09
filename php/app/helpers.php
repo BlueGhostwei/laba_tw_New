@@ -679,6 +679,19 @@ function Get_user_info(){
 }
 
 
+//返回类型别名
+if(!function_exists('Get_Set_Name')){
+
+    function Get_Set_Name($id){
+        $allname = Config::get('mediatype');
+        $allname = $allname[0];
+        $allname = array_get($allname, 'classification');
+        return $allname[$id]['set_name'];
+
+    }
+
+}
+
 
 
 
