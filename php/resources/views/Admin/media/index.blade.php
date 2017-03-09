@@ -217,9 +217,9 @@
                                                         <div id="shangchuan" title="上传文档" style="display: none;">
                                                             <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>稿件导入:
                                                                 </p>
-                                                                <input type="text" name="textfield" id="textfield"
+                                                                    <input type="file" name="Manuscripts" id="Manuscripts"
                                                                        class="txt6"/>
-                                                                <button type="button" name="textfield" id="textfield" class="txt7"/>
+                                                                <button type="button" name="upload_file"  class="txt7"/>
                                                                 导入</button><br/>
                                                                 <span style="margin-left: 145px;">选填，如果您的文章已编辑完成，请复制链接到此处，并点击“导入”。</span>
                                                             </div>
@@ -239,7 +239,7 @@
                                                                 <div id="key_input">
                                                                     <input type="text" name="textfield" id="textfield"
                                                                            class="WIFN1"
-                                                                           placeholder="关键字不超过100个字符，多个关键字请用。隔开"/>
+                                                                           placeholder="关键字不超过100个字符，多个关键字请用，隔开"/>
                                                                     <p>还可输入<b>100</b>个字</p>
                                                                 </div>
 														</div>
@@ -332,9 +332,7 @@
 <script type="text/javascript">
 	/*	百度编辑器	*/
 	var ue = UE.getEditor('container');
-
 	var _token = $('input[name="_token"]').val();
-
 	$('#wrapper_i').on("click","tr",function(){
 		$(this).addClass("choose");
 		var rst_id = $(this).attr('rst_id');
@@ -434,19 +432,37 @@
 			dataType: "json",
 			stopAllStart: true,
 			success: function (data) {
-				var sum = data.data.data.length;
-				var get_data = data.data.data;
+				var sum = data.data.length;
+				var get_data = data.data;
 				var result='';
 				if (data.sta == '0') {
 					//页面渲染
 					for(var i=0; i< sum; i++){
+                        var vg=get_data[i].standard;
+                        var vt=get_data[i].Entrance_form;
+                        var vb=get_data[i].Entrance_level;
+                        if(get_data[i].standard==''){
+                            vg  = "不限";
+                        }else{
+                            vg= get_data[i].standard[0].name;
+                        }
+                        if(get_data[i].Entrance_form==''){
+                            vt = "不限";
+                        }else{
+                            vt= get_data[i].Entrance_form[0].name;
+                        }
+                        if(get_data[i].Entrance_level==''){
+                            vb  = "不限";
+                        }else{
+                            vb= get_data[i].Entrance_level[0].name;
+                        }
 						result += '<tr rst_id="'+get_data[i].id+'">' +
 							'<td>'+get_data[i].id+'</td>' +
 							'<td class="sbox_3_t1">' +
 							'<img src="'+get_data[i].media_md5+'"  style="width: 100px;height:30px">'+get_data[i].media_name+'</td>' +
-							'<td class="sbox_3_t2">'+get_data[i].Entrance_form[0].name+'</td>' +
-							'<td class="sbox_3_t3">'+get_data[i].Entrance_level[0].name+'</td>' +
-							'<td>'+get_data[i].standard[0].name+'</td>' +
+							'<td class="sbox_3_t2">'+vt+'</td>' +
+							'<td class="sbox_3_t3">'+vb+'</td>' +
+							'<td>'+vg+'</td>' +
 							'<td class="sbox_3_t5"><img src="'+get_data[i].diagram_img+'" style="width:50px;height:20px"></td>' +
 							'<td class="red">'+get_data[i].pf_price+'</td>' +
 							'<td class="red">'+get_data[i].px_price+'</td>' +
@@ -472,6 +488,13 @@
 		});
 		return false;
 	});
+
+    //文件上传
+
+
+
+
+
 
 	function getDataArr() {
 		var opt_1 = [];

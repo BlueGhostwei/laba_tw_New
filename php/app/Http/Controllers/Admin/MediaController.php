@@ -144,8 +144,6 @@ class MediaController extends Controller
         //获取所有媒体
 
         $media = Media_community::select('*')->orderBy('id', 'desc')->paginate(10);
-        dd($media);
-
         return view('Admin.media.market');
     }
 
