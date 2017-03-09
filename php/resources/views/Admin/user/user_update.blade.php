@@ -186,8 +186,6 @@
                         data['answer'][i]=$(this).val();
                     });
                 }
-                console.log(data);
-                debugger
                 $.ajax({
                     url:"{{route('member.info')}}",
                     data: data,

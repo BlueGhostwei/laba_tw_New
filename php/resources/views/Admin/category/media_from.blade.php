@@ -353,10 +353,10 @@
                 stopAllStart: true,
                 success: function (data) {
                     if (data.sta == '0') {
-                        layer.msg('保存成功', {icon: 1});
-                        setTimeout(function () {
+                        layer.msg(data.msg);
+                       /* setTimeout(function () {
                             window.location.href="{{route('category.media_List')}}"
-                        }, 2000);
+                        }, 2000);*/
                     } else {
                         layer.msg(data.msg);
                     }

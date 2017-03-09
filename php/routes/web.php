@@ -38,7 +38,7 @@ Route::group(['middleware' => 'guest'], function () {
         Route::get('Admin/password/pass_info', ['as' => 'Admin.pass_info', 'uses' => 'PasswordController@pass_info']);
         Route::post('Admin/password/pass_Overlay','PasswordController@pass_find_update');
         Route::post('Admin/password/getuser', ['as' => 'Admin.pass.getuser', 'uses' => 'PasswordController@getuser']);
-        Route::post('password/email', ['as' => 'pass.email', 'uses' => 'PasswordController@send_email']);//邮件
+        Route::post('Admin/password/email', ['as' => 'pass.email', 'uses' => 'PasswordController@send_email']);//邮件
         Route::post('Admin/find_password', 'PasswordController@postIndex');
 
        // Route::resource('Admin/find_password','PasswordController');
@@ -118,6 +118,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
 
         Route::any('Admin/set_cate',['as'=>'set.set_cate','uses'=>'MediaController@set_cate']); //发布新闻分类列表
         Route::post('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
-        Route::get('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
+        Route::post('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
+        Route::get('/Admin/user/_logout',['as'=>'member._logout','uses'=>'UserController@_logout']);//用户退出
     });
 });

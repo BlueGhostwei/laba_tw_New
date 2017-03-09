@@ -68,7 +68,7 @@ class MediaController extends Controller
                     ->orWhere('Entrance_form', $media_cate[2]['data_id'])
                     ->orWhere('coverage', $media_cate[3]['data_id'])
                     ->orWhere('channel', $media_cate[4]['data_id'])
-                    ->orderBy('id', 'desc')->paginate(10);
+                    ->orderBy('id', 'desc')->get()/*->paginate(10)*/;
                 foreach ($data_list as $k => $v) {
                     $data_list[$k]->media_md5 = md52url($v->media_md5);
                     $data_list[$k]->documents_img = md52url($v->documents_img);

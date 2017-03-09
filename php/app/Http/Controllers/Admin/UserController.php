@@ -129,13 +129,21 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     */
     public function getLogout()
     {
         Auth::logout();
         return Redirect::route('user.login');
     }
 
-    public function _getLogout()
+    /**
+     * @return mixed
+     *
+     */
+    public function _logout()
     {
         Auth::logout();
         return json_encode(["msg" => "请求成功", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
@@ -291,7 +299,7 @@ class UserController extends Controller
                     }
                     User::where('id', $user->id)->update(['password' => bcrypt($New_pass)]);
                     Auth::logout();
-                    return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    return json_encode(['msg' => '密码修改成功，请重新登陆', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
                 } else {
                     return json_encode(['msg' => '旧密码不能为空，请重新输入', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
                 }
