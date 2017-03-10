@@ -68,8 +68,8 @@ class MediaController extends Controller
                 }
             }
         }
-
-        $keyword="0";
+        $keyword = array_get(Input::all(),'keyword');
+//        $keyword="1";
         if (isset($keyword)) {
             if ($keyword == "0") {
 
@@ -78,34 +78,32 @@ class MediaController extends Controller
                     ->orderBy('id', 'desc')->get()->toArray();
                 $this->to_sql_array($data_list);
             } else {
-//                $media_cate = Input::get('data');
-                $media_cate =array (
-                    0 => '0,0',
-                    1 => '1,0',
-                    2 => '2,5',
-                    3 => '3,0',
-                    4 => '4,0',
-                );
+                $media_cate =  array_get(Input::all(),'data');
+
+                $media_cate = $this->build_data($media_cate);
+
+                $sql = $this->build_sql($media_cate);
+                dd($sql);
+//                $data_list = DB::select($sql);
+//                $this->to_sql_array($data_list);
 
 
-
-
-//                $sql =SELECT * FROM `media_community` WHERE `network` =1 OR `Entrance_form` =5 OR `channel` =14;
-//                $sql = "SELECT * FROM `media_community` WHERE"
-
-                $data_list = DB::table('media_community')
-                    ->where('network', $media_cate[0]['data_id'])
-                    ->orWhere('Entrance_level', $media_cate[1]['data_id'])
-                    ->orWhere('Entrance_form', $media_cate[2]['data_id'])
-                    ->orWhere('coverage', $media_cate[3]['data_id'])
-                    ->orWhere('channel', $media_cate[4]['data_id'])
-                    ->orderBy('id', 'desc')->get()/*->paginate(10)*/;
-                foreach ($data_list as $k => $v) {
-                    $data_list[$k]->media_md5 = md52url($v->media_md5);
-                    $data_list[$k]->documents_img = md52url($v->documents_img);
-                    $data_list[$k]->diagram_img = md52url($v->diagram_img);
-                }
-                $data_list = $this->to_sql($data_list);
+//                $sql =`network` =1 OR `Entrance_form` =5 OR `channel` =14;
+//                $sql = "SELECT * FROM `media_community` WHERE `"
+//
+//                $data_list = DB::table('media_community')
+//                    ->where('network', $media_cate[0]['data_id'])
+//                    ->orWhere('Entrance_level', $media_cate[1]['data_id'])
+//                    ->orWhere('Entrance_form', $media_cate[2]['data_id'])
+//                    ->orWhere('coverage', $media_cate[3]['data_id'])
+//                    ->orWhere('channel', $media_cate[4]['data_id'])
+//                    ->orderBy('id', 'desc')->get()/*->paginate(10)*/;
+//                foreach ($data_list as $k => $v) {
+//                    $data_list[$k]->media_md5 = md52url($v->media_md5);
+//                    $data_list[$k]->documents_img = md52url($v->documents_img);
+//                    $data_list[$k]->diagram_img = md52url($v->diagram_img);
+//                }
+//                $data_list = $this->to_sql($data_list);
             }
             return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
         } else {
@@ -142,7 +140,7 @@ class MediaController extends Controller
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
-            $result = array_slice($result, 0, 5);
+//            $result = array_slice($result, 0, 5);
             foreach ($result as $key => $vel) {
                 $category_id = $vel['category_id'];
                 $set_cate_data = Category::where(['media_id' => $category_id])
@@ -156,6 +154,42 @@ class MediaController extends Controller
             }
         }
         return json_encode(['msg' => '', 'sta' => '0', 'data' => $result]);
+    }
+    /**
+     * @param $array
+     * @return $array
+     *
+     * 将客户端的请求数据重新编码
+     *
+     */
+    protected function build_data($array){
+        foreach ($array as $k => $v){
+            $array[$k] = explode(',',$v);
+        }
+        return $array;
+    }
+
+    /**
+     * @param $array
+     * @return string
+     *
+     * 生成原生sql语句
+     *
+     */
+    protected function build_sql($array){
+
+        $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
+        foreach ($array as $k =>$v){
+            if($v[1]=='0'){
+
+            }else{
+                $sql .= Get_Set_Name($v[0])." = ".$v[1]." OR ";
+            }
+
+        }
+        $sql = substr($sql, 0, -3);
+        $sql .=" order by id desc";
+        return $sql;
     }
 
     protected function to_sql_array($data_list)
