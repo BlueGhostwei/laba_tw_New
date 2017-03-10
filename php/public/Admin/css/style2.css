@@ -293,7 +293,8 @@ select.sel_t1{	border:1px solid #ccc;	height:32px;	line-height:32px;	margin:0 6p
 select.sel_t1 option{		}
 .sbox_5 .WMain3_2>span{		color:#999999;	font-size:14px;	margin-left:10px;	}
 .btn_sub_w{		padding:40px 0 20px;	text-align:center;		}
-.btn_sub{		background:none;	border:none;	cursor:pointer;	}
+.btn_sub{		display:block;	border:none;	cursor:pointer;		margin:0 auto;	width:250px;	height:60px;	background:url(../img/WLButton.png) no-repeat center center;	}
+.btn_sub_w .notagree{	background:url(../images/WLButton_2.png) no-repeat center center;	cursor:default;	}
 
 .sbox_5 .WMain3 p{	width:100px;	text-align:right;	padding-right:45px;	}
 .sbox_5 .WMain3_1>div{	margin-left:145px;	}

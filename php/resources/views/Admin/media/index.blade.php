@@ -19,7 +19,7 @@
                                     @foreach($result_data as $key =>$vel)
                                         @if($vel['category_id']==3)
                                             <div class="sbox_1_item clearfix">
-                                                <span class="l" data="option_4">
+                                                <span class="l" data="option_{{$vel['category_id']}}">
                                                     <strong>{{$vel['name']}}</strong></span>
                                                 <div class="m">
                                                     <ul category_id="{{$vel['category_id']}}">
@@ -38,7 +38,7 @@
                                             </div>
                                         @elseif($vel['set_name']!="standard")
                                             <div class="sbox_1_item clearfix">
-                                                <span class="l" data="option_1"><strong>{{$vel['name']}}</strong></span>
+                                                <span class="l" data="option_{{$vel['category_id']}}"><strong>{{$vel['name']}}</strong></span>
                                                 <div class="m">
                                                     <ul category_id="{{$vel['category_id']}}">
                                                         @if(isset($vel['data']) && $vel['data'] !=null)
@@ -62,7 +62,7 @@
                                     @endforeach
                                 @else
                                     <div class="sbox_1_item clearfix">
-                                        <span class="l" data="option_1"><strong>网站类型</strong></span>
+                                        <span class="l" data="option_"><strong>网站类型</strong></span>
                                         <div class="m">
                                             <ul>
                                                 <li><a href="" class="cur">不限</a></li>
@@ -75,7 +75,11 @@
                                 @endif
 							</div>
 						</div>
-								
+						<div class="sbox_2 clearfix radius1">
+							<strong class="l">已选择：</strong>
+							<ul class="m"></ul>
+							<span class="r">共<b>6300</b>条资源</span>
+						</div>
 						<div class="sbox_3">
                                     <h4>
                                         <strong class="l">共<b></b>条资源</strong>
@@ -195,40 +199,43 @@
                                                 <ul>
                                                     <li style="display:block;">
                                                         <div class="WMain3"><p><i class="LGntas">*</i>活动标题:</p>
-                                                            <input type="text" name="textfield" id="textfield" maxlength="25"
+                                                            <input type="text" name="name1" id="textfield" maxlength="25"
                                                                    placeholder="可输入25个汉字" class="WIFN1"/>
                                                         </div>
                                                         <div class="WMain3"><p><i class="LGntas">*</i>稿件内容:</p>
-                                                            <label><input type="radio" name="gao"
+                                                            <label><input type="radio" name="name2" value="1" 
                                                                           onclick="waibu.style.display='';shangchuan.style.display='none';bianji.style.display='none';"
                                                                           checked/>外部连接</label>
-                                                            <label><input type="radio" name="gao"
+                                                            <label><input type="radio" name="name2" value="2" 
                                                                           onclick="shangchuan.style.display='';waibu.style.display='none';bianji.style.display='none';"/>上传文档</label>
-                                                            <label><input type="radio" name="gao"
+                                                            <label><input type="radio" name="name2" value="3" 
                                                                           onclick="bianji.style.display='';waibu.style.display='none';shangchuan.style.display='none';"/>内部编辑</label>
                                                         </div>
                                                         <div id="waibu" title="外部连接">
                                                             <div class="WMain3"><p><i class="LGntas">*</i>外部链接:</p>
-                                                                <input type="text" name="textfield" id="textfield"
+                                                                <input type="text" name="name2_1" id="textfield"
                                                                        class="WIFN1"/>
                                                             </div>
 														</div>
 
-                                                        <div id="shangchuan" title="上传文档" style="display: none;">
-                                                            <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>稿件导入:
-                                                                </p>
-                                                                    <input type="file" name="Manuscripts" id="Manuscripts"
-                                                                       class="txt6"/>
-                                                                <button type="button" name="upload_file"  class="txt7"/>
-                                                                导入</button><br/>
-                                                                <span style="margin-left: 145px;">选填，如果您的文章已编辑完成，请复制链接到此处，并点击“导入”。</span>
-                                                            </div>
+                                                        <div id="shangchuan" title="上传文档" style="adisplay: none;">
+															<div class="WMain3 WMain3_2"><p><i class="LGntas"></i>稿件导入:</p>
+																<form id="form1" method="post">
+																	{{ csrf_field() }}
+																	<input type="file" name="file" id="Manuscripts" class="txt6"
+																		 style="display:none;opacity:0;"	/>
+																	<input type="text" name="name2_2" id="name2_2" class="txt6" />
+																	<button type="button" name="upload_file" id="upload_file" class="txt7"/>
+																	导入</button><br/>
+																	<span style="margin-left: 145px;">选填，如果您的文章已编辑完成，请复制链接到此处，并点击“导入”。</span>
+																</form>
+															</div>
                                                         </div>
                                                         <div id="bianji" title="内部编辑" style="display: none;">
                                                             <div class="WMain3 WMain3_1"><p><i class="LGntas">*</i>内容编辑:
                                                                 </p>
                                                                 <script id="container" name="content" type="text/plain"
-                                                                        style="width:90%;height:500px"></script>
+                                                                        style="width:90%;height:300px;width:auto;"></script>
                                                             </div>
                                                         </div>															
 															
@@ -236,7 +243,7 @@
 														<div class="WMain3 WMain3_1"><p><i class="LGntas"></i>关键字:
                                                                 </p>
                                                                 <div id="key_input">
-                                                                    <input type="text" name="textfield" id="textfield"
+                                                                    <input type="text" name="name3" id="textfield"
                                                                            class="WIFN1"
                                                                            placeholder="关键字不超过100个字符，多个关键字请用，隔开"/>
                                                                     <p>还可输入<b>100</b>个字</p>
@@ -244,7 +251,7 @@
 														</div>
 														<div class="WMain3 WMain3_2"><p><i class="LGntas">*</i>开始时间:
                                                                 </p>
-                                                                <input type="text" name="textfield" id="datepicker1"
+                                                                <input type="text" name="name4" id="datepicker1"
                                                                        class="txt2"/>
                                                                 <select class="sel_t1 options_h">
 @for($i=0;$i<60;$i++)
@@ -261,7 +268,7 @@
 														</div>
 														<div class="WMain3 WMain3_2"><p><i class="LGntas">*</i>截止时间:
                                                                 </p>
-                                                                <input type="text" name="textfield" id="datepicker2"
+                                                                <input type="text" name="name5" id="datepicker2"
                                                                        class="txt2"/>
                                                                 <select class="sel_t1 options_h">
 @for($i=0;$i<60;$i++)
@@ -278,20 +285,20 @@
 
                                                         <div class="WMain3 WMain3_1"><p><i class="LGntas">*</i>新闻备注:</p>
                                                             <div id="xinwenbeizhu">
-                                                                <textarea type="text" name="textfield" id="textfield"
+                                                                <textarea type="text" name="name6" id="textfield"
                                                                        class="WIFN2"></textarea>
                                                                 <p>还可能输入<b>500</b>个字</p>
                                                             </div>
                                                         </div>
                                                         <div class="WMain3"><p><i class="LGntas"></i></p>
-                                                            <label><input type="checkbox" name="admit" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
+                                                            <label><input type="checkbox" value="1" name="agree" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
                                                         </div>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
 										<div class="clr btn_sub_w">
-											<button type="submit" value="submit" class="btn_sub"><img src="{{url('Admin/img/WLButton.png')}}" /></button>
+											<button type="submit" value="submit" class="btn_sub notagree" id="btn_sub"></button>
 										</div>
 										<script>
                                             $(function () {
@@ -390,13 +397,15 @@
 	$(".sbox_1_item .m ul li a").click(function () {
 		$(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
 		var option = $(this).parents(".m").prev("span").attr("data");
-		var li = "<li data='" + option + "'><a href=''>" + value + "</a></li>";
+		var data_id = $(this).parent("li").attr("data_id");
 		var value = $.trim($(this).html());
+		var li = "<li data='" + option + "' data_id='" + data_id + "'><a href=''>" + value + "</a></li>";
+		console.log(li+"__"+value);
 		if (value == "不限") {
 			$(".sbox_2 .m li[data='" + option + "']").remove();
 		} else if ($(".sbox_2 .m li[data='" + option + "']").length > 0) {
 			//$(".sbox_2 .m li[data='"+option+"']").remove();
-			$(".sbox_2 .m li[data='" + option + "']").find("a").html(value);
+			$(".sbox_2 .m li[data='" + option + "']").find("a").html(value).parent("li").attr("data_id",data_id);
 		} else {
 			$(".sbox_2 .m").append(li);
 		}
@@ -488,13 +497,6 @@
 		return false;
 	});
 
-    //文件上传
-
-
-
-
-
-
 	function getDataArr() {
 		var opt_1 = [];
 		$(".sbox_1_item").each(function () {
@@ -518,7 +520,8 @@
 		var value = $.trim($(this).html());
 		$(this).parent("li").remove();
 		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li a").removeClass("cur");
-		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").addClass("cur");
+		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").click();
+//		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").addClass("cur");
 		return false;
 	});
 	
@@ -619,6 +622,127 @@
 		}
 	});
 
+	/*	稿件上传	*/
+	$("#upload_file").click(function(){
+		$("#Manuscripts").click();
+		$("#Manuscripts").change(function () {
+			//创建FormData对象
+			var data = new FormData($('#form1')[0]);
+			$.ajax({
+				url: '{{url('upload')}}',
+					type: 'POST',
+					data: data,
+					dataType: 'JSON',
+					cache: false,
+					processData: false,
+					contentType: false
+			}).done(function(ret){
+				if(ret.sta == 1){
+					$('input[name="name2_2"]').val(ret.md5);
+				}else{
+					layer.msg('头像上传失败');
+				}
+			});
+		});
+	});
+	
+	/*	底部提交	*/
+	$("#btn_sub").click(function(){
+		if( $(this).hasClass("notagree") ){
+			return;
+		}
+		var data = [];
+		data['id'] = [];
+		$("#select_media tr[rst_id!=0]").each(function(){			//已选媒体ID 数组
+			var id = $(this).attr("rst_id");
+			data['id'].push(id);
+		});
+		data['name1'] = $("input[name=name1]").val();				//活动标题
+		data['name2'] = $("input[name=name2]:checked").val();		//稿件内容		1 外部连接 		2 上传文档		3 内部编辑
+			data['name2_1'] = $("input[name=name2_1]").val();			//稿件内容》外部连接
+			data['Manuscripts'] = $("input[name=name2_2").val();		//稿件内容》上传文档	稿件导入
+			data['content'] = ue.getContent();								//稿件内容》内部编辑	内容编辑		获取编辑器的内容
+			
+		data['name3'] = $("input[name=name3]").val();				//关键字
+		data['name4'] = $("input[name=name4]").val();				//开始时间
+		data['name5'] = $("input[name=name5]").val();				//截止时间
+		data['name6'] = $("textarea[name=name6]").val();			//新闻备注
+		if( $("input[name=agree]").is(":checked") ){				//我已经阅读并同意云媒体交易平台习家规则
+			data['agree'] = $("input[name=agree]").val();
+		}else{
+			data['agree'] = "0";
+		}
+		
+		console.log(data);
+		if( !checkSubmit(data) ){			//检查数据
+			return;
+		}
+	
+		var key = "category_id2";
+		$.ajax({
+			url: '{{route('media.release')}}',
+			data: {
+				'keyword':key,
+				'data':data,
+				'_token':_token
+			},
+			type: 'post',
+			dataType: "json",
+			stopAllStart: true,
+			success: function (data) {
+				if (data.sta == '0') {
+					layer.msg(data.msg || '提交成功');
+				} else {
+					layer.msg(data.msg || '提交失败');
+				}
+			},
+			error: function () {
+				layer.msg(data.msg || '网络发生错误');
+				return false;
+			}
+		});
+	});
+	
+	$("input[name=agree]").change(function(){
+		if( $("input[name=agree]").is(":checked") ){
+			$("#btn_sub").removeClass("notagree");
+		}else{
+			$("#btn_sub").addClass("notagree");
+		}
+	});
+	
+	/*	检查数据	*/
+	function checkSubmit(obj){
+		var flag = 1;
+		for (var a in obj) {
+			if ( obj[a] == "") {
+				flag = 0;
+				console.log(a + "不能为空");
+				layer.msg(a + "不能为空");
+			}else {
+			}
+		}
+		return flag;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
 @endsection
 

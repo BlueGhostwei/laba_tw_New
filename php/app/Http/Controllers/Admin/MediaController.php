@@ -15,6 +15,20 @@ use PhpParser\Node\Stmt\DeclareDeclare;
 
 class MediaController extends Controller
 {
+
+
+
+
+
+    public function selec_key(){
+
+        $data_list = DB::table('media_community')
+            ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
+            ->orderBy('id', 'desc')->paginate(10);
+
+        $data_list = $this->to_sql($data_list);
+        return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
+    }
     /**
      * @return mixed
      *  //获取分类信息
@@ -28,6 +42,8 @@ class MediaController extends Controller
         /**
          * 获取分类信息，与媒体信息
          */
+
+
         $key=Input::get('key');
         if($key=="media"){
            $media_id=Input::get('media_id');
@@ -52,16 +68,31 @@ class MediaController extends Controller
                 }
             }
         }
-        $keyword = Input::get('keyword');
-        if ($keyword) {
+
+        $keyword="0";
+        if (isset($keyword)) {
             if ($keyword == "0") {
+
                 $data_list = DB::table('media_community')
-                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
-                    ->orderBy('id', 'desc')->paginate(10);
-                $data_list = $this->to_sql($data_list);
-                return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
+                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price','Website_Description')
+                    ->orderBy('id', 'desc')->get()->toArray();
+                $this->to_sql_array($data_list);
             } else {
-                $media_cate = Input::get('data');
+//                $media_cate = Input::get('data');
+                $media_cate =array (
+                    0 => '0,0',
+                    1 => '1,0',
+                    2 => '2,5',
+                    3 => '3,0',
+                    4 => '4,0',
+                );
+
+
+
+
+//                $sql =SELECT * FROM `media_community` WHERE `network` =1 OR `Entrance_form` =5 OR `channel` =14;
+//                $sql = "SELECT * FROM `media_community` WHERE"
+
                 $data_list = DB::table('media_community')
                     ->where('network', $media_cate[0]['data_id'])
                     ->orWhere('Entrance_level', $media_cate[1]['data_id'])
@@ -87,6 +118,7 @@ class MediaController extends Controller
     }
 
 
+
     /**
      * @param $id
      * @return \Illuminate\Database\Eloquent\Model|null|static
@@ -110,6 +142,7 @@ class MediaController extends Controller
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
+            $result = array_slice($result, 0, 5);
             foreach ($result as $key => $vel) {
                 $category_id = $vel['category_id'];
                 $set_cate_data = Category::where(['media_id' => $category_id])
@@ -125,6 +158,24 @@ class MediaController extends Controller
         return json_encode(['msg' => '', 'sta' => '0', 'data' => $result]);
     }
 
+    protected function to_sql_array($data_list)
+    {
+
+        //dd($data_list);
+        foreach ($data_list as $k =>$vel){
+            $vel->coverage = DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
+            //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
+            $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
+            $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
+            $vel->channel = DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
+            $vel->standard = DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
+            $vel->media_md5 = md52url($vel->media_md5);
+            $vel->diagram_img = md52url($vel->diagram_img);
+        }
+
+        return $data_list;
+    }
+
     protected function to_sql($data_list)
     {
         foreach ($data_list as $key => $vel) {
@@ -137,7 +188,6 @@ class MediaController extends Controller
         }
         return $data_list;
     }
-
     //百科营销
     public function Encyclopedia()
     {
