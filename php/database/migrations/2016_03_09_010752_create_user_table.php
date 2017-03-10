@@ -65,7 +65,8 @@ class CreateUserTable extends Migration
 
             //是否同意协议
             $table->tinyInteger('confirm')->default(1)->index();
-
+            //拥有财富
+            $table->decimal('wealth')->default(0)->index()->commit('拥有的财富');
             //是否设置密保
             $table->tinyInteger('security')->default(0)->index()->commit('是否设置密码：1为true,0为false');
             //用户证件（身份证）

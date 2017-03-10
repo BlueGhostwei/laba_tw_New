@@ -15,6 +15,7 @@ class Category extends Eloquent
      */
     protected $fillable = [
         'name',
+        'pt',
         'media_id'//媒体类型：新闻发布，论坛等
     ];
 

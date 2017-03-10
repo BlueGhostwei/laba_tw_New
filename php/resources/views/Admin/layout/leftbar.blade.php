@@ -248,7 +248,7 @@
             </div>
             <ul class="menu">
                 <li><a href="{{route('category.index')}}">
-                        <div class="nd1n">新闻发布</div>
+                        <div class="nd1n">分类管理</div>
                     </a></li>
                 <li><a href="{{route('category.media_from')}}">
                         <div class="nd2n">新增媒体</div>

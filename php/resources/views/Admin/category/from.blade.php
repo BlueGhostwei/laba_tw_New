@@ -12,6 +12,7 @@
                 <div class="ndt">
                     <!--新闻任务	-->
                     <div class="sbox_1 clearfix">
+                          <span>新闻发布</span>
                         {{ csrf_field() }}
                         <div class="sbox_1_w">
                             @if(isset($result_data) && $result_data != null)
@@ -74,12 +75,36 @@
                                             <li><a href="">全国门户<i class="del"></i></a></li>
                                             <li><a href="">垂直行业<i class="del"></i></a></li>
                                             <li><a href="">地方门户<i class="del"></i> </a></li>
-                                            <li class="add"><a href="" target="_blank">添加</a></li>
+                                            <li class="ghostwrite"><a href="" target="_blank">添加</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             @endif
                         </div>
+                        <span>
+                            内容代写
+                        </span>
+                        <div class="sbox_1_w">
+                            <div class="sbox_1_item clearfix">
+                                <span class="l" data="option_1"><strong>文案类型</strong></span>
+                                <div class="m">
+                                    <ul class="sortable">
+                                        @if(isset($ghostwrite) && !empty($ghostwrite))
+                                            @foreach($ghostwrite as $ky =>$vt)
+                                            <li><a href=""
+                                                @if($ky==0)
+                                                    class="cur"
+                                                    @endif
+                                                ><i class="del"></i>{{$vt->name}}</a></li>
+                                            @endforeach
+                                           @else
+                                            <li><a href="" class="cur"><i class="del"></i>常规新闻稿</a></li>
+                                            @endif
+                                        <li class="to_ghostwrite"><a href="" target="_blank" style="position: relative;color: #fff;background: #2D9FDD;padding: 0 10px 0 10px;">添加</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -106,8 +131,46 @@
         </div>
         <p>&nbsp;</p>
     </div>
+    <div class="ghostwrite" style="display: none;width: 75%; height: auto;margin: auto;padding-left: 25%; padding-top: 5%;">
+        <div class="IF3">
+            <p>类型名称:</p>
+            <input type="text" name="ghostname" id="ghostname" class="IFN2"/>
+        </div>
+        <div class="IF3">
+            <input type="button" name="ghostwrite_button" id="ghostwrite_button" value="确    认" class="LGButton3"
+                   style="margin-top:8%;margin-left: 25%"/>
+        </div>
+        <p>&nbsp;</p>
+    </div>
     <script type="text/javascript">
         var _token = $('input[name="_token"]').val();
+        $('#ghostwrite_button').click(function () {
+            var ghostname = $('input[name="ghostname"]').val();
+            $.ajax({
+                url: '{{route('category.save')}}',
+                data: {
+                    'name':ghostname,
+                    'media_id': "0",
+                    '_token': _token,
+                    'pt':"ghostwrite"
+                },
+                type: 'post',
+                dataType: "json",
+                stopAllStart: true,
+                success: function (data) {
+                    if (data.sta == '0') {
+                        layer.msg('保存成功', {icon: 1});
+                        window.location.reload();
+                    } else {
+                        layer.msg('保存失败');
+                    }
+                },
+                error: function () {
+                    layer.msg('网络发生错误');
+                }
+            });
+        return false
+        });
         $('#media_button').click(function () {
             var select_id = $('#select option:selected').attr('media_id');
             var media_name = $('input[name="media_name"]').val();
@@ -116,7 +179,8 @@
                 data: {
                     'name':media_name,
                     'media_id': select_id,
-                    '_token': _token
+                    '_token': _token,
+                    'pt':''
                 },
                 type: 'post',
                 dataType: "json",
@@ -207,8 +271,19 @@
             });
             return false;
         });
+        $(".sbox_1_item .m ul li.to_ghostwrite a").unbind("click").click(function () {  /*内容代写*/
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['35%', '50%'], //宽高
+                content: $('.ghostwrite')
+            });
+            return false;
 
-        $(".sbox_2 .m").on("click", "li a", function () {
+
+        });
+
+            $(".sbox_2 .m").on("click", "li a", function () {
 
             var option = $(this).parent("li").attr("data");
             var value = $.trim($(this).html());

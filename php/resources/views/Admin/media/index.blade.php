@@ -224,7 +224,6 @@
                                                                 <span style="margin-left: 145px;">选填，如果您的文章已编辑完成，请复制链接到此处，并点击“导入”。</span>
                                                             </div>
                                                         </div>
-
                                                         <div id="bianji" title="内部编辑" style="display: none;">
                                                             <div class="WMain3 WMain3_1"><p><i class="LGntas">*</i>内容编辑:
                                                                 </p>
@@ -511,6 +510,7 @@
 			opt_1[index]["data_id"] = data_id;
 		});
 		return opt_1;
+
 	}
 	
 	$(".sbox_2 .m").on("click", "li a", function () {

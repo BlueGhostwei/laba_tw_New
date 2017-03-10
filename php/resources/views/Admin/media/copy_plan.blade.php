@@ -18,17 +18,31 @@
                                 <div class="WMain2 WMain2_weixin">
                                     <ul>
                                         <li style="display:block;">
+
                                             <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>类型:</p>
                                                 <div id="radio_a1">
-                                                    <label class="cur"><input type="radio" name="type" value=""
-                                                                              checked/>常规新闻稿</label>
-                                                    <label><input type="radio" name="type" value=""/>偏软文新闻稿</label>
-                                                    <label><input type="radio" name="type" value=""/>企业介绍</label>
-                                                    <label><input type="radio" name="type" value=""/>产品介绍</label>
-                                                    <label><input type="radio" name="type" value=""/>人物介绍</label>
-                                                    <label><input type="radio" name="type" value=""/>活动宣传</label>
-                                                    <label><input type="radio" name="type" value=""/>百科撰写</label>
-                                                    <label><input type="radio" name="type" value=""/>问答策划</label>
+                                                    @if(isset($ghostwrite) && !empty($ghostwrite))
+                                                        @foreach($ghostwrite as $ky =>$vl)
+                                                            <label
+                                                            @if($ky==0)
+                                                                 class="cur"
+                                                                @endif
+                                                                    write_id="{{$vl->id}}"
+                                                            ><input type="radio" name="type" value=""
+                                                                                      checked/>{{$vl->name}}</label>
+                                                            @endforeach
+                                                        @else
+                                                        <label class="cur"><input type="radio" name="type" value=""
+                                                                                  checked/>常规新闻稿</label>
+                                                        <label><input type="radio" name="type" value=""/>偏软文新闻稿</label>
+                                                        <label><input type="radio" name="type" value=""/>企业介绍</label>
+                                                        <label><input type="radio" name="type" value=""/>产品介绍</label>
+                                                        <label><input type="radio" name="type" value=""/>人物介绍</label>
+                                                        <label><input type="radio" name="type" value=""/>活动宣传</label>
+                                                        <label><input type="radio" name="type" value=""/>百科撰写</label>
+                                                        <label><input type="radio" name="type" value=""/>问答策划</label>
+                                                        @endif
+
                                                 </div>
                                                 <script type="text/javascript">
                                                     $("#radio_a1 label").click(function () {
@@ -36,35 +50,41 @@
                                                     });
                                                 </script>
                                             </div>
+                                            <div class="WMain3"><p><i class="LGntas">*</i>标题:</p>
+                                                <input type="text" name="textfield" id="textfield"
+                                                       placeholder="请输入标题" class="WIFN1"/>
+                                            </div>
                                             <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>需求:</p>
                                                 <div class="editor_w">
                                                     <script id="editor" name="zw" type="text/plain"></script>
                                                 </div>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>字数:</p>
-                                                <label><input type="radio" name="type" value=""/>1000字</label>
-                                                <label><input type="radio" name="type" value=""/>2000字</label>
-                                                <label><input type="radio" name="type" value=""/>3000字</label>
+                                                <label><input type="radio" name="number" value=""/>1000字</label>
+                                                <label><input type="radio" name="number" value=""/>2000字</label>
+                                                <label><input type="radio" name="number" value=""/>3000字</label>
                                             </div>
                                             <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>编辑:</p>
                                                 <div>
-                                                    <label><input type="radio" name="type" value=""/>专业手写
+                                                    <label><input type="radio" name="cycle" value=""/>专业手写
                                                         ￥100/千字1个工作日</label>
-                                                    <label><input type="radio" name="type" value=""/>专业编辑
+                                                    <label><input type="radio" name="cycle" value=""/>专业编辑
                                                         ￥100/千字1个工作日</label>
-                                                    <label><input type="radio" name="type" value=""/>专业作者
+                                                    <label><input type="radio" name="cycle" value=""/>专业作者
                                                         ￥100/千字1个工作日</label>
                                                 </div>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>篇数:</p>
-                                                <select name="" class="sel2">
+                                                <select id="" name="" class="sel2">
                                                     <option value="">代写一篇</option>
                                                     <option value="">代写二篇</option>
                                                     <option value="">代写三篇</option>
+                                                    <option value="5">更多</option>
                                                 </select>
+                                                <input type="text" name="article_price" id="article_price" class="txt6"  style="width:130px;" />&nbsp;篇
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>总额:</p>
-                                                <input type="text" name="textfield" id="textfield" class="txt6"
+                                                <input type="text" name="article_price" id="article_price" class="txt6"
                                                        style="width:130px;"/>&nbsp; 元
                                             </div>
                                             <div class="WMain3 Wmain3_2">
@@ -81,7 +101,6 @@
                                                     </ul>
                                                 </div>
                                             </div>
-
                                             <div class="WMain3 WMain3_2" style="amargin-top:45px;">
                                                 <input type="submit" value="提交" class="sub5"/>
                                                 <span style="margin-left:30px;">账户余额不足，<a href="">点此充值</a></span>
@@ -99,6 +118,13 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(function () {
+            var mb="";
+               mb +='<input type="text" name="article_price" id="article_price"' +
+                'class="txt6"  style="width:130px; placeholder="" />&nbsp;篇'
+        });
+    </script>
     <script type="text/javascript">
 
         //实例化编辑器

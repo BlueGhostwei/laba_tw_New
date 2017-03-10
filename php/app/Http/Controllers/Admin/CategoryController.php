@@ -12,6 +12,7 @@ use Illuminate\Routing\Route;
 use Input;
 use App\Models\Category;
 use App\Models\Media_community;
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate;
 use Validator;
 
 class CategoryController extends Controller
@@ -33,7 +34,7 @@ class CategoryController extends Controller
             $result = array_get($get_arr, 'classification');
             foreach ($result as $key => $vel) {
                 $category_id = $vel['category_id'];
-                $set_cate_data = Category::where(['media_id' => $category_id])->get()->toArray();
+                $set_cate_data = Category::where(['media_id' => $category_id,'pt'=>null])->get()->toArray();
                 if (!empty($set_cate_data)) {
                     $result[$key]['data'] = $set_cate_data;
                 }
@@ -47,7 +48,10 @@ class CategoryController extends Controller
         }
         //查询省市
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        return view('Admin.category.from', ['midia_type' => $media_type, 'result_data' => $result, 'provinces' => $provinces]);
+        //内容代写分类
+        $ghostwrite=Category::where('pt','ghostwrite')->select('id','name')->orderBy('id','desc')->get();
+
+        return view('Admin.category.from', ['midia_type' => $media_type, 'result_data' => $result, 'provinces' => $provinces,'ghostwrite'=>$ghostwrite]);
     }
 
     /**
@@ -57,7 +61,6 @@ class CategoryController extends Controller
      */
     public function create_category(Request $request)
     {
-
         $category = new Category();
         $validate = Validator::make($request->all(), $category->rules()['create']);
         $messages = $validate->messages();
