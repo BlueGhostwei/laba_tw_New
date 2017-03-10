@@ -11,7 +11,8 @@ class CreateEncyclopediaTable extends Migration
      */
     public function up()
     {
-       Schema::table('createEncyclopedia',function(Blueprint $table){
+       Schema::create('createEncyclopedia',function(Blueprint $table){
+           
 
        });
     }

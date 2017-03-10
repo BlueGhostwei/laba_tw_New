@@ -20,7 +20,7 @@ class CreateSecurityTable extends Migration
             $table->timestamps();//自动维护更新时间
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      *

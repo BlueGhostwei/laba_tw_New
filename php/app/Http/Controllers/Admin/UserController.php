@@ -218,6 +218,7 @@ class UserController extends Controller
     public function user_info()
     {
 
+        $uesr=User::where('id',Auth::id())->first();
         return view('Admin.user.info');
     }
 
@@ -336,22 +337,23 @@ class UserController extends Controller
                 }
                 break;
             case "security";
+
                  $questin=Input::get('question');
                  $answer=Input::get('answer');
                  if(count($questin)==3 && count($answer)==3 ){
                      $user_id=Auth::id();//用户id
                      Security::where('user_id',$user_id)->delete();
                      foreach ($questin as $key =>$vel){
-                        if($vel==0){
-                          return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                        }
-                         $save_data['user_id']=$user_id;
-                         $save_data['ques_id']=$vel;
-                         $save_data['answer']=$answer[$key];
-                         $security=new Security();
-                         $result=$security->create($save_data);
-                         if($result){
-                             //更新用户表密保字段
+                             if($vel==0){
+                                 return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                             }
+                             $save_data['user_id']=$user_id;
+                             $save_data['ques_id']=$vel;
+                             $save_data['answer']=$answer[$key];
+                             $security=new Security();
+                             $result=$security->create($save_data);
+                             if($result){
+                                 //更新用户表密保字段
                              User::where('id',$user_id)->update(['security'=>'1']);
                        }
                      }
