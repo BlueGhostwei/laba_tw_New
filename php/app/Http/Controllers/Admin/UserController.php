@@ -11,6 +11,8 @@ use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 use Validator;
 use Redirect;
 use Auth;
+use Illuminate\Support\Facades\DB;
+use Config;
 use Input;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
@@ -234,7 +236,8 @@ class UserController extends Controller
             $user[$k]=!empty($user[$k])?$v:"";
         }
 
-        return json_encode($user);
+//        return json_encode($user);
+        return json_encode(['msg'=>'','sta'=>"0",'data'=>$user]);
     }
 
     /**
@@ -258,7 +261,35 @@ class UserController extends Controller
     
 
     public function _data_con(){
-        return json_encode(['msg'=>'','sta'=>"0",'data'=>config('security')]);
+
+        $question = Config('security');
+        $type = Config('questiontype');
+        foreach ($type as $k => $v){
+            $data[$v['type']] = array_merge($this->get_question($question,$v['type']));
+        }
+        return json_encode(['msg'=>'','sta'=>"0",'data'=>$data]);
+    }
+    protected function get_question($array,$type){
+
+        foreach ($array as $k =>$v){
+            if($v['type']==$type){
+                $arr[]= array_merge($v);
+            }
+        }
+        return $arr;
+    }
+
+    public function get_security_question(){
+        $result_array = Security::where('user_id',Auth::id())->select('id','ques_id')->get()->toArray();
+
+        if (!empty($result_array)){
+            for ($i=0;$i<count($result_array);$i++){
+                $result_array[$i]['question_name'] = Get_Question_Name($result_array[$i]['id']);
+            }
+            return json_encode(['msg'=>'获取成功','sta'=>"0",'data'=>$result_array]);
+        }else{
+            return json_encode(['msg'=>'没有设置密保问题','sta'=>"1"]);
+        }
     }
 
 
@@ -359,6 +390,23 @@ class UserController extends Controller
                  }
                 break;
         }
+
+    }
+
+
+    public function check_question(){
+        $data = Input::get('data');
+        $checkbool = 0;
+        for ($i=0;$i<count($data);$i++){
+            if ($data[$i]['answer']==DB::table('security')->where('id',$data[$i]['id'])->pluck('answer')->first()){
+                $checkbool ++;
+            }
+        }
+        if ($checkbool==count($data)){
+            return json_encode(['msg' => '验证成功！', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+        }else{
+            return json_encode(['msg' => '验证失败！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+        }
     }
 
     /**
@@ -371,8 +419,8 @@ class UserController extends Controller
     }
 
 //    public function test(){
+//
 //       echo Get_Set_Name(3);
 //    }
-
 
 }

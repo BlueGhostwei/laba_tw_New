@@ -18,7 +18,7 @@ return [
             array('category_id'=>'2',"name"=>'入口形式' ,'set_name'=>"Entrance_form"),
             array('category_id'=>'3',"name"=>'覆盖区域','set_name'=>"coverage"),
             array('category_id'=>'4',"name"=>'频道类型','set_name'=>"channel"),
-            array('category_id'=>'5',"name"=>'会员价','set_name'=>"member"),
+            array('category_id'=>'5',"name"=>'会员价','set_name'=>"mb_price"),
             array('category_id'=>'6',"name"=>'正文带链接','set_name'=>"standard"),
         )
     ),

@@ -120,8 +120,11 @@ Route::group(['middleware' => ['auth','acl']], function () {
 
         Route::any('Admin/set_cate',['as'=>'set.set_cate','uses'=>'MediaController@set_cate']); //发布新闻分类列表
         Route::any('Admin/selec_key',['as'=>'set.selec_key','uses'=>'MediaController@selec_key']);
-        Route::post('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
-        Route::post('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
+        Route::any('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
+        Route::any('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
+        Route::get('Admin/question',['as'=>'admin.question','uses'=>'UserController@get_security_question']);
+
+        Route::get('Admin/check_question',['as'=>'admin.check_questions','uses'=>'UserController@check_question']);
         Route::get('/Admin/user/_logout',['as'=>'member._logout','uses'=>'UserController@_logout']);//用户退出
 //        Route::get('/Admin/test',['uses'=>'UserController@test']);
     });

@@ -680,6 +680,7 @@ function Get_user_info(){
 
 
 //返回类型别名
+
 if(!function_exists('Get_Set_Name')){
 
     function Get_Set_Name($id){
@@ -692,6 +693,37 @@ if(!function_exists('Get_Set_Name')){
 
 }
 
+if(!function_exists('Get_Question_Name')){
+
+    function Get_Question_Name($id){
+        $allname = Config::get('security');
+        foreach ($allname as $k => $v){
+            if($v['id']==$id){
+                return $v['question_name'];
+            }
+        }
+
+    }
+
+}
+
+
+if(!function_exists('arrToOne')){
+
+    function arrToOne($multi)
+    {
+        $arr = array();
+        foreach ($multi as $key => $val) {
+            if( is_array($val) ) {
+                $arr = array_merge($arr, arrToOne($val));
+            } else {
+                $arr[] = $val;
+            }
+        }
+        return $arr;
+    }
+
+}
 
 
 

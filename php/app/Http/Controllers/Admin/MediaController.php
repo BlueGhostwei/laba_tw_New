@@ -197,14 +197,14 @@ class MediaController extends Controller
 
         //dd($data_list);
         foreach ($data_list as $k =>$vel){
-            $vel->coverage = DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
+            $vel->coverage =empty(DB::table('region')->where('id', $vel->coverage)->pluck('name')->first())?'':DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
             //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
-            $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
-            $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
-            $vel->channel = DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
-            $vel->standard = DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
-            $vel->media_md5 = md52url($vel->media_md5);
-            $vel->diagram_img = md52url($vel->diagram_img);
+            $vel->Entrance_level =empty(DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
+            $vel->Entrance_form =empty(DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
+            $vel->channel =empty(DB::table('category')->where('id', $vel->channel)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
+            $vel->standard = empty(DB::table('category')->where('id', $vel->standard)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
+            $vel->media_md5 =empty(md52url($vel->media_md5))?'':md52url($vel->media_md5);
+            $vel->diagram_img =empty(md52url($vel->diagram_img))?'':md52url($vel->diagram_img);
         }
 
         return $data_list;
