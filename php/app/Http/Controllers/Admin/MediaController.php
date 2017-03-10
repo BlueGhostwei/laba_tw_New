@@ -77,16 +77,16 @@ class MediaController extends Controller
                 $data_list = DB::table('media_community')
                     ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price', 'Website_Description')
                     ->orderBy('id', 'desc')->get()->toArray();
-                $this->to_sql_array($data_list);
+                $data_list=$this->to_sql_array($data_list);
             } else {
                 $media_cate = array_get(Input::all(), 'data');
 
                 $media_cate = $this->build_data($media_cate);
 
                 $sql = $this->build_sql($media_cate);
-                dd($sql);
-//                $data_list = DB::select($sql);
-//                $this->to_sql_array($data_list);
+//                dd($sql);
+                $data_list = DB::select($sql);
+                $data_list=$this->to_sql_array($data_list);
 
 
 //                $sql =`network` =1 OR `Entrance_form` =5 OR `channel` =14;
@@ -200,15 +200,17 @@ class MediaController extends Controller
     {
 
         //dd($data_list);
-        foreach ($data_list as $k => $vel) {
-            $vel->coverage = DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
+
+        foreach ($data_list as $k =>$vel){
+            $vel->coverage =empty(DB::table('region')->where('id', $vel->coverage)->pluck('name')->first())?'':DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
+
             //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
-            $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
-            $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
-            $vel->channel = DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
-            $vel->standard = DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
-            $vel->media_md5 = md52url($vel->media_md5);
-            $vel->diagram_img = md52url($vel->diagram_img);
+            $vel->Entrance_level =empty(DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
+            $vel->Entrance_form =empty(DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
+            $vel->channel =empty(DB::table('category')->where('id', $vel->channel)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
+            $vel->standard = empty(DB::table('category')->where('id', $vel->standard)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
+            $vel->media_md5 =empty(md52url($vel->media_md5))?'':md52url($vel->media_md5);
+            $vel->diagram_img =empty(md52url($vel->diagram_img))?'':md52url($vel->diagram_img);
         }
 
         return $data_list;
