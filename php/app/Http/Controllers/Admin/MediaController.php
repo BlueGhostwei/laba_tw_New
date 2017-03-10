@@ -76,16 +76,16 @@ class MediaController extends Controller
                 $data_list = DB::table('media_community')
                     ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price','Website_Description')
                     ->orderBy('id', 'desc')->get()->toArray();
-                $this->to_sql_array($data_list);
+                $data_list=$this->to_sql_array($data_list);
             } else {
                 $media_cate =  array_get(Input::all(),'data');
 
                 $media_cate = $this->build_data($media_cate);
 
                 $sql = $this->build_sql($media_cate);
-                dd($sql);
-//                $data_list = DB::select($sql);
-//                $this->to_sql_array($data_list);
+//                dd($sql);
+                $data_list = DB::select($sql);
+                $data_list=$this->to_sql_array($data_list);
 
 
 //                $sql =`network` =1 OR `Entrance_form` =5 OR `channel` =14;
