@@ -8,7 +8,6 @@
 			maxDate: new Date('2020-12-31'),
 			yearRange: [2000,2020]
 		});
-	console.log(typeof(picker1));
 	}
 	if( $('#datepicker2').length>0 && typeof(picker2)!="object" ){
 		var picker2 = new Pikaday({

@@ -299,6 +299,16 @@ select.sel_t1 option{		}
 .sbox_5 .WMain3 p{	width:100px;	text-align:right;	padding-right:45px;	}
 .sbox_5 .WMain3_1>div{	margin-left:145px;	}
 
+.sbox_5 .WMain3{	position:relative;	}
+em.error,
+.err_tip{	color:#f00;	padding:0 0 0 10px;	afloat:right;	font-style:normal;	}
+em#agree-error{		position:absolute;	top:20px;	left:152px;	}
+body .sbox_5 .WMain3 .time1-error,
+body .sbox_5 .WMain3 .time2-error{	color:#f00;		}
+#datepicker1-error,
+#datepicker2-error{	display:none!important;		}
+
+
 /*	问答任务列表	*/
 table.table_in1_2{	margin:0 auto;	border-left:1px solid #F2F2F2;	border-right:1px solid #F2F2F2;	}
 table.table_in1_2 tr{	border-bottom:1px solid #F2F2F2;	}

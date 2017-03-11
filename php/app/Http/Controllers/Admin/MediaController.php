@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Config;
@@ -10,7 +9,6 @@ use DB;
 use App\Models\Media_community;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\Rules\In;
-use App\Models\Encyclopedia;
 use Input;
 use App\Models\Category;
 use PhpParser\Node\Stmt\DeclareDeclare;
@@ -19,8 +17,10 @@ class MediaController extends Controller
 {
 
 
-    public function selec_key()
-    {
+
+
+
+    public function selec_key(){
 
         $data_list = DB::table('media_community')
             ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
@@ -29,7 +29,6 @@ class MediaController extends Controller
         $data_list = $this->to_sql($data_list);
         return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
     }
-
     /**
      * @return mixed
      *  //获取分类信息
@@ -45,15 +44,17 @@ class MediaController extends Controller
          */
 
 
-        $key = Input::get('key');
-        if ($key == "media") {
-            $media_id = Input::get('media_id');
-            $result = $this->get_media($media_id);
-            return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result]);
+		$key=Input::get('key');
+        if($key=="media"){
+           $media_id=Input::get('media_id');
+           $result=$this->get_media($media_id);
+           return json_encode(['msg'=>"请求成功",'sta'=>"0",'data'=>$result]);
         }
         $media_type = Config::get('mediatype');
+//	dd($media_type);
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        /* $price = Config::get('price');*/
+        $price = Config::get('price');
+//		dd($price);
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
@@ -67,26 +68,33 @@ class MediaController extends Controller
                 if ($vel['category_id'] == "3") {
                     $result[$key]['data'] = $provinces;
                 }
+                if ($vel['category_id'] == "5") {
+                    $result[$key]['data'] = $price;
+                }
             }
         }
-        $keyword = array_get(Input::all(), 'keyword');
+//		dd($result);
+        $keyword = array_get(Input::all(),'keyword');
 //        $keyword="1";
         if (isset($keyword)) {
             if ($keyword == "0") {
 
                 $data_list = DB::table('media_community')
-                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price', 'Website_Description')
+                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price','Website_Description')
                     ->orderBy('id', 'desc')->get()->toArray();
-                $data_list=$this->to_sql_array($data_list);
+                $this->to_sql_array($data_list);
+            } else if($keyword == "test1"){
+				$data_list = array_get(Input::all(),"form5data");
+				return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
             } else {
-                $media_cate = array_get(Input::all(), 'data');
+                $media_cate =  array_get(Input::all(),'data');
 
-                $media_cate = $this->build_data($media_cate);
-
+//                $media_cate = $this->build_data($media_cate);
+//				print_r($media_cate);
                 $sql = $this->build_sql($media_cate);
-//                dd($sql);
+//                echo("<br/>$sql<br/>");
                 $data_list = DB::select($sql);
-                $data_list=$this->to_sql_array($data_list);
+                $this->to_sql_array($data_list);
 
 
 //                $sql =`network` =1 OR `Entrance_form` =5 OR `channel` =14;
@@ -110,11 +118,13 @@ class MediaController extends Controller
         } else {
             $data_list = DB::table('media_community')
                 ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
-                ->orderBy('id', 'desc')->paginate(10);
+//                ->orderBy('id', 'desc')->paginate(10);
+                ->orderBy('id', 'desc')->paginate(10000);
             $data_list = $this->to_sql($data_list);
         }
         return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
     }
+
 
 
     /**
@@ -122,10 +132,9 @@ class MediaController extends Controller
      * @return \Illuminate\Database\Eloquent\Model|null|static
      *
      */
-    protected function get_media($id)
-    {
-        $set_meaid = Media_community::where('id', $id)->select('id', 'media_md5', 'media_name', 'Website_Description', 'mb_price')->first();
-        $set_meaid->media_md5 = md52url($set_meaid->media_md5);
+    protected  function get_media($id){
+        $set_meaid=Media_community::where('id',$id)->select('id','media_md5','media_name','Website_Description','mb_price')->first();
+        $set_meaid->media_md5=md52url($set_meaid->media_md5);
         return $set_meaid;
     }
 
@@ -156,7 +165,6 @@ class MediaController extends Controller
         }
         return json_encode(['msg' => '', 'sta' => '0', 'data' => $result]);
     }
-
     /**
      * @param $array
      * @return $array
@@ -164,10 +172,9 @@ class MediaController extends Controller
      * 将客户端的请求数据重新编码
      *
      */
-    protected function build_data($array)
-    {
-        foreach ($array as $k => $v) {
-            $array[$k] = explode(',', $v);
+    protected function build_data($array){
+        foreach ($array as $k => $v){
+            $array[$k] = explode(',',$v);
         }
         return $array;
     }
@@ -179,20 +186,26 @@ class MediaController extends Controller
      * 生成原生sql语句
      *
      */
-    protected function build_sql($array)
-    {
+    protected function build_sql($array){
 
         $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
-        foreach ($array as $k => $v) {
-            if ($v[1] == '0') {
-
-            } else {
-                $sql .= Get_Set_Name($v[0]) . " = " . $v[1] . " OR ";
+        foreach ($array as $k =>$v){
+//			if($v[1]=='0'){
+			if($v['data_id']<>''){
+//				$sql .= Get_Set_Name($v[0])." = ".$v[1]." OR ";
+				if($v['category_id']=='5'){		//	价格
+					$sql .= Get_Set_Name($v['category_id'])." ".Config::get('price')[ $v['data_id'] ]['sql']." AND ";
+				}else{
+					$sql .= Get_Set_Name($v['category_id'])." = '".$v['data_id']."' AND ";
+				}
             }
+			
 
         }
-        $sql = substr($sql, 0, -3);
-        $sql .= " order by id desc";
+//        $sql = substr($sql, 0, -3);
+        $sql = substr($sql, 0, -4);
+//		echo $sql;
+        $sql .=" order by id desc";
         return $sql;
     }
 
@@ -200,17 +213,15 @@ class MediaController extends Controller
     {
 
         //dd($data_list);
-
         foreach ($data_list as $k =>$vel){
-            $vel->coverage =empty(DB::table('region')->where('id', $vel->coverage)->pluck('name')->first())?'':DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
-
+            $vel->coverage = DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
             //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
-            $vel->Entrance_level =empty(DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
-            $vel->Entrance_form =empty(DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
-            $vel->channel =empty(DB::table('category')->where('id', $vel->channel)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
-            $vel->standard = empty(DB::table('category')->where('id', $vel->standard)->pluck('name')->first())?'':DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
-            $vel->media_md5 =empty(md52url($vel->media_md5))?'':md52url($vel->media_md5);
-            $vel->diagram_img =empty(md52url($vel->diagram_img))?'':md52url($vel->diagram_img);
+            $vel->Entrance_level = DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
+            $vel->Entrance_form = DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
+            $vel->channel = DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
+            $vel->standard = DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
+            $vel->media_md5 = md52url($vel->media_md5);
+            $vel->diagram_img = md52url($vel->diagram_img);
         }
 
         return $data_list;
@@ -228,101 +239,6 @@ class MediaController extends Controller
         }
         return $data_list;
     }
-
-
-    /**
-     * 会员订单
-     */
-    public function Member_order()
-    {
-        $Encyclopedia = new Encyclopedia();
-        $data = Input::get('data');
-        $Manuscripts_attr = $data['Manuscripts_attr'];
-        switch ($Manuscripts_attr) {
-            case '1';
-                $rules = array(
-                    'media_id' => 'required',
-                    'title' => 'required|max:25',
-                    'Manuscripts_attr' => 'required',
-                    'url_line' => 'required|url',
-                    'keyword' => 'required:min:2',
-                    'start_time' => 'required',
-                    'end_time' => 'required',
-                    'remark' => 'required',
-
-                );
-                break;
-            case '2';
-                $rules = array(
-                    'media_id' => 'required',
-                    'title' => 'required|max:25',
-                    'Manuscripts' => 'required',
-                    'Manuscripts_attr' => 'required',
-                    'keyword' => 'required:min:2',
-                    'start_time' => 'required',
-                    'end_time' => 'required',
-                    'remark' => 'required',
-
-                );
-                break;
-            case '3';
-                $rules = array(
-                    'media_id' => 'required',
-                    'title' => 'required|max:25',
-                    'Manuscripts_attr' => 'required',
-                    'keyword' => 'required:min:2',
-                    'start_time' => 'required',
-                    'end_time' => 'required',
-                    'remark' => 'required',
-                    'content' => 'required|min:200'
-                );
-                break;
-        }
-        $messgage = array(
-            'media_id.required' => '请选择媒体',
-            'title.required' => '请填写标题',
-            'title.max' => '标题最大限制为25个字符',
-            'Manuscripts.required' => '请选择提交的外部稿件',
-            'Manuscripts_attr.required' => '请选择提交稿件类型',
-            'url_line.required' => '请填写外部链接',
-            'url_line.url' => '链接地址不合法',
-            'keyword.required' => '关键字不能为空',
-            'keyword.min' => '关键字最小为2个字符',
-            'start_time.required' => '请设置文章发布时间',
-            'end_time.required' => '请设置文章结束时间',
-            'remark.required' => '备注信息不能为空',
-            'content.required' => '内容不能为空',
-            'content.min' => '内容最小为200个字符'
-        );
-        $validator=Validator::make($data,$rules,$messgage);
-        $messages=$validator->messages();
-        if($validator->fails()){
-            $msg = $messages->toArray();
-            foreach ($msg as $k => $v) {
-                return json_encode(['sta' => "1", 'msg' => $v[0], 'data' => ''], JSON_UNESCAPED_UNICODE);
-            }
-        }else{
-            //判断开始时间。
-            $this_time=time();
-            if(strtotime($data['start_time'])<$this_time ){
-                return json_encode(['msg' => "开始时间必须大于当前时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
-            }
-            if(strtotime($data['start_time'])>strtotime($data['end_time'])){
-                return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
-            }
-
-            $result= $Encyclopedia->create($data);
-            if($result){
-                //扣除对应金额
-            }
-        }
-        return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
-
-
-
-    }
-
-
     //百科营销
     public function Encyclopedia()
     {

@@ -17,7 +17,7 @@
     <script type="text/javascript" src="{{url('Admin/js/jquery.SuperSlide.2.1.1.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.dataTables.min.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/echarts.min.js')}}"></script>
-	<script type="text/javascript" src="{{url('Admin/js/moment.js')}}"></script>
+	<script type="text/javascript" src="{{url('Admin/js/moment.min.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/date.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/main2.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.tools.min.js')}}"></script>
