@@ -35,12 +35,12 @@
                                                         <label class="cur"><input type="radio" name="type" value=""
                                                                                   checked/>常规新闻稿</label>
                                                         <label><input type="radio" name="type" value=""/>偏软文新闻稿</label>
-                                                        <label><input type="radio" name="type" value=""/>企业介绍</label>
+                                                       {{-- <label><input type="radio" name="type" value=""/>企业介绍</label>
                                                         <label><input type="radio" name="type" value=""/>产品介绍</label>
                                                         <label><input type="radio" name="type" value=""/>人物介绍</label>
                                                         <label><input type="radio" name="type" value=""/>活动宣传</label>
                                                         <label><input type="radio" name="type" value=""/>百科撰写</label>
-                                                        <label><input type="radio" name="type" value=""/>问答策划</label>
+                                                        <label><input type="radio" name="type" value=""/>问答策划</label>--}}
                                                         @endif
 
                                                 </div>
@@ -69,9 +69,9 @@
                                                     <label><input type="radio" name="cycle" value=""/>专业手写
                                                         ￥100/千字1个工作日</label>
                                                     <label><input type="radio" name="cycle" value=""/>专业编辑
-                                                        ￥100/千字1个工作日</label>
+                                                        ￥200/千字1个工作日</label>
                                                     <label><input type="radio" name="cycle" value=""/>专业作者
-                                                        ￥100/千字1个工作日</label>
+                                                        ￥300/千字1个工作日</label>
                                                 </div>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>篇数:</p>

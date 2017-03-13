@@ -359,7 +359,9 @@ class MediaController extends Controller
     //文案策划
     public function Copy_plan()
     {
-        return view('Admin.media.copy_plan');
+       $ghostwrite=Category::where('pt','ghostwrite')->orderBy('id','desc')->get();
+       // dd($ghostwrite);
+        return view('Admin.media.copy_plan',['ghostwrite'=>$ghostwrite]);
     }
 
     //微信营销
