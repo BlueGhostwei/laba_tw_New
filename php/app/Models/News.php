@@ -26,6 +26,7 @@ class News extends Eloquent
     //数据完整性
     protected $fillable = [
         'user_id',
+        'title',
         'media_id',
         'Manuscripts_attr',
         'Manuscripts',
@@ -34,6 +35,8 @@ class News extends Eloquent
         'keyword',
         'start_time',
         'end_time',
+        'order_code',
+        'status',
         'remark',
     ];
 }

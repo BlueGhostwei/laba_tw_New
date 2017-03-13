@@ -194,12 +194,12 @@
 				data: {
 					'keyword' : key
 					,'formdata' : {
-						"type": formdata["type"],
+						"text_type": formdata["type"],
 						"title": formdata["title"],
-						"zw": formdata["zw"],
+						"content": formdata["zw"],
 						"number": formdata["number"],
 						"cycle": formdata["cycle"],
-						"articles_num": formdata["articles_num"],
+						"article_num": formdata["articles_num"],
 						"article_price": formdata["article_price"]
 					}
 					,'_token' : _token

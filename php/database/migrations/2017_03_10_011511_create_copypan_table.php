@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateCopypanTable extends Migration
 {
     /**
+     * 内容策划
      * Run the migrations
      * user_id 用户id
      * 'text_type'，文章类型
@@ -17,7 +18,7 @@ class CreateCopypanTable extends Migration
      * @return void
      * @return void
      */
-    public function up()
+    public function up()    
     {
         Schema::create('copy_pan',function(Blueprint $table){
             $table->increments('id');
@@ -26,7 +27,7 @@ class CreateCopypanTable extends Migration
             $table->string('title',150)->commit('标题');
             $table->longText('content')->nullable()->commit('文章内容');
             $table->tinyInteger('number')->commit('字数');
-            $table->tinyInteger('cycle')->commit('周期');
+            $table->Integer('cycle')->commit('周期');
             $table->tinyInteger('article_num')->commit('篇数');
             $table->char('article_price',50)->nullable()->commit('价格');
             $table->timestamps();//自动维护时间

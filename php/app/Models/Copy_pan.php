@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+
 class Copy_pan extends Eloquent
 {
 
@@ -40,15 +41,13 @@ class Copy_pan extends Eloquent
     public function rules()
     {
         return [
-            'create' => [
-                'title'=>'required',
-                'text_type' => "required",
-                'content' => "required",
-                'number' => "required",
-                'cycle' => "required",
-                'article_num' => "required",
-                'article_price' => "required",
-            ],
+            'title' => 'required',
+            'text_type' => "required",
+            'content' => "required",
+            'number' => "required",
+            'cycle' => "required",
+            'article_num' => "required",
+            'article_price' => "required",
         ];
     }
 }

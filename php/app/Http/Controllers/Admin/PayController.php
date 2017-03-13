@@ -20,7 +20,6 @@ class PayController extends Controller
     public function mobile_pay(){
         // 创建支付单。
         $alipay = app('alipay.mobile');
-       // dd($alipay);
         $order_id=date('YmdHis') . mt_rand(1000,9999);
         $order_price=0.01;
         $goods_name="情人节狗粮";

@@ -44,6 +44,7 @@ Route::group(['middleware' => 'guest'], function () {
        // Route::resource('Admin/find_password','PasswordController');
         //验证登录状态
         Route::get('Admin/user/checklogin',['as'=>'user.checklogin','uses'=>'UserController@_checkLogin']);
+        Route::any('Admin/get_token',['as'=>'set.token','uses'=>'UserController@Set_token']); //生成_token
 
     });
 
@@ -74,13 +75,14 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/media/forum',['as'=>'media.forum','uses'=>'MediaController@forum']);//论坛
         Route::get('Admin/media/Second_shot',['as'=>'media.Second_shot','uses'=>'MediaController@Second_shot']);//秒拍
         Route::get('Admin/media/Copy_plan',['as'=>'media.Copy_plan','uses'=>'MediaController@Copy_plan']);//文案策划
+        Route::post('Admin/media/Copy_plan','Copy_panController@create');//文案策划
         Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
         Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
-        Route::any('Admin/user/info','UserController@update_info');//会员信息
+        Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
 

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use Session;
 use Hash;
 use Illuminate\Http\Request;
@@ -15,8 +14,9 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Config;
 use Input;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Controller;
+
 
 class UserController extends Controller
 {
@@ -232,13 +232,10 @@ class UserController extends Controller
     /**
      * @return mixed
      */
-    public function user_info()
-    {
-
-        $uesr=User::where('id',Auth::id())->first();
-        return view('Admin.user.info');
-    }
-
+     public function user_info()
+     {
+         return view('Admin.user.info');
+     }
     /**
      * @return mixed
      *
@@ -274,7 +271,7 @@ class UserController extends Controller
         return view('Admin.user.user_update', ['type' => $data]);
 
     }
-    
+
 
     public function _data_con(){
 
@@ -395,27 +392,27 @@ class UserController extends Controller
                 break;
             case "security";
 
-                 $questin=Input::get('question');
-                 $answer=Input::get('answer');
-                 if(count($questin)==3 && count($answer)==3 ){
-                     $user_id=Auth::id();//用户id
-                     Security::where('user_id',$user_id)->delete();
-                     foreach ($questin as $key =>$vel){
-                             if($vel==0){
-                                 return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                             }
-                             $save_data['user_id']=$user_id;
-                             $save_data['ques_id']=$vel;
-                             $save_data['answer']=$answer[$key];
-                             $security=new Security();
-                             $result=$security->create($save_data);
-                             if($result){
-                                 //更新用户表密保字段
-                             User::where('id',$user_id)->update(['security'=>'1']);
-                       }
-                     }
-                     return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                 }
+                $questin=Input::get('question');
+                $answer=Input::get('answer');
+                if(count($questin)==3 && count($answer)==3 ){
+                    $user_id=Auth::id();//用户id
+                    Security::where('user_id',$user_id)->delete();
+                    foreach ($questin as $key =>$vel){
+                        if($vel==0){
+                            return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                        }
+                        $save_data['user_id']=$user_id;
+                        $save_data['ques_id']=$vel;
+                        $save_data['answer']=$answer[$key];
+                        $security=new Security();
+                        $result=$security->create($save_data);
+                        if($result){
+                            //更新用户表密保字段
+                            User::where('id',$user_id)->update(['security'=>'1']);
+                        }
+                    }
+                    return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }
                 break;
         }
 
@@ -424,7 +421,7 @@ class UserController extends Controller
     public function resetPhone(Request $request){
 //        $user = Auth::user();
         $data = $request->all();
-      //  dd($data);
+        //  dd($data);
         $user_SMS = Redis::exists('user_SMS');
         if ($user_SMS == 1 && $data) {
             $send_num_data = Redis::get('user_SMS');

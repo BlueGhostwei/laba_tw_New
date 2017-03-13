@@ -31,7 +31,6 @@ class Copy_panController extends Controller
     {
         $data=$request->all();
         $data['user_id']=Auth::id();
-        dd($data);
         $Copy_pan = new Copy_pan();
         $message = array(
             'title.required'=>'请添加文章标题',
@@ -42,7 +41,7 @@ class Copy_panController extends Controller
             "article_num.required" => "请选择篇数",
             "article_price.required" => "价格不能为空",
             );
-        $validator = Validator::make($data, $Copy_pan->rules('create'),$message);
+        $validator = Validator::make($data['formdata'], $Copy_pan->rules('create'),$message);
         $messages=$validator->messages();
         if($validator->fails()){
             $msg = $messages->toArray();
@@ -50,10 +49,13 @@ class Copy_panController extends Controller
                 return json_encode(['sta' => "1", 'msg' => $v[0], 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
         }else{
+            $data['formdata']['user_id']=Auth::id();
+            $result=$Copy_pan->create($data['formdata']);
+            dd($result);
             //获取价格
             //判断用户财富是否足够支付
             //返回结果
-
+            return json_encode(['sta' => "0", 'msg' => "", 'data' => ''], JSON_UNESCAPED_UNICODE);
         }
 
     }

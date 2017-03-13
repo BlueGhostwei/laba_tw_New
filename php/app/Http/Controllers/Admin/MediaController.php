@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Models\News;
 use Validator;
 use Illuminate\Http\Request;
@@ -259,7 +258,7 @@ class MediaController extends Controller
                     'title' => 'required|max:25',
                     'Manuscripts_attr' => 'required',
                     'url_line' => 'required|url',
-                    'keyword' => 'required:min:2',
+                    'keyword' => 'required:min:2|max:50',
                     'start_time' => 'required',
                     'end_time' => 'required',
                     'remark' => 'required',
@@ -302,12 +301,17 @@ class MediaController extends Controller
             'url_line.url' => '链接地址不合法',
             'keyword.required' => '关键字不能为空',
             'keyword.min' => '关键字最小为2个字符',
+            'keyword.max' => '关键字最大为50个字符',
             'start_time.required' => '请设置文章发布时间',
             'end_time.required' => '请设置文章结束时间',
             'remark.required' => '备注信息不能为空',
             'content.required' => '内容不能为空',
             'content.min' => '内容最小为200个字符'
         );
+        $set_title=News::where(['title'=>"$data[title]"])->first();
+        if($set_title){
+            return json_encode(['msg' => '新闻标题已被占用', 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
+        }
         $data['user_id']=Auth::id();
         $validator=Validator::make($data,$rules,$messgage);
         $messages=$validator->messages();
@@ -325,12 +329,16 @@ class MediaController extends Controller
             if(strtotime($data['start_time'])>strtotime($data['end_time'])){
                 return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
-           $data['media_id']=implode(',',$data['media_id']);
+            $data['start_time']=strtotime($data['start_time']);
+            $data['end_time']=strtotime($data['end_time']);
+            $data['media_id']=implode(',',$data['media_id']);
             //生成订单
-
+            $data['order_code']='1111111111';
+            $data['status']='1';
             $result=News::create($data);
             if($result){
                 //扣除对应金额
+                //User::update();
             }
         }
         return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
@@ -386,6 +394,8 @@ class MediaController extends Controller
     {
         return view('Admin.media.wechat_market');
     }
+    
+  
 
 
 }
