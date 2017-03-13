@@ -53,7 +53,7 @@ class MediaController extends Controller
         }
         $media_type = Config::get('mediatype');
         $provinces = DB::table('region')->where('pid', "0")->select(['id', 'name'])->get();
-        /* $price = Config::get('price');*/
+		$price = Config::get('price');
         if (!empty($media_type)) {
             $get_arr = $media_type[0];
             $result = array_get($get_arr, 'classification');
@@ -67,6 +67,10 @@ class MediaController extends Controller
                 if ($vel['category_id'] == "3") {
                     $result[$key]['data'] = $provinces;
                 }
+				if ($vel['category_id'] == "5") {
+                    $result[$key]['data'] = $price;
+                }
+				
             }
         }
         $keyword = array_get(Input::all(), 'keyword');
@@ -81,7 +85,7 @@ class MediaController extends Controller
             } else {
                 $media_cate = array_get(Input::all(), 'data');
 
-                $media_cate = $this->build_data($media_cate);
+//				$media_cate = $this->build_data($media_cate);
 
                 $sql = $this->build_sql($media_cate);
 //                dd($sql);
@@ -110,7 +114,7 @@ class MediaController extends Controller
         } else {
             $data_list = DB::table('media_community')
                 ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
-                ->orderBy('id', 'desc')->paginate(10);
+                ->orderBy('id', 'desc')->paginate(10000);
             $data_list = $this->to_sql($data_list);
         }
         return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
@@ -167,7 +171,7 @@ class MediaController extends Controller
     protected function build_data($array)
     {
         foreach ($array as $k => $v) {
-            $array[$k] = explode(',', $v);
+			$array[$k] = explode(',', $v);
         }
         return $array;
     }
@@ -184,14 +188,23 @@ class MediaController extends Controller
 
         $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
         foreach ($array as $k => $v) {
-            if ($v[1] == '0') {
-
+/*
+			if ($v[1] == '0') {
             } else {
                 $sql .= Get_Set_Name($v[0]) . " = " . $v[1] . " OR ";
             }
-
+*/
+			if($v['data_id']<>''){
+				if($v['category_id']=='5'){		//	价格
+					$sql .= Get_Set_Name($v['category_id'])." ".Config::get('price')[ $v['data_id'] ]['sql']." AND ";
+				}else{
+					$sql .= Get_Set_Name($v['category_id'])." = '".$v['data_id']."' AND ";
+				}
+            }
+			
         }
-        $sql = substr($sql, 0, -3);
+//		$sql = substr($sql, 0, -3);
+		$sql = substr($sql, 0, -4);
         $sql .= " order by id desc";
         return $sql;
     }
