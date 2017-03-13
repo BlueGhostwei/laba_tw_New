@@ -1,6 +1,10 @@
 @extends('Admin.layout.main')
-@section('title', '首页')
+@section('title', '文案策划')
 @section('header_related')
+	<link rel="stylesheet" href="{{url('Admin/js/layui/css/layui.css')}}"  media="all">
+	<script src="{{url('Admin/js/layui/layui.js')}}" charset="utf-8"></script>
+	<script src="{{url('Admin/js/jquery.validate.min.js')}}" charset="utf-8"></script>
+	<script src="{{url('Admin/js/messages_zh.min.js')}}" charset="utf-8"></script>
 @endsection
 @section('content')
     <div class="content">
@@ -13,7 +17,8 @@
                         <h3 class="title1"><strong><a href="#">内容代写</a></strong></h3>
 
                         <div class="sbox_5">
-
+<form id="form1" method="post" action="/index.php">
+	{{ csrf_field() }}
                             <div class="WMain1" style="border:none;">
                                 <div class="WMain2 WMain2_weixin">
                                     <ul>
@@ -28,8 +33,7 @@
                                                                  class="cur"
                                                                 @endif
                                                                     write_id="{{$vl->id}}"
-                                                            ><input type="radio" name="type" value=""
-                                                                                      checked/>{{$vl->name}}</label>
+                                                            >{{$vl->name}}</label>
                                                             @endforeach
                                                         @else
                                                         <label class="cur"><input type="radio" name="type" value=""
@@ -51,7 +55,7 @@
                                                 </script>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas">*</i>标题:</p>
-                                                <input type="text" name="textfield" id="textfield"
+                                                <input type="text" name="title" id="title"
                                                        placeholder="请输入标题" class="WIFN1"/>
                                             </div>
                                             <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>需求:</p>
@@ -60,31 +64,33 @@
                                                 </div>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>字数:</p>
-                                                <label><input type="radio" name="number" value=""/>1000字</label>
-                                                <label><input type="radio" name="number" value=""/>2000字</label>
-                                                <label><input type="radio" name="number" value=""/>3000字</label>
+                                                <label><input type="radio" name="number" value="1" checked />1000字</label>
+                                                <label><input type="radio" name="number" value="2" />2000字</label>
+                                                <label><input type="radio" name="number" value="3" />3000字</label>
                                             </div>
                                             <div class="WMain3 WMain3_2"><p><i class="LGntas"></i>编辑:</p>
                                                 <div>
-                                                    <label><input type="radio" name="cycle" value=""/>专业手写
+                                                    <label><input type="radio" name="cycle" value="100" checked />专业手写
                                                         ￥100/千字1个工作日</label>
-                                                    <label><input type="radio" name="cycle" value=""/>专业编辑
+                                                    <label><input type="radio" name="cycle" value="200" />专业编辑
                                                         ￥200/千字1个工作日</label>
-                                                    <label><input type="radio" name="cycle" value=""/>专业作者
+                                                    <label><input type="radio" name="cycle" value="300" />专业作者
                                                         ￥300/千字1个工作日</label>
                                                 </div>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>篇数:</p>
-                                                <select id="" name="" class="sel2">
-                                                    <option value="">代写一篇</option>
-                                                    <option value="">代写二篇</option>
-                                                    <option value="">代写三篇</option>
-                                                    <option value="5">更多</option>
+                                                <select id="articles_num1" name="articles_num1" class="sel2">
+                                                    <option value="1">代写一篇</option>
+                                                    <option value="2">代写二篇</option>
+                                                    <option value="3">代写三篇</option>
+                                                    <option value="else">更多</option>
                                                 </select>
-                                                <input type="text" name="article_price" id="article_price" class="txt6"  style="width:130px;" />&nbsp;篇
+                                                <span id="articles_num2_w" style="display:none;">
+													<input type="text" name="articles_num2" id="articles_num2" class="txt6"  style="width:130px;margin:0 0 0 10px;" />&nbsp;篇
+												</span>
                                             </div>
                                             <div class="WMain3"><p><i class="LGntas"></i>总额:</p>
-                                                <input type="text" name="article_price" id="article_price" class="txt6"
+                                                <input type="text" name="article_price" id="article_price" class="txt6" readonly="readonly" 
                                                        style="width:130px;"/>&nbsp; 元
                                             </div>
                                             <div class="WMain3 Wmain3_2">
@@ -102,7 +108,7 @@
                                                 </div>
                                             </div>
                                             <div class="WMain3 WMain3_2" style="amargin-top:45px;">
-                                                <input type="submit" value="提交" class="sub5"/>
+                                                <input type="submit" value="提交" class="sub5" id="submit" />
                                                 <span style="margin-left:30px;">账户余额不足，<a href="">点此充值</a></span>
                                             </div>
 
@@ -110,7 +116,7 @@
                                     </ul>
                                 </div>
                             </div>
-
+</form>
                         </div>
                     </div>
 
@@ -118,123 +124,123 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+	
+<script type="text/javascript">
         $(function () {
             var mb="";
                mb +='<input type="text" name="article_price" id="article_price"' +
                 'class="txt6"  style="width:130px; placeholder="" />&nbsp;篇'
         });
-    </script>
-    <script type="text/javascript">
-
-        //实例化编辑器
-        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-        var ue = UE.getEditor('editor');
-        function isFocus(e){
-            alert(UE.getEditor('editor').isFocus());
-            UE.dom.domUtils.preventDefault(e)
-        }
-        function setblur(e){
-            UE.getEditor('editor').blur();
-            UE.dom.domUtils.preventDefault(e)
-        }
-        function insertHtml() {
-            var value = prompt('插入html代码', '');
-            UE.getEditor('editor').execCommand('insertHtml', value)
-        }
-        function createEditor() {
-            enableBtn();
-            UE.getEditor('editor');
-        }
-        function getAllHtml() {
-            alert(UE.getEditor('editor').getAllHtml())
-        }
-        function getContent() {
-            var arr = [];
-            arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-            arr.push("内容为：");
-            arr.push(UE.getEditor('editor').getContent());
-            alert(arr.join("\n"));
-        }
-        function getPlainTxt() {
-            var arr = [];
-            arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
-            arr.push("内容为：");
-            arr.push(UE.getEditor('editor').getPlainTxt());
-            alert(arr.join('\n'))
-        }
-        function setContent(isAppendTo) {
-            var arr = [];
-            arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
-            UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
-            alert(arr.join("\n"));
-        }
-        function setDisabled() {
-            UE.getEditor('editor').setDisabled('fullscreen');
-            disableBtn("enable");
-        }
-
-        function setEnabled() {
-            UE.getEditor('editor').setEnabled();
-            enableBtn();
-        }
-
-        function getText() {
-            //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
-            var range = UE.getEditor('editor').selection.getRange();
-            range.select();
-            var txt = UE.getEditor('editor').selection.getText();
-            alert(txt)
-        }
-
-        function getContentTxt() {
-            var arr = [];
-            arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
-            arr.push("编辑器的纯文本内容为：");
-            arr.push(UE.getEditor('editor').getContentTxt());
-            alert(arr.join("\n"));
-        }
-        function hasContent() {
-            var arr = [];
-            arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
-            arr.push("判断结果为：");
-            arr.push(UE.getEditor('editor').hasContents());
-            alert(arr.join("\n"));
-        }
-        function setFocus() {
-            UE.getEditor('editor').focus();
-        }
-        function deleteEditor() {
-            disableBtn();
-            UE.getEditor('editor').destroy();
-        }
-        function disableBtn(str) {
-            var div = document.getElementById('btns');
-            var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
-            for (var i = 0, btn; btn = btns[i++];) {
-                if (btn.id == str) {
-                    UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
-                } else {
-                    btn.setAttribute("disabled", "true");
-                }
-            }
-        }
-        function enableBtn() {
-            var div = document.getElementById('btns');
-            var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
-            for (var i = 0, btn; btn = btns[i++];) {
-                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
-            }
-        }
-
-        function getLocalData () {
-            alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
-        }
-
-        function clearLocalData () {
-            UE.getEditor('editor').execCommand( "clearlocaldata" );
-            alert("已清空草稿箱")
-        }
-    </script>
+</script>
+<script type="text/javascript">
+	/*	百度编辑器	*/
+	var ue = UE.getEditor('editor');
+	var formdata = [];
+	var _token = $('input[name="_token"]').val();
+	
+	function countPrice(){
+		var number = $("[name=number]:checked").val();					//字数
+		var cycle = $("[name=cycle]:checked").val();					//编辑
+		var articles_num = $("#articles_num1").val() == 'else' ? $("#articles_num2").val() : $("#articles_num1").val();			//篇数
+		var article_price = number * cycle * articles_num;
+		$("#article_price").val(article_price);
+		return article_price;
+	}
+	$("[name=number],[name=cycle],[name=articles_num2]").change(function(){
+		countPrice();
+	});
+	$("[name=articles_num1]").change(function(){
+		if( $("#articles_num1").val() == 'else' ){
+			$("#articles_num2_w").show();
+		}else{
+			$("#articles_num2_w").hide();			
+		}
+		countPrice();
+	});	
+	$("[name=articles_num2]").keyup(function(){
+		countPrice();
+	});
+	countPrice();
+	
+	$("#submit").click(function(){
+		formdata['type'] = $("#radio_a1 label.cur").attr("write_id");			//类型
+		formdata['title'] = $("#title").val();									//标题
+		formdata['zw'] = ue.getContent();										//需求
+		formdata['number'] = $("[name=number]:checked").val();						//字数
+		formdata['cycle'] = $("[name=cycle]:checked").val();						//编辑
+		formdata['articles_num'] = $("#articles_num1").val() == 'else' ? $("#articles_num2").val() : $("#articles_num1").val();			//篇数
+		formdata['article_price'] = $("#article_price").val();						//总金额
+		
+		console.log("click:");
+		console.log(formdata);
+	});
+		
+	$.validator.setDefaults({
+		submitHandler: function() {
+			
+			console.log("表单提交");
+			var flag = 0;
+			if( formdata['zw'] == "" ){
+				flag = 1;
+				layer.msg("需求不能为空");
+				ue.focus();
+				return false;
+			}
+			
+			console.log("继续提交");
+			var key = "test1";
+			$.ajax({
+				url: "{{route('media.Copy_plan')}}",
+				data: {
+					'keyword' : key
+					,'formdata' : {
+						"type": formdata["type"],
+						"title": formdata["title"],
+						"zw": formdata["zw"],
+						"number": formdata["number"],
+						"cycle": formdata["cycle"],
+						"articles_num": formdata["articles_num"],
+						"article_price": formdata["article_price"]
+					}
+					,'_token' : _token
+				},
+				type: 'post',
+				dataType: "json",
+				stopAllStart: true,
+				success: function (data) {
+					console.log(data);
+					if (data.sta == '0') {
+						layer.msg(data.msg || '提交成功');
+					} else {
+						layer.msg(data.msg || '提交失败');
+					}
+				},
+				error: function (data) {
+					console.log(data);
+					layer.msg(data.msg || '网络发生错误');
+					return false;
+				}
+			});
+		}
+	});
+	
+	$("#form1").validate({
+		ignore: "",
+		rules: {
+			title: { required: true, minlength: 2, maxlength: 25 }
+			,number: "required"
+			,cycle: "required"
+			,articles_num1: "required"
+			,articles_num2: { required: function(){ return $("#articles_num1").val() == 'else' }, digits: true, min: 1, max: 1000000 }
+			,article_price: { required: true, number: true, min: 0 }
+		},
+		errorElement: "em",
+		messages: {
+			articles_num2: { digits: "只能输入整数" },
+			article_price: { number: "金额错误" }
+		}
+	});
+		
+</script>
 @endsection
 
