@@ -782,19 +782,20 @@ $.validator.setDefaults({
 });
 
 	$("#form5").validate({
-		onfocusout: false,
-		onkeyup: false,
-		onclick: false,
+		// onfocusout: false,
+		// onkeyup: false,
+		// onclick: false,
 		ignore: "",
 		rules: {
-			name1: { required: true, minlength: 2 }
+			name1: { required: true, minlength: 2, maxlength: 25 }
 			,name2: "required"
-				,name2_1: { required: function(){ return $("input[name=name2]:checked").val() == 1 } }
+				,name2_1: { required: function(){ return $("input[name=name2]:checked").val() == 1 }, url: true }
 				,name2_2: { required: function(){ return $("input[name=name2]:checked").val() == 2 } }
 				,content: { required: function(){ return $("input[name=name2]:checked").val() == 3 } }
+			,name3: { required: false, maxlength: 100 }
 			,name4: { required: true, dateISO: true, comparetime1: true }
 			,name5: { required: true, dateISO: true, comparetime2: true }
-			,name6: { required: true }
+			,name6: { required: true, maxlength: 500 }
 			,agree: "required"
 		},
 		errorElement: "em",
