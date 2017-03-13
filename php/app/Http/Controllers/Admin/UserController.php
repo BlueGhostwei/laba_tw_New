@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Session;
 use Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -47,6 +48,17 @@ class UserController extends Controller
     {
         return view('Admin.user.register');
     }
+
+    public function getResetUsername(){
+//        dd($this->get_security_question());
+//        $this->setStep(1);
+        echo $this->getStep();
+        $user = Auth::user();
+//        echo $user->username;
+        return view('Admin.user.reset_Uname',['step'=>$this->getStep(),'question'=>$this->get_security_question(),'phone'=>$user->username]);
+    }
+
+
 
     /**
      * @param Request $request
@@ -138,6 +150,7 @@ class UserController extends Controller
     public function getLogout()
     {
         Auth::logout();
+        Session::flush();
         return Redirect::route('user.login');
     }
 
@@ -147,7 +160,9 @@ class UserController extends Controller
      */
     public function _logout()
     {
+//        Session::forget('step');
         Auth::logout();
+
         return json_encode(["msg" => "请求成功", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
     }
 
@@ -265,6 +280,7 @@ class UserController extends Controller
 
         $question = Config('security');
         $type = Config('questiontype');
+//        dd($type);
         foreach ($type as $k => $v){
             $data[$v['type']] = array_merge($this->get_question($question,$v['type']));
         }
@@ -285,11 +301,21 @@ class UserController extends Controller
 
         if (!empty($result_array)){
             for ($i=0;$i<count($result_array);$i++){
-                $result_array[$i]['question_name'] = Get_Question_Name($result_array[$i]['id']);
+                //echo Get_Question_Name($result_array[$i]['id']);
+                $result_array[$i]['question_name'] = Get_Question_Name($result_array[$i]['ques_id']);
             }
-            return json_encode(['msg'=>'获取成功','sta'=>"0",'data'=>$result_array]);
+            return $result_array;
         }else{
-            return json_encode(['msg'=>'没有设置密保问题','sta'=>"1"]);
+            return null;
+        }
+    }
+
+    public function get_security_question_api(){
+//        dd($this->get_security_question());
+        if(empty($this->get_security_question())){
+            return sendMessage(null,'没有设置密保问题！');
+        }else{
+            return sendMessage($this->get_security_question(),'获取成功！');
         }
     }
 
@@ -395,9 +421,50 @@ class UserController extends Controller
 
     }
 
+    public function resetPhone(Request $request){
+//        $user = Auth::user();
+        $data = $request->all();
+      //  dd($data);
+        $user_SMS = Redis::exists('user_SMS');
+        if ($user_SMS == 1 && $data) {
+            $send_num_data = Redis::get('user_SMS');
+            $send_num = json_decode($send_num_data, true);
+            if ($data['user_code'] == $send_num['code']) {
+                //验证码5分钟内有效
+                $endtime = date('Y-m-d H:i:s', $send_num['Send_time'] + 600);
+                $this_time = date('Y-m-d H:i:s', time());
+                //当前时间是否大于发送时间+时间限制 在限制时间内，当前时间小于发送时间+限制
+                $second = intval((strtotime($this_time) - strtotime($endtime)) % 86400);
+                if ($second <> 0 && $second > 0) {
+                    Redis::del('user_SMS');
+                    return json_encode(['sta' => "1", 'msg' => '验证码已失效，请重新申请', 'data' => ""], JSON_UNESCAPED_UNICODE);
+                }
+                if ($data['username'] != $send_num['user_phone']) {
+                    return json_encode(['msg' => "验证用户不一致！", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }
+                $user = Auth::user();
+                $user->username = $data['username'];
+
+                if ($user->save()) {
+                    Redis::del('user_SMS');
+                    $this->setStep(3);
+                    return json_encode(['sta' => "0", 'msg' => '修改成功！', 'data' => $data], JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                return json_encode(['msg' => "验证码错误", 'sta' => "1", 'data' => '']);
+            }
+        }
+        return json_encode(['sta' => "1", 'msg' => '请求错误，请刷新页面重试', 'data' => ''], JSON_UNESCAPED_UNICODE);
+    }
 
     public function check_question(){
+
+
+
         $data = Input::get('data');
+        if(count($data)==0){
+            die(json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']));
+        }
         $checkbool = 0;
         for ($i=0;$i<count($data);$i++){
             if ($data[$i]['answer']==DB::table('security')->where('id',$data[$i]['id'])->pluck('answer')->first()){
@@ -405,6 +472,7 @@ class UserController extends Controller
             }
         }
         if ($checkbool==count($data)){
+            $this->setStep(2);
             return json_encode(['msg' => '验证成功！', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
         }else{
             return json_encode(['msg' => '验证失败！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
@@ -419,6 +487,16 @@ class UserController extends Controller
     {
         return view('Admin.user.top-up');
     }
+
+    public function getStep(){
+        $step = Session::get('step',1);
+        return $step;
+    }
+    public function setStep($step){
+        Session::put('step', $step);
+    }
+
+
 
 //    public function test(){
 //

@@ -725,6 +725,9 @@ if(!function_exists('arrToOne')){
 
 }
 
-
-
+if (!function_exists('sendMessage')){
+    function sendMessage($data,$msg){
+            return response()->json(['msg'=>$msg,'sta'=>"0",'data'=>$data]);
+    }
+}
 
