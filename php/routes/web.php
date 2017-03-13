@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
-        Route::post('Admin/user/info','UserController@update_info');//会员信息
+        Route::any('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
 
@@ -123,10 +123,16 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::any('Admin/selec_key',['as'=>'set.selec_key','uses'=>'MediaController@selec_key']);
         Route::any('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
         Route::any('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
-        Route::get('Admin/question',['as'=>'admin.question','uses'=>'UserController@get_security_question']);
+        Route::get('Admin/question',['as'=>'admin.question','uses'=>'UserController@get_security_question_api']);
 
         Route::get('Admin/check_question',['as'=>'admin.check_questions','uses'=>'UserController@check_question']);
+        Route::post('Admin/check_question',['as'=>'admin.check_questions','uses'=>'UserController@check_question']);
         Route::get('/Admin/user/_logout',['as'=>'member._logout','uses'=>'UserController@_logout']);//用户退出
+
+        Route::any('Admin/reset',['as'=>'admin.reset','uses'=>'UserController@getResetUsername']);
+
+        Route::any('Admin/resetphone',['as'=>'admin.resetphone','uses'=>'UserController@resetPhone']);
+
 //        Route::get('/Admin/test',['uses'=>'UserController@test']);
     });
 
