@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\News;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Config;
 use DB;
+use Auth;
 use App\Models\Media_community;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\Rules\In;
@@ -248,8 +250,7 @@ class MediaController extends Controller
      */
     public function Member_order()
     {
-        $Encyclopedia = new Encyclopedia();
-        $data = Input::get('data');
+        $data=Input::get('form5data');
         $Manuscripts_attr = $data['Manuscripts_attr'];
         switch ($Manuscripts_attr) {
             case '1';
@@ -307,6 +308,7 @@ class MediaController extends Controller
             'content.required' => '内容不能为空',
             'content.min' => '内容最小为200个字符'
         );
+        $data['user_id']=Auth::id();
         $validator=Validator::make($data,$rules,$messgage);
         $messages=$validator->messages();
         if($validator->fails()){
@@ -323,8 +325,10 @@ class MediaController extends Controller
             if(strtotime($data['start_time'])>strtotime($data['end_time'])){
                 return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
+           $data['media_id']=implode(',',$data['media_id']);
+            //生成订单
 
-            $result= $Encyclopedia->create($data);
+            $result=News::create($data);
             if($result){
                 //扣除对应金额
             }

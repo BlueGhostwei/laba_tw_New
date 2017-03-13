@@ -200,7 +200,7 @@
 								<input type="file" name="file" id="Manuscripts" class="txt6" 
 									style="display:none;opacity:0;"	/>
 							</form>
-							<form id="form5" method="post" action="/index.php">
+							<form id="form5" method="post" action="{{--{{route('media.Member_order')}}--}}">
                                     <div class="WIn2">
                                         <h2>新闻内容</h2>
                                         <div class="WMain1">
@@ -657,7 +657,7 @@
 				if(ret.sta == 1){
 					$('input[name="name2_2"]').val(ret.md5);
 				}else{
-					layer.msg('头像上传失败');
+					layer.msg(ret.msg);
 				}
 			});
 		});
@@ -689,7 +689,7 @@
 	$('#datepicker1').val(moment().add(30,"minutes").format('YYYY-MM-DD'));
 	
 	/*	底部提交按钮	*/
-	var form5data = [];
+	var form5data = {};
 	$("#btn_sub").click(function(){
 		form5data['id'] = [];
 		$("#select_media tr[rst_id!=0]").each(function(){			//已选媒体ID 数组
@@ -699,11 +699,11 @@
 		form5data['name1'] = $("input[name=name1]").val();				//活动标题
 		form5data['name2'] = $("input[name=name2]:checked").val();		//稿件内容		1 外部连接 		2 上传文档		3 内部编辑
 			form5data['name2_1'] = $("input[name=name2_1]").val();			//稿件内容》外部连接
-			form5data['Manuscripts'] = $("input[name=name2_2").val();		//稿件内容》上传文档	稿件导入
+			form5data['Manuscripts'] = $("input[name=name2_2]").val();		//稿件内容》上传文档	稿件导入
 			form5data['content'] = ue.getContent();							//稿件内容》内部编辑	内容编辑		获取编辑器的内容
-			
+
 		form5data['name3'] = $("input[name=name3]").val();				//关键字
-		
+
 		form5data['name4'] = $("input[name=name4]").val();				//开始时间
 		form5data['name4'] += " " + $("select[name=name4_1]").val() + ":" + $("select[name=name4_2]").val() + ":00";
 		form5data['name5'] = $("input[name=name5]").val();				//截止时间
@@ -732,7 +732,6 @@
 $.validator.setDefaults({
 	submitHandler: function() {
 		console.log("表单提交");
-		
 		var flag = 0;
 		if( form5data['id'] == "" ){
 			flag = 1;
@@ -740,26 +739,25 @@ $.validator.setDefaults({
 			return false;
 		}
 		console.log("继续提交");
-		
 		var key = "test1";
 		$.ajax({
-			url: '{{route('media.release')}}',
+			url: '{{route('media.Member_order')}}',
 			data: {
-				'keyword' : key
-				,'form5data' : {
-					"id": form5data["id"],
-					"name1": form5data["name1"],
-					"name2": form5data["name2"],
-						"name2_1": form5data["name2_1"],
-						"name2_2": form5data["Manuscripts"],
-						"name2_3": form5data["content"],
-					"name3": form5data["name3"],
-					"name4": form5data["name4"],
-					"name5": form5data["name5"],
-					"name6": form5data["name6"],
+				'keyword' : key,
+                'form5data' : {
+					"media_id": form5data["id"],
+					"title": form5data["name1"],
+					"Manuscripts_attr": form5data["name2"],
+						"url_line": form5data["name2_1"],
+						"Manuscripts": form5data["Manuscripts"],
+						"content": form5data["content"],
+					"keyword": form5data["name3"],
+					"start_time": form5data["name4"],
+					"end_time": form5data["name5"],
+					"remark": form5data["name6"],
 					"agree": form5data["agree"]
-				}
-				,'_token' : _token
+				},
+                '_token' : _token
 			},
 			type: 'post',
 			dataType: "json",
