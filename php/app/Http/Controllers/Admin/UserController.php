@@ -243,7 +243,7 @@ class UserController extends Controller
      * @return mixed
      *
      */
-    public function _user_info()
+    public function _user_data()
     {
         //$user = Auth::user();
         $user = User::where('id',Auth::id())->get()->toArray();
