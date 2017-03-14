@@ -260,10 +260,11 @@
         </li>
     </ul>
 </div>
+<div id="current_url" style="display:none;">{{url()->current()}}</div>
 <script type="text/javascript">
     var t1=TouchScroll('apDiv1',{vOffset:0,mouseWheel:true,keyPress:false})
-
     $(function(){
+		
         $(".menu a").each(function(){
             var href1 = $(this).attr("href");
             var href2 = window.location.href;
@@ -272,15 +273,22 @@
                 $(this).parent("li").addClass("cur");
             }
         });
-    });
 
-    $(document).ready(function(){
         $(".ITuser").click(function(){
             $(".HYrukou").toggle();
-
         });
 
-
-    });
-
+		var current_url = $.trim($("#current_url").html());
+		if( current_url != "" && current_url != "#" ){
+			$(".sidebar .menu li a").each(function(){
+				var url = $.trim($(this).attr("href"));
+				if( url == current_url ){
+					$(this).parent().addClass("selected").css("border-bottom","none")
+						.closest(".menu").slideDown()
+						.prev(".header").find(".arrow").addClass("down").removeClass("up");
+				}
+			});
+		}
+		
+	});
 </script>
