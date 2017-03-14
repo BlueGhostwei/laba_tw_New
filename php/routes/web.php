@@ -122,7 +122,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::any('Admin/set_cate',['as'=>'set.set_cate','uses'=>'MediaController@set_cate']); //发布新闻分类列表
         Route::any('Admin/selec_key',['as'=>'set.selec_key','uses'=>'MediaController@selec_key']);
         Route::any('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
-        Route::any('Admin/user/_user_info',['as'=>'member._user_info','uses'=>'UserController@_user_info']);//用户信息
+        Route::any('Admin/user/_user_data',['as'=>'member._user_info','uses'=>'UserController@_user_data']);//用户信息
         Route::get('Admin/question',['as'=>'admin.question','uses'=>'UserController@get_security_question_api']);
 
         Route::get('Admin/check_question',['as'=>'admin.check_questions','uses'=>'UserController@check_question']);
