@@ -243,7 +243,7 @@ class UserController extends Controller
      * @return mixed
      *
      */
-    public function _user_info()
+    public function _user_data()
     {
         //$user = Auth::user();
         $user = User::where('id',Auth::id())->get()->toArray();
@@ -253,6 +253,7 @@ class UserController extends Controller
         }
 
 //        return json_encode($user);
+//        return sendMessage($user,'');
         return json_encode(['msg'=>'','sta'=>"0",'data'=>$user]);
     }
 
@@ -424,7 +425,7 @@ class UserController extends Controller
     public function resetPhone(Request $request){
 //        $user = Auth::user();
         $data = $request->all();
-      //  dd($data);
+//        dd($data);
         $user_SMS = Redis::exists('user_SMS');
         if ($user_SMS == 1 && $data) {
             $send_num_data = Redis::get('user_SMS');
@@ -458,9 +459,6 @@ class UserController extends Controller
     }
 
     public function check_question(){
-
-
-
         $data = Input::get('data');
         if(count($data)==0){
             die(json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']));
