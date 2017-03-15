@@ -168,9 +168,9 @@ class UserController extends Controller
 
     public function _checkLogin(){
         if(Auth::check()){
-            return json_encode(["msg" => "已登录", "sta" => "1", "data" => ""], JSON_UNESCAPED_UNICODE);
+            return json_encode(["msg" => "已登录", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
         }else{
-            return json_encode(["msg" => "未登录", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
+            return json_encode(["msg" => "未登录", "sta" => "1", "data" => ""], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -240,6 +240,7 @@ class UserController extends Controller
      * @return mixed
      *
      */
+
     public function _user_data()
     {
         //$user = Auth::user();
@@ -248,8 +249,6 @@ class UserController extends Controller
         foreach ($user as $k =>$v){
             $user[$k]=!empty($user[$k])?$v:"";
         }
-
-//        return json_encode($user);
         return json_encode(['msg'=>'','sta'=>"0",'data'=>$user]);
     }
 
@@ -415,7 +414,6 @@ class UserController extends Controller
                 }
                 break;
         }
-
     }
 
     public function resetPhone(Request $request){
@@ -455,16 +453,14 @@ class UserController extends Controller
     }
 
     public function check_question(){
-
-
-
         $data = Input::get('data');
         if(count($data)==0){
             die(json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']));
         }
         $checkbool = 0;
         for ($i=0;$i<count($data);$i++){
-            if ($data[$i]['answer']==DB::table('security')->where('id',$data[$i]['id'])->pluck('answer')->first()){
+            $arr=explode(',', $data[$i]);
+            if ($arr['1']==DB::table('security')->where('id',$arr['0'])->pluck('answer')->first()){
                 $checkbool ++;
             }
         }
@@ -474,6 +470,24 @@ class UserController extends Controller
         }else{
             return json_encode(['msg' => '验证失败！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
         }
+        /*
+        $data = Input::get('data');
+        if(count($data)==0){
+            die(json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']));
+        }
+        $checkbool = 0;
+        for ($i=0;$i<count($data);$i++){
+            dd($data[$i]);
+            if ($data[$i]['answer']==DB::table('security')->where('id',$data[$i]['id'])->pluck('answer')->first()){
+                $checkbool ++;
+            }
+        }
+        if ($checkbool==count($data)){
+            $this->setStep(2);
+            return json_encode(['msg' => '验证成功！', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+        }else{
+            return json_encode(['msg' => '验证失败！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+        }*/
     }
 
     /**
