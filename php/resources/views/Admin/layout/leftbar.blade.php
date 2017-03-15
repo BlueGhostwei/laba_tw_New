@@ -258,6 +258,18 @@
                     </a></li>
             </ul>
         </li>
+        <li>
+            <div class="header">
+                <span class="label" id="sd3">媒体供应商</span>
+                <span class="arrow up"></span>					</div>
+            <ul class="menu">
+                <li><a href=""><div class="nd1">活动订单</div></a></li>
+                <li><a href=""><div class="nd2">预约订单</div></a></li>
+                <li><a href=""><div class="nd3">资源管理</div></a></li>
+                <li><a href=""><div class="nd4">账单查询</div></a></li>
+                <li><a href=""><div class="nd5">用户中心</div></a></li>
+            </ul>
+        </li>
     </ul>
 </div>
 <div id="current_url" style="display:none;">{{url()->current()}}</div>
