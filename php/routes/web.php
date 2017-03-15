@@ -44,6 +44,7 @@ Route::group(['middleware' => 'guest'], function () {
        // Route::resource('Admin/find_password','PasswordController');
         //验证登录状态
         Route::get('Admin/user/checklogin',['as'=>'user.checklogin','uses'=>'UserController@_checkLogin']);
+        Route::any('Admin/get_token',['as'=>'set.token','uses'=>'UserController@Set_token']); //生成_token
 
     });
 
@@ -74,13 +75,14 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/media/forum',['as'=>'media.forum','uses'=>'MediaController@forum']);//论坛
         Route::get('Admin/media/Second_shot',['as'=>'media.Second_shot','uses'=>'MediaController@Second_shot']);//秒拍
         Route::get('Admin/media/Copy_plan',['as'=>'media.Copy_plan','uses'=>'MediaController@Copy_plan']);//文案策划
+        Route::post('Admin/media/Copy_plan','Copy_panController@create');//文案策划
         Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
         Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
-        Route::any('Admin/user/info','UserController@update_info');//会员信息
+        Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
 
@@ -123,7 +125,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::any('Admin/selec_key',['as'=>'set.selec_key','uses'=>'MediaController@selec_key']);
         Route::any('Admin/security/_data_con', ['as' => 'user.security', 'uses' => 'UserController@_data_con']);//密保问题
         Route::any('Admin/user/_user_data',['as'=>'member._user_info','uses'=>'UserController@_user_data']);//用户信息
-        Route::get('Admin/question',['as'=>'admin.question','uses'=>'UserController@get_security_question_api']);
+        Route::post('Admin/question',['as'=>'admin.question','uses'=>'UserController@get_security_question_api']);
 
         Route::get('Admin/check_question',['as'=>'admin.check_questions','uses'=>'UserController@check_question']);
         Route::post('Admin/check_question',['as'=>'admin.check_questions','uses'=>'UserController@check_question']);
@@ -133,6 +135,12 @@ Route::group(['middleware' => ['auth','acl']], function () {
 
         Route::any('Admin/resetphone',['as'=>'admin.resetphone','uses'=>'UserController@resetPhone']);
 
+
+        Route::get('Admin/userlist',['as'=>'admin.userlist','uses'=>'UserController@userManage']);//用户列表
+        Route::get('Admin/addUser',['as'=>'admin.adduser','uses'=>'UserController@addUser']);
+        Route::post('Admin/modify_info',['as'=>'admin.modify_info','uses'=>'UserController@addUser_api']);
+        Route::post('Admin/search_user',['as'=>'admin.search_user','uses'=>'UserController@getUserList']);
+        Route::get('Admin/search_user',['as'=>'admin.search_user','uses'=>'UserController@getUserList']);
 //        Route::get('/Admin/test',['uses'=>'UserController@test']);
     });
 

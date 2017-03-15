@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Models\AclRole;
+use App\Models\AclUser;
 use Session;
 use Hash;
 use Illuminate\Http\Request;
@@ -15,8 +16,9 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Config;
 use Input;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Controller;
+
 
 class UserController extends Controller
 {
@@ -232,13 +234,10 @@ class UserController extends Controller
     /**
      * @return mixed
      */
-    public function user_info()
-    {
-
-        $uesr=User::where('id',Auth::id())->first();
-        return view('Admin.user.info');
-    }
-
+     public function user_info()
+     {
+         return view('Admin.user.info');
+     }
     /**
      * @return mixed
      *
@@ -275,7 +274,7 @@ class UserController extends Controller
         return view('Admin.user.user_update', ['type' => $data]);
 
     }
-    
+
 
     public function _data_con(){
 
@@ -396,36 +395,39 @@ class UserController extends Controller
                 break;
             case "security";
 
-                 $questin=Input::get('question');
-                 $answer=Input::get('answer');
-                 if(count($questin)==3 && count($answer)==3 ){
-                     $user_id=Auth::id();//用户id
-                     Security::where('user_id',$user_id)->delete();
-                     foreach ($questin as $key =>$vel){
-                             if($vel==0){
-                                 return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                             }
-                             $save_data['user_id']=$user_id;
-                             $save_data['ques_id']=$vel;
-                             $save_data['answer']=$answer[$key];
-                             $security=new Security();
-                             $result=$security->create($save_data);
-                             if($result){
-                                 //更新用户表密保字段
-                             User::where('id',$user_id)->update(['security'=>'1']);
-                       }
-                     }
-                     return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                 }
+                $questin=Input::get('question');
+                $answer=Input::get('answer');
+                if(count($questin)==3 && count($answer)==3 ){
+                    $user_id=Auth::id();//用户id
+                    Security::where('user_id',$user_id)->delete();
+                    foreach ($questin as $key =>$vel){
+                        if($vel==0){
+                            return json_encode(['msg' => '请完善密保问题', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                        }
+                        $save_data['user_id']=$user_id;
+                        $save_data['ques_id']=$vel;
+                        $save_data['answer']=$answer[$key];
+                        $security=new Security();
+                        $result=$security->create($save_data);
+                        if($result){
+                            //更新用户表密保字段
+                            User::where('id',$user_id)->update(['security'=>'1']);
+                        }
+                    }
+                    return json_encode(['msg' => '密保设置成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }
                 break;
         }
 
     }
 
+    /**
+     * @param Request $request
+     * @return string
+     */
     public function resetPhone(Request $request){
 //        $user = Auth::user();
         $data = $request->all();
-//        dd($data);
         $user_SMS = Redis::exists('user_SMS');
         if ($user_SMS == 1 && $data) {
             $send_num_data = Redis::get('user_SMS');
@@ -449,6 +451,7 @@ class UserController extends Controller
                 if ($user->save()) {
                     Redis::del('user_SMS');
                     $this->setStep(3);
+                    Auth::logout();
                     return json_encode(['sta' => "0", 'msg' => '修改成功！', 'data' => $data], JSON_UNESCAPED_UNICODE);
                 }
             } else {
@@ -457,6 +460,10 @@ class UserController extends Controller
         }
         return json_encode(['sta' => "1", 'msg' => '请求错误，请刷新页面重试', 'data' => ''], JSON_UNESCAPED_UNICODE);
     }
+
+    /**
+     * @return string
+     */
 
     public function check_question(){
         $data = Input::get('data');
@@ -494,11 +501,141 @@ class UserController extends Controller
         Session::put('step', $step);
     }
 
+    public function userManage(){
+        $users = User::orderBy('user.id','Desc')->select('user.username','user.id','user.role','user.created_at','user.created_by','user.wealth','user.lock','acl_user.acl_name')->join('acl_user','user.role','acl_user.acl_id')->where('user.deleted_at','=',null)->paginate(10);
+//        dd($users);
+        foreach ($users as $k=>$v){
+//            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
+            if ($users[$k]['created_by']!=0){
+                $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
+            }
+            else{
+                $users[$k]['created_by']='--';
+            }
+        }
+        return view('Admin.user.userManage',['users'=>$users]);
+    }
 
 
-//    public function test(){
-//
-//       echo Get_Set_Name(3);
-//    }
 
+
+    public function getUserList(){
+        $type=Input::get('type');
+        $username = Input::get('username');
+//        dd($username);
+        $users = User::orderBy('user.id','Desc')->select('user.username','user.id','user.role','user.created_at','user.created_by','user.lock','acl_user.acl_name','user.wealth')->join('acl_user','user.role','acl_user.acl_id')->where('user.username','like','%'.$username.'%')->paginate(10);
+        foreach ($users as $k=>$v){
+//            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
+            if ($users[$k]['created_by']!=0){
+                $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
+            }
+            else{
+                $users[$k]['created_by']='--';
+            }
+        }
+        if ($type=='web'){
+//            dd($users);
+            return view('Admin.user.userManage',['users'=>$users]);
+        }else{
+            if(empty($users)){
+                return json_encode(['msg' => '没有找到类似数据！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }else{
+                return json_encode(['msg' => '查询成功！', 'sta' => '0', 'data' => $users], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+
+
+    }
+
+    public function addUser(){
+        $acl = $this->getAclRole();
+        $id = intval(Input::get('id'));
+        if (empty($id)){
+            $user = null;
+        }else{
+            $user = User::find($id);
+        }
+        return view('Admin.user.userAdd',['user'=>$user,'aclusers'=>$acl]);
+    }
+
+    public function getAclRole(){
+        return AclUser::all()->toArray();
+    }
+
+
+    public function addUser_api(Request $request){
+        $data = $request->all();
+        $type = $data['type'];
+        $id = intval($data['id']);
+        switch ($type){
+            case 'add':
+                $passbool = $data['pass']==$data['pass1'];
+                $bool = !empty($data['username'])&&!empty($data['pass'])&&!empty($data['pass1'])&&!empty($data['role'])&&isset($data['lock']);
+                if ($bool&&$passbool){
+                    if(empty(User::where('username', $data['username'])->first())){
+//                            dd(User::where('username', $data['username'])->first());
+                        $user = new User();
+                        $user->username = $data['username'];
+                        $user->password = $data['pass'];
+                        $user->role = $data['role'];
+                        $user->contact_person = $data['person'];
+                        $user->user_Eail = $data['mail'];
+                        $user->created_by =Auth::id();
+                        $user->user_phone = $data['phone'];
+                        $user->lock = $data['lock'];
+                        if($user->save()){
+                            return json_encode(['msg' => '添加成功！', 'sta' => '0', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                        }else{
+                            return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                        }
+                    }else{
+//                            dd(User::where('username', $data['username'])->first());
+                        return json_encode(['msg' => '用户已存在！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                    }
+                }else{
+                    return json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                }
+                break;
+            case 'update':
+                $passbool = $data['pass']==$data['pass1'];
+                $bool = !empty($data['username'])&&!empty($data['pass'])&&!empty($data['pass1'])&&!empty($data['role'])&&isset($data['lock']);
+//                dd($passbool);
+                if ($bool&&$passbool){
+                    $user = User::find($id);
+                    $user->username = $data['username'];
+                    $user->password = $data['pass'];
+                    $user->role = $data['role'];
+                    $user->contact_person = $data['person'];
+                    $user->user_Eail = $data['mail'];
+                    $user->user_phone = $data['phone'];
+                    $user->lock = $data['lock'];
+                    if($user->save()){
+                        return json_encode(['msg' => '修改成功！', 'sta' => '0', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                    }else{
+                        return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                    }
+                }else{
+                    return json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                }
+                break;
+            case "delete":
+
+                    if ($id==Auth::id()){
+                        return json_encode(['msg' => '不能删除自身！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                    }else{
+                        $user = User::find($id);
+                        if ($user->delete()){
+                            return json_encode(['msg' => '删除成功！', 'sta' => '0', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                        }else{
+                            return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                        }
+                    }
+
+
+                    break;
+        }
+
+    }
+    
 }
