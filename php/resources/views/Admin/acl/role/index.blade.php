@@ -42,7 +42,6 @@
                     width: 60%;
                 }
             </style>
-
             <div class="row">
                 <div class="box-widget widget-module">
                     <div class="widget-container">

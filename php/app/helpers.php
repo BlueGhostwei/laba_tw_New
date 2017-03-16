@@ -4,6 +4,8 @@ use App\Models\AclResource;
 use App\Models\AclRole;
 use App\Http\Controllers\Admin\UploadController;
 use App\Models\User;
+use  App\Models\News;
+use App\Models\Media_community;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
 
@@ -402,136 +404,6 @@ function searchDir($path, &$data)
     }
 }
 
-
-//微信分享图片下载
-function share_img($url,$type='weixin')
-{
-
-
-    if(getimagesize($url)){
-        $size = getimagesize($url);
-
-
-        if (is_array($size)) {
-
-            $suffix = explode('/', $size['mime']);//分解图片后缀
-            $pic_name_arr = explode('/', dirname($url));//分解图片地址
-            $pic_name = $pic_name_arr[count($pic_name_arr) - 1];//取出图片名
-
-            if($type == 'baidu'){
-                $path = 'baidu_img/' . $pic_name . '.' . $suffix[1];
-            }else{
-                $path = 'share_img/' . $pic_name . '.' . $suffix[1];
-
-            }
-
-            $new_url = url('') . '/' . $path;
-            if (!file_exists($new_url)) {
-                //mkdir($path, 0777);
-                $ch = curl_init();
-                $httpheader = array(
-                    'Host' => 'mmbiz.qpic.cn',
-                    'Connection' => 'keep-alive',
-                    'Pragma' => 'no-cache',
-                    'Cache-Control' => 'no-cache',
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8',
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36',
-                    'Accept-Encoding' => 'gzip, deflate, sdch',
-                    'Accept-Language' => 'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4'
-                );
-                $options = array(
-                    CURLOPT_HTTPHEADER => $httpheader,
-                    CURLOPT_URL => $url,
-                    CURLOPT_TIMEOUT => 5,
-                    CURLOPT_FOLLOWLOCATION => 1,
-                    CURLOPT_RETURNTRANSFER => true
-                );
-                curl_setopt_array($ch, $options);
-                $result = curl_exec($ch);
-                curl_close($ch);
-
-                $dirname = mkdir_dirname($path);
-
-                Image::make($result)->save($path);
-
-            }
-
-            return $new_url;
-
-
-        } else {
-            return '';
-        }
-    }else{
-        return '';
-    }
-
-}
-
-
-//微信内容多图片爬取
-function content_img($arr_url)
-{
-
-    $img_url = explode(',', $arr_url);
-    $content_url = array();
-    foreach ($img_url as $k => $v) {
-
-        if (!empty($v)) {
-
-
-            $size = getimagesize($v);
-
-            if (is_array($size)) {
-
-                $suffix = explode('/', $size['mime']);//分解图片后缀
-                $pic_name_arr = explode('/', dirname($v));//分解图片地址
-                $pic_name = $pic_name_arr[count($pic_name_arr) - 1];//取出图片名
-
-                $path = 'content_img/' . $pic_name . '.' . $suffix[1];
-
-                $new_url = url('') . '/' . $path;
-                if (!file_exists($new_url)) {
-                    $ch = curl_init();
-                    $httpheader = array(
-                        'Host' => 'mmbiz.qpic.cn',
-                        'Connection' => 'keep-alive',
-                        'Pragma' => 'no-cache',
-                        'Cache-Control' => 'no-cache',
-                        'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8',
-                        'User-Agent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36',
-                        'Accept-Encoding' => 'gzip, deflate, sdch',
-                        'Accept-Language' => 'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4'
-                    );
-                    $options = array(
-                        CURLOPT_HTTPHEADER => $httpheader,
-                        CURLOPT_URL => $v,
-                        CURLOPT_TIMEOUT => 5,
-                        CURLOPT_FOLLOWLOCATION => 1,
-                        CURLOPT_RETURNTRANSFER => true
-                    );
-                    curl_setopt_array($ch, $options);
-                    $result = curl_exec($ch);
-                    curl_close($ch);
-
-                    $dirname = mkdir_dirname($path);
-
-
-                    Image::make($result)->save($path);
-
-                }
-            } else {
-                $new_url = '';
-            }
-            $content_url[] = $new_url;
-
-
-        }
-    }
-    return $content_url;
-
-}
-
 /**
  * 输出方法 rep 默认视图输出
  *
@@ -730,4 +602,21 @@ if (!function_exists('sendMessage')){
             return response()->json(['msg'=>$msg,'sta'=>"0",'data'=>$data]);
     }
 }
+
+
+//首页获取未支付订单
+function get_order(){
+    $list=News::where('user_id',Auth::id())->where('status','1')->where('release_sta','1')->orderBy('id','desc')->limit(20)->get();
+    return $list;
+}
+function get_media_img($id){
+    if(!empty($id)){
+        $id=explode(',',$id);
+        $media=Media_community::where('id',$id[0])->select('media_md5')->first();
+        return md52url($media->media_md5);
+    }else{
+        return url('Admin/img/bn66.png');
+    }
+}
+
 

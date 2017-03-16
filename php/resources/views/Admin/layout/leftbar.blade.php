@@ -47,98 +47,22 @@
         </div>
     </div>
     <div style="background:#1d3a78; float:left; width:260px; height:auto;">
-        <div class="IIO_nt">购物车共：<span>20</span>个</div>
+        <div class="IIO_nt">购物车共：<span> @if(!empty(get_order())){{count(get_order())}}@endif</span>个</div>
         <ul class="ITorder" id="apDiv1">
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
-            <li><a href="">
-                    <div class="IOimg"><img src="{{url('Admin/img/bn66.png')}}"/>
-                        <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
-                    </div>
-                    <div class="IOtext">
-                        <h3>定单标题</h3>
-                        <p>微信号：123456</p>
-                    </div>
-                </a>
-            </li>
+            @if(!empty(get_order()))
+                @foreach(get_order() as $key =>$vel)
+                <li><a href="">
+                        <div class="IOimg"><img src="{{get_media_img($vel['media_id'])}}"/>
+                            <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
+                        </div>
+                        <div class="IOtext">
+                            <h3>{{$vel['title']}}</h3>
+                            <p>{{Auth::user()->username}}</p>
+                        </div>
+                    </a>
+                </li>
+                @endforeach
+          @endif
         </ul>
         <div class="IObu"><input type="submit" name="button" id="button" value="下一步" class="TOUbutton"/></div>
     </div>
@@ -204,6 +128,14 @@
         </li>
         <li>
             <div class="header">
+                <span class="label" id="sd3">权限管理</span>
+                <span class="arrow up"></span></div>
+            <ul class="menu">
+                <li><a href="{{route('acl.role.index')}}"><div class="nd1">角色列表</div></a></li>
+            </ul>
+        </li>
+        <li>
+            <div class="header">
                 <span class="label" id="sd3">会员中心</span>
                 <span class="arrow up"></span>
             </div>
@@ -213,6 +145,9 @@
                     </a></li>
                 <li><a href="{{route('member.Onlnetop_up')}}">
                         <div class="nd2n">在线充值</div>
+                    </a></li>
+                <li><a href="{{route('user.order_list')}}">
+                        <div class="nd2n">我的订单</div>
                     </a></li>
             </ul>
         </li>

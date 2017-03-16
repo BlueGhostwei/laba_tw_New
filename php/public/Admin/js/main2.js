@@ -118,6 +118,7 @@ if( $("#tb1").length>0 ){
 		return false;
 	});
 
+
 /*	首页表格排序	*/
 if( $('#datatable1').length>0 ){
 	$('#datatable1').DataTable({
@@ -149,11 +150,11 @@ if( $('#datatable1').length>0 ){
 
 
 /*	媒体供应商_活动订单	*/
-	$(".nav_hdorder .tab li a").click(function(){
+/*	$(".nav_hdorder .tab li a").click(function(){
 		$(this).parent("li").addClass("cur").siblings("li").removeClass("cur");
 		return false;
 	});
-
+*/
 
 
 

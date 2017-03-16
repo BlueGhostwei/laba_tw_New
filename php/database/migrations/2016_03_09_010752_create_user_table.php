@@ -25,6 +25,9 @@ class CreateUserTable extends Migration
 
             // 密码, hash 值
             $table->string('password', 60);
+            
+            //平台支付密码 ,hash值
+            $table->string('pay_pass',60);
 
             // 邮箱验证状态, 0 或 1
             $table->tinyInteger('email_validate')->unsigned()->default(0);

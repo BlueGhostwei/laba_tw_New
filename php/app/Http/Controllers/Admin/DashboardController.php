@@ -19,10 +19,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $id=Auth::id();
-        $set_user_info=User::find($id)->toArray();
-       // dd($set_user_info);
-
+     
         return view('Admin.dashboard.league-agent');
     }
 

@@ -31,7 +31,7 @@ class AclRoleController extends Controller
     {
         //$role = (new AclRole())->getRole();
         $role = AclUser::orderBy('id', 'desc')->get();
-        return view('Admin.acl.role.index',['role'=>$role]);
+        return view('Admin.user_acl.index',['role'=>$role]);
     }
 
     /**
@@ -94,11 +94,16 @@ class AclRoleController extends Controller
         $roleResource = Arr::pluck($roleResource, 'resource');
         //dd($roleResource);
 
-        return view('Admin.acl.role.form', [
+        return view('Admin.user_acl.form', [
             'role' => $id,
             'resource' => $resource,
             'roleResource' => $roleResource,
         ]);
+       /* return view('Admin.acl.role.form', [
+            'role' => $id,
+            'resource' => $resource,
+            'roleResource' => $roleResource,
+        ]);*/
     }
 
     /**
@@ -110,11 +115,11 @@ class AclRoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-     
+            
         $this->validate($request, [
             'resource' => 'required'
         ]);
-
+        
         AclRole::where('role', $id)->delete();
 
         $resource = $request->get('resource');

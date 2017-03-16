@@ -3,7 +3,7 @@
 @section('title', '修改角色权限')
 
 @section('content')
-    <div class="main-container">
+    {{--<div class="main-container">
         <div class="container-fluid">
             @include('Admin.layout.breadcrumb', [
                 'title' => '修改角色权限',
@@ -11,7 +11,7 @@
                 'breadcrumb' => [
                     '修改角色权限' => ''
                 ]
-            ])
+            ])--}}
 
             <div class="row">
                 <div class="col-md-12">

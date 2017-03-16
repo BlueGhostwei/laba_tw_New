@@ -220,8 +220,9 @@ class MediaController extends Controller
     public function Member_order()
     {
 
-        $arr=array (
+       /* $arr=array (
             '_token' => 'ayvU2z93V4fmDPFLYawV3PRvPZpWEkAQc2hSRJ36',
+            'key'=>'news',
             'form5data' => array (
                     'Manuscripts' => '',
                     'Manuscripts_attr' => '1',
@@ -239,15 +240,15 @@ class MediaController extends Controller
                     'title' => '没有主题',
                     'url_line' => 'http://www.5idev.com/p-php_fwrite.shtml',
                 ),
-        );
-        $Encyclopedia = new Encyclopedia();
-       // $arr = Input::all();
+        );*/
+        $arr = Input::all();
         if(!empty(Input::get('form5data')) && empty($arr['form5data'])){
             $data=Input::get('form5data');
         }else{
             $data= $arr['form5data'];
         }
         $Manuscripts_attr = $data['Manuscripts_attr'];
+        $data['price']="234123";
         switch ($Manuscripts_attr) {
             case '1';
                 $rules = array(
@@ -259,6 +260,7 @@ class MediaController extends Controller
                     'start_time' => 'required',
                     'end_time' => 'required',
                     'remark' => 'required',
+                    'price'=>'required'
 
                 );
                 break;
@@ -272,7 +274,7 @@ class MediaController extends Controller
                     'start_time' => 'required',
                     'end_time' => 'required',
                     'remark' => 'required',
-
+                    'price'=>'required'
                 );
                 break;
             case '3';
@@ -284,7 +286,8 @@ class MediaController extends Controller
                     'start_time' => 'required',
                     'end_time' => 'required',
                     'remark' => 'required',
-                    'content' => 'required|min:200'
+                    'content' => 'required|min:200',
+                    'price'=>'required'
                 );
                 break;
         }
@@ -302,7 +305,8 @@ class MediaController extends Controller
             'end_time.required' => '请设置文章结束时间',
             'remark.required' => '备注信息不能为空',
             'content.required' => '内容不能为空',
-            'content.min' => '内容最小为200个字符'
+            'content.min' => '内容最小为200个字符',
+            'price.required'=>'价格不能为空'
         );
         $set_title=News::where('title','=',$data['title'])->first();
         if($set_title){
@@ -318,27 +322,21 @@ class MediaController extends Controller
             }
         } else {
             //判断开始时间。
-           /* $this_time = time();
+            $this_time = time();
             if (strtotime($data['start_time']) < $this_time) {
                 return json_encode(['msg' => "开始时间必须大于当前时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
             if (strtotime($data['start_time']) > strtotime($data['end_time'])) {
                 return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
-            }*/
-           if(Auth::user()->wealth > $data['price']){
-               return json_encode(['msg' => '账户余额不足，请充值', 'sta' => "1", 'data' => ""], JSON_UNESCAPED_UNICODE);
-           }
-            $result = $Encyclopedia->create($data);
-            if ($result) {
-                //扣除对应金额
-                $news_price=Auth::user()->wealth -$data['price'];
-                $rst= User::where('id','=',Auth::id())->update(['wealth'=>$news_price]);
-                if($rst){
-                    return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
-                }else{
-                    //回滚
-                }
             }
+            //生成订单号
+            $data['news_type']=$arr['key'];
+            $data['price']='14231';
+            $data['order_code']=Controller::makePaySn(Auth::id());
+            $data['media_id']=implode(',',$data['media_id']);
+            $data['start_time']=strtotime($data['start_time']);
+            $data['end_time']=strtotime($data['end_time']);
+            $result = News::create($data);
         }
         return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
 

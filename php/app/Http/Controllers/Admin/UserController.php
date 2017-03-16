@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Models\AclRole;
 use App\Models\AclUser;
+use App\Models\News;
 use Session;
 use Hash;
 use Illuminate\Http\Request;
@@ -69,22 +70,29 @@ class UserController extends Controller
      */
     public function post_login(Request $request)
     {
-        $username = Input::get('username');
-        $password = Input::get('user_password');
+        $username = trim(Input::get('username'));
+        $password = trim(Input::get('user_password'));
         $remember = Input::get('remember', false);
-        //判断用户手机号码
-        if (Controller::isMobile(Input::get('username')) == false) {
-            return Redirect::back()->withErrors('请输入正确的手机号码')->withInput();
-            //return json_encode(["msg" => "", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
+        $field = isEmail($username) ? 'email' : 'username';
+        if($field=='email'){
+            //验证用户
+            $set_user = User::where(['user_Eail' =>$username, 'deleted_at' => null])->first();
+        }else{
+            //判断用户手机号码
+            if (Controller::isMobile($username) == false) {
+                return Redirect::back()->withErrors('请输入正确的手机号码')->withInput();
+                //return json_encode(["msg" => "", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
+            }
+            //验证用户
+            $set_user = User::where(['username' => $username, 'deleted_at' => null])->first();
         }
-        //验证用户
-        $set_user = User::where(['username' => Input::get("username"), 'deleted_at' => null])->get()->toArray();
-        if (empty($set_user)) {
+        if ($set_user->id == null) {
             return Redirect::back()->withErrors('用户不存在，请注册')->withInput();
-            //return json_encode(["msg" => "", "sta" => 1, "data" => ""], JSON_UNESCAPED_UNICODE);
         }
         //判断用户状态是否锁定
-
+         if($set_user->lock=="1"){
+             return Redirect::back()->withErrors('该用户已被锁定，请联系客服')->withInput();
+         }
         //定义验证验证码规则
         $rules = [
             "user_code" => 'required|captcha'
@@ -98,7 +106,11 @@ class UserController extends Controller
             return Redirect::back()->withErrors($validator->errors())->withInput();//验证码错误！
         } else {
             //通过验证
-            $rst = Auth::attempt(['username' => $username, 'password' => $password], $remember);
+           if($field=='email'){
+               $rst = Auth::attempt(['user_Eail' => $username, 'password' => $password], $remember);
+           }else{
+               $rst = Auth::attempt(['username' => $username, 'password' => $password], $remember);
+           }
             if ($rst == true) {
                 return redirect()->intended('/');//登录成功，跳转页面
             } else {
@@ -109,13 +121,22 @@ class UserController extends Controller
 
     }
 
-
+    /**
+     * @return mixed
+     *
+     */
+    public function order_list()
+    {
+        $user_order=News::where('user_id',Auth::id())->select('title','start_time','price','remark','created_at','news_type')->orderBy('id','desc')->get();
+        return view('Admin.user.order_list',['user_order'=>$user_order]);
+    }
     //ios登陆
     public function Api_postLogin()
     {
         $username = Input::get('username');
         $password = Input::get('password');
         $remember = Input::get('remember', false);
+
         $redirect = urldecode(Input::get('redirect', '/'));
         //判断用户手机号码
         if (Controller::isMobile(Input::get('username')) == false) {

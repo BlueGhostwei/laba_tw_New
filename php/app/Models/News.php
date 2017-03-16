@@ -25,6 +25,7 @@ class News extends Eloquent
 
     //数据完整性
     protected $fillable = [
+        'news_type',
         'user_id',
         'title',
         'media_id',
