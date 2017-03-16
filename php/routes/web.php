@@ -11,6 +11,13 @@
 |
 */
 
+
+
+Route::get('/alipay/webnotify', ['as' => 'website.pay', 'uses' => 'Admin\PayController@webnotify']);
+Route::get('/alipay/webreturn', ['as' => 'website.pay', 'uses' => 'Admin\PayController@webreturn']);
+
+
+
 //Route::get('/', function () {return view('welcome');});
 //游客路由
 Route::group(['middleware' => 'guest'], function () {
@@ -94,8 +101,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('upload/config', 'UploadController@config');
         //支付宝支付
         Route::get('/pay', ['as' => 'website.pay', 'uses' => 'PayController@index']);
-        Route::get('/alipay/webnotify', ['as' => 'website.pay', 'uses' => 'PayController@webnotify']);
-        Route::get('/alipay/webreturn', ['as' => 'website.pay', 'uses' => 'PayController@webreturn']);//网页支付
+        //网页支付
         Route::get('/mobile_pay', ['as' => 'website.mobile_pay', 'uses' => 'PayController@mobile_pay']);//手机支付
         Route::get('/alipay/alipayNotify', ['as' => 'website.alipayNotify', 'uses' => 'PayController@alipayNotify']);//手机回调
         //微信支付
