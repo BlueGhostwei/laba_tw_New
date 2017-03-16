@@ -9,22 +9,21 @@
                 <div class="ndt">
                     <div class="Ifapiao"><h2>在线充值</h2></div>
                     <div class="IF1" style="padding:5% 4% 0 8%;">
+                        {{--<form method="get" action="{{url('/pay')}}" name="payform">--}}
                         <div class="IF3"><p>充值金额:</p>
-                            <input type="text" name="textfield" id="textfield" class="IFN1"/>
+                            <input type="text"  id="recharge" value="" class="IFN1"/>
                             <span>元</span>
                         </div>
                         <div class="LGnt8">
-                            <li>500元</li>
-                            <li>1000元</li>
-                            <li>2000元</li>
-                            <li>5000元</li>
-                            <li>10000元</li>
+                            @foreach($lists as $list)
+                                <li class="rechargelist">{{$list}}</li>
+                            @endforeach
                         </div>
                         <div class="IF3"><p>充值方式:</p>
                             <ul class="LGnt9">
-                                <li><img src="{{url('Admin/img/LGnta1.jpg')}}"/></li>
+                                {{--<li><img src="{{url('Admin/img/LGnta1.jpg')}}"/></li>--}}
                                 <li><img src="{{url('Admin/img/LGnta2.jpg')}}"/></li>
-                                <li><img src="{{url('Admin/img/LGnta3.jpg')}}"/></li>
+                                {{--<li><img src="{{url('Admin/img/LGnta3.jpg')}}"/></li>--}}
 
                             </ul>
                         </div>
@@ -38,11 +37,51 @@
                         </div>
                         <div class="IF3" style="margin-top:20px;">
                             <p>&nbsp;</p>
-                            <input type="submit" name="button" id="button" value="立即充值" class="Button"/>
+                            <input type="submit" name="button" id="paybutton" value="立即充值" class="Button"/>
+
                         </div>
+                        {{--</form>--}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script type="application/javascript">
+        $(function () {
+            var type = 'alipay';
+            $(".rechargelist").click(function () {
+                $("#recharge").val($(this).html());
+            })
+
+
+
+            $("#paybutton").click(function () {
+                var charge = $("#recharge").val();
+                if(charge==""){
+                    layer.msg('请先输入金额!');
+                }else{
+                    $.ajax({
+                        type: "get",
+                        url: "{{url('/pay')}}",
+                        data: {
+                            "money": charge
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.sta == 1) {
+                                layer.msg(data.msg);
+                            }else{
+//                                console.log(data.data);
+                                window.location.href = data.data;
+                            }
+                        }
+                    });
+                }
+            })
+
+
+
+
+        })
+    </script>
 @endsection

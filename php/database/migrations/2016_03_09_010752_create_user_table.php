@@ -49,7 +49,7 @@ class CreateUserTable extends Migration
 
 
             // 移动电话, 固话
-            $table->char('user_phone',15)->unique()->nullable()->index();
+            $table->char('user_phone',15)->nullable()->index();
 
         /*    // 微信号
             $table->string('wechat', 20)->nullable();*/
@@ -73,7 +73,7 @@ class CreateUserTable extends Migration
             //是否设置密保
             $table->tinyInteger('security')->default(0)->index()->commit('是否设置密码：1为true,0为false');
             //用户证件（身份证）
-            $table->char('User_ID',35)->nulltable()->commit('用户证件（身份证）');
+            $table->string('User_ID',35)->nulltable()->commit('用户证件（身份证）');
 
             // 创建的管理员
             $table->integer('created_by')->unsigned()->default(0);

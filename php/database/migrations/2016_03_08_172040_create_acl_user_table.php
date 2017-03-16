@@ -18,6 +18,7 @@ class CreateAclUserTable extends Migration
             $table->increments('id');
             // 用户 id
             $table->string('acl_name');
+            $table->integer('acl_id');
             // 自动维护的创建更新时间
             $table->timestamps();
         });

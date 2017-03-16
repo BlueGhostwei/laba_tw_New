@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\In;
 use Latrell\Alipay;
 use Request;
 use Log;
@@ -20,7 +23,6 @@ class PayController extends Controller
     public function mobile_pay(){
         // 创建支付单。
         $alipay = app('alipay.mobile');
-       // dd($alipay);
         $order_id=date('YmdHis') . mt_rand(1000,9999);
         $order_price=0.01;
         $goods_name="情人节狗粮";
@@ -39,19 +41,48 @@ class PayController extends Controller
      */
     public function index(){
         $alipay = app('alipay.web');
-        $order_id=date('YmdHis') . mt_rand(1000,9999);
-        $order_price=0.01;
-        $goods_name="情人节狗粮";
+        $order_id = Controller::makePaySn(Auth::id());
+//        dd($order_id);
+//        $order_id=date('YmdHis') . mt_rand(1000,9999);
+        $order_price=Input::get('money');
+        $goods_name="充值账户";
         $goods_description="";//产品描述暂无
         $alipay->setOutTradeNo($order_id);
         $alipay->setTotalFee($order_price);
         $alipay->setSubject($goods_name);
         $alipay->setBody($goods_description);
-        $alipay->setQrPayMode('4'); //该设置为可选，添加该参数设置，支持二维码支付。
+        if ($order_price<10){
+            return json_encode(['msg'=>'每次充值不能低于10元！','sta'=>'1']);
+        }else{
+            $order = new Order();
+            $order->type =1;
+            $order->user_id=Auth::id();
+            $order->price = $order_price;
+            $order->title = '账户充值';
+            $order->number = $order_id;
+            $order->save();
+            return json_encode(['msg'=>'','sta'=>'0','data'=>$alipay->getPayLink()]);
+        }
+
+
+
+
+//        $alipay->setQrPayMode('4'); //该设置为可选，添加该参数设置，支持二维码支付。
+
 
         // 跳转到支付页面。
-        return redirect()->to($alipay->getPayLink());
+
     }
+
+
+    /**
+     * @return string
+     *
+     * 支付宝网页异步提示
+     *
+     */
+
+
     public function webnotify(){
         // 验证请求。
         if (! app('alipay.web')->verify()) {
@@ -68,12 +99,18 @@ class PayController extends Controller
 
         switch (Input::get('trade_status')) {
             case 'TRADE_SUCCESS':
+                $order = Order::where('number', '=',Input::get('out_trade_no'))->first();
+                $order->state =1;
+                $order->save();
             case 'TRADE_FINISHED':
                 // TODO: 支付成功，取得订单号进行其它相关操作。
                 Log::debug('Alipay notify post data verification success.', [
                     'out_trade_no' => Input::get('out_trade_no'),
                     'trade_no' => Input::get('trade_no')
                 ]);
+                $order = Order::where('number', '=', Input::get('out_trade_no'))->first();
+                $order->state =1;
+                $order->save();
                 break;
         }
 
@@ -86,11 +123,11 @@ class PayController extends Controller
      */
     public function webreturn(){
      // 验证请求。
-        if (! app('alipay.web')->verify()) {
+        if (!app('alipay.web')->verify()) {
             Log::notice('Alipay return query data verification fail.', [
                 'data' => Request::getQueryString()
             ]);
-            return view('alipay.fail');
+            return view('Admin.pay.payFail');
         }
 
         // 判断通知类型。
@@ -102,10 +139,11 @@ class PayController extends Controller
                     'out_trade_no' => Input::get('out_trade_no'),
                     'trade_no' => Input::get('trade_no')
                 ]);
+
                 break;
         }
 
-        return view('alipay.success');
+        return view('Admin.pay.paySuccess');
 
     }
     /**

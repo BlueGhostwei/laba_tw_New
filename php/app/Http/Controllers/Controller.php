@@ -42,4 +42,17 @@ class Controller extends BaseController
         }
         return $random;
     }
+
+    /**
+     * @param $member_id
+     * @return string
+     * 生成订单号
+     */
+    public function makePaySn($member_id) {
+        return mt_rand(10,99)
+            . sprintf('%010d',time() - 946656000)
+            . sprintf('%03d', (float) microtime() * 1000)
+            . sprintf('%03d', (int) $member_id % 1000);
+    }
+
 }
