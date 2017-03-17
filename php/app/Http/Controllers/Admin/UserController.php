@@ -183,9 +183,7 @@ class UserController extends Controller
      */
     public function _logout()
     {
-//        Session::forget('step');
         Auth::logout();
-
         return json_encode(["msg" => "请求成功", "sta" => "0", "data" => ""], JSON_UNESCAPED_UNICODE);
     }
 

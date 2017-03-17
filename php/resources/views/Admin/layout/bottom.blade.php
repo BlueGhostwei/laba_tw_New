@@ -27,6 +27,7 @@
 			yearRange: [2000,2020]
 		});
 	}
+
 </script>
 <div class="foot">
     <p>@2016-2020版权所有</p>

@@ -219,28 +219,6 @@ class MediaController extends Controller
      */
     public function Member_order()
     {
-
-       /* $arr=array (
-            '_token' => 'ayvU2z93V4fmDPFLYawV3PRvPZpWEkAQc2hSRJ36',
-            'key'=>'news',
-            'form5data' => array (
-                    'Manuscripts' => '',
-                    'Manuscripts_attr' => '1',
-                    'agree' => '1',
-                    'price'=>'200',
-                    'content' => '',
-                    'end_time' => '2017-03-18 18:58:00',
-                    'keyword' => '没有，主题',
-                    'media_id' => array (
-                        0 => '18',
-                        1 => '19',
-                    ),
-                    'remark' => '没有备注',
-                    'start_time' => '2017-03-15 23:58:00',
-                    'title' => '没有主题',
-                    'url_line' => 'http://www.5idev.com/p-php_fwrite.shtml',
-                ),
-        );*/
         $arr = Input::all();
         if(!empty(Input::get('form5data')) && empty($arr['form5data'])){
             $data=Input::get('form5data');

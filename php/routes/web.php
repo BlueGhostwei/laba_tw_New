@@ -94,6 +94,10 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
+        //媒体供应商
+        Route::get('Admin/vider/Event_list',['as'=>'vider.Event_list','uses'=>'MediaProviderController@Event_list']);
+        Route::get('Admin/vider/user_center',['as'=>'vider.user_center','uses'=>'MediaProviderController@user_center']);
+        Route::get('Admin/vider/bill_query',['as'=>'vider.bill_query','uses'=>'MediaProviderController@bill_query']);
 
         // 文件上传, 图片处理
         Route::post('upload', 'UploadController@index');
