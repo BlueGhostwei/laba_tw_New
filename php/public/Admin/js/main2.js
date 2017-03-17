@@ -119,35 +119,6 @@ if( $("#tb1").length>0 ){
 	});
 
 
-/*	首页表格排序	*/
-if( $('#datatable1').length>0 ){
-	$('#datatable1').DataTable({
-		"searching" : false,
-		"paging" : false,
-		"lengthChange" : false,
-		"info" : false,
-		"columnDefs" : [{
-        	"targets": 'nosort',
-			"orderable": false
-		}],
-		"order" : [[0,"asc"]]
-	});
-}
-/*	
-	$('.data-table').dataTable({
-        "searching": false,  //是否允许Datatables开启本地搜索
-        "paging": false,  //是否开启本地分页
-        "lengthChange": false,  //是否允许用户改变表格每页显示的记录数
-        "info": false,   //控制是否显示表格左下角的信息
-        "columnDefs": [{
-            "targets": 'nosort',  //列的样式名
-            "orderable": false    //包含上样式名‘nosort’的禁止排序
-        }],
-        //跟数组下标一样，第一列从0开始，这里表格初始化时，第四列默认降序
-        "order": [3]  //asc升序   desc降序  "order": [[ 3, "desc" ]]默认第四列为降序排列
-    });
-*/
-
 
 /*	媒体供应商_活动订单	*/
 /*	$(".nav_hdorder .tab li a").click(function(){

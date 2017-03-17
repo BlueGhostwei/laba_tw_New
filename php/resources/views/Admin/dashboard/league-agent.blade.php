@@ -341,7 +341,7 @@
         });
     </script>
     <script>
-        var pages = 1;
+/*         var pages = 1;
         laypage({
             cont: 'page', //容器。值支持id名、原生dom对象，jquery对象,
             pages: pages, //总页数
@@ -366,11 +366,45 @@
                 });
 
             }
-        });
+        }); */
     </script>
 
     <script type="text/javascript">
-        $(function () {
+		$(function () {
+			var dt_option = {
+				"searching" : true,		//是否允许Datatables开启本地搜索
+				"paging" : true,			//是否开启本地分页
+				"pageLength" : 5,			//每页显示记录数
+				"info" : true,
+				"lengthChange" : true,		//是否允许用户改变表格每页显示的记录数 
+				"lengthMenu": [ 5, 10, 100 ],		//用户可选择的 每页显示记录数
+				"info" : false,
+				"columnDefs" : [{
+		        	"targets": 'nosort',
+					"orderable": false
+				}],
+				"pagingType": "full_numbers",
+				"language": {
+					"search": "搜索",
+					sZeroRecords : "没有查询到数据",
+					oPaginate: {    
+						"sFirst" : "首页",
+						"sPrevious" : "上一页",    
+						"sNext" : "下一页",    
+						"sLast" : "尾页"    
+					},
+					searchPlaceholder: "过滤..."
+				},
+				"paginate": [{
+					"first": "首页",
+					"previous": "前一页",
+					"sNext": "后一页",
+					"sLast": "末页"
+				}],
+				"order" : [[3,"desc"]]
+			};
+			var datatable =  $('#datatable1').DataTable(dt_option);
+
             var _token = $('input[name="_token"]').val();
             $("#searchnews").click(function () {
                 $.ajax({
@@ -382,9 +416,13 @@
                         'title':$("#keyword").val()
                     },
                     success:function (msg) {
+						console.log(msg);
                         if (msg) {
-                            $('#listcontent').html(msg);
+							datatable.destroy();
+							$('#listcontent').html(msg);
+							datatable =  $('#datatable1').DataTable(dt_option);
                         } else {
+							datatable.destroy();
                             $('#listcontent').html("没有查询到数据！");
 //                        window.location.reload();
                         }
