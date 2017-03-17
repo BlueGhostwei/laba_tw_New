@@ -153,6 +153,13 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::post('Admin/modify_info',['as'=>'admin.modify_info','uses'=>'UserController@addUser_api']);
         Route::post('Admin/search_user',['as'=>'admin.search_user','uses'=>'UserController@getUserList']);
         Route::get('Admin/search_user',['as'=>'admin.search_user','uses'=>'UserController@getUserList']);
+
+        Route::get('Admin/getnewslist',['as'=>'admin.getnewslist','uses'=>'DashboardController@getNewslist']);
+
+        Route::get('Admin/getnewspage',['as'=>'admin.getnewspage','uses'=>'DashboardController@getNewspage']);
+
+        Route::get('Admin/searchnews',['as'=>'admin.searchnews','uses'=>'DashboardController@searchNews']);
+        Route::get('Admin/searchnewspage',['as'=>'admin.searchnewspage','uses'=>'DashboardController@searchNewspage']);
 //        Route::get('/Admin/test',['uses'=>'UserController@test']);
     });
 

@@ -1,6 +1,41 @@
 @extends('Admin.layout.main')
 @section('title', '首页')
 @section('header_related')
+<script src="{{url('Admin/js/laypage.js')}}"  type="text/javascript"></script>
+<style type="text/css">
+    .laypage_curr{
+        background: #CCCCCC;
+        color: #fff;
+        border-radius: 15px;
+
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #E6E6E6;
+        padding: 0 16px;
+    }
+    .laypage_prev{
+        color: #fff;
+        border-radius: 15px;
+        height: 28px;
+        line-height: 28px;
+        border: 1px solid #E6E6E6;
+        padding: 0 16px;
+    }
+    .laypage_next{
+
+        border: 1px solid #E6E6E6;
+        border-radius: 15px;
+
+        float: left;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 11px;
+        margin: 0 1px;
+    }
+    .laypage_main{
+
+    }
+</style>
 @endsection
 @section('content')
     {{--<div class="main-container">
@@ -39,7 +74,7 @@
                     <div class="searchbar clearfix">
                         <div class="s_date">
 			<span class="sp1">
-				<span>Monday</span><b>1</b><i>Feb</i>
+				<span>Monday</span><b>1</b><i>Feb</i>{{ csrf_field() }}
 			</span>
 			<span class="sp2">
 				<span>AM</span><b>01:01</b>
@@ -67,7 +102,7 @@
                     <div class="rwgl radius1">
                         <h3 class="title1"><strong><a href="#">任务管理</a></strong>
                             <div class="search_1">
-                                <form action="" method="" name="">
+                                <form >
                                     <div class="l">
                                         <span>起始时间</span>
                                     </div>
@@ -75,8 +110,8 @@
                                         <input type="text" class="txt2" id="datepicker1" />-<input type="text" class="txt2" id="datepicker2" />
                                     </div>
                                     <div class="l">
-                                        <input type="text" class="txt3" placeholder="请输入关键字" />
-                                        <input type="submit" name="submit" class="sub2" value="" />
+                                        <input type="text" id="keyword" class="txt3" placeholder="请输入关键字" />
+                                        <input type="button" name="submit" id="searchnews" class="sub2" value="" />
                                     </div>
                                 </form>
                             </div>
@@ -85,17 +120,17 @@
                         <div class="rwgl_m">
                             <div class="tab1">
                                 <ul>
-                                    <li class="cur"><a href="#">派单类<i class="num">120</i></a></li>
-                                    <li><a href="#">预约类</a></li>
+                                    <li class="cur"><a href="#">派单类</a></li>
+                                    {{--<li><a href="#">预约类</a></li>--}}
                                 </ul>
-                                <select class="paixu">
-                                    <option value="">默认排序</option>
-                                    <option value="">ID号</option>
-                                    <option value="">名称</option>
-                                    <option value="">类型</option>
-                                    <option value="">时间</option>
-                                    <option value="">实际消费</option>
-                                </select>
+                                {{--<select class="paixu">--}}
+                                    {{--<option value="">默认排序</option>--}}
+                                    {{--<option value="">ID号</option>--}}
+                                    {{--<option value="">名称</option>--}}
+                                    {{--<option value="">类型</option>--}}
+                                    {{--<option value="">时间</option>--}}
+                                    {{--<option value="">实际消费</option>--}}
+                                {{--</select>--}}
                             </div>
                             <div class="tab1_body">
                                 <table class="table_in1 cur" id="datatable1">
@@ -121,175 +156,97 @@
                                         <th class="nosort">操作</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1sdf100000815</td>
-                                        <td>5互联网大数据新闻编写</td>
-                                        <td>3文案策划</td>
-                                        <td>2016-10-12  15:12:00</td>
-                                        <td>1600</td>
-                                        <td>预约状态</td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2sdf100000815</td>
-                                        <td>4互联网大数据新闻编写</td>
-                                        <td>7文案策划</td>
-                                        <td>2017-9-12  15:12:00</td>
-                                        <td>600</td>
-                                        <td>预约状态</td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3sdf100000815</td>
-                                        <td>1互联网大数据新闻编写</td>
-                                        <td>文案策划</td>
-                                        <td>2016-9-12  16:12:00</td>
-                                        <td>600</td>
-                                        <td>6预约状态</td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>sdf100000815</td>
-                                        <td>3互联网大数据新闻编写</td>
-                                        <td>2文案策划</td>
-                                        <td>2016-9-12  15:12:00</td>
-                                        <td>6200</td>
-                                        <td>3预约状态</td>
-                                        <td><select>
-                                                <option>1删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>sdf100000815</td>
-                                        <td>互联网大数据新闻编写</td>
-                                        <td>文案策划</td>
-                                        <td>2016-9-12  15:13:00</td>
-                                        <td>6231400</td>
-                                        <td>35预约状态</td>
-                                        <td><select>
-                                                <option>2删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>sdf100000815</td>
-                                        <td>互联网大数据新闻编写</td>
-                                        <td>文案策划</td>
-                                        <td>2016-9-12  15:12:00</td>
-                                        <td>600</td>
-                                        <td>预约状态</td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
+                                    <tbody id="listcontent">
+                                    @foreach($news as $new)
+                                        <tr>
+                                            <td>{{$new->order_code}}</td>
+                                            <td>{{$new->title}}</td>
+                                            <td>{{$new->news_type}}</td>
+                                            <td>{{$new->created_at}}</td>
+                                            <td>{{$new->price}}</td>
+                                            <td>{{$new->status}}</td>
+                                            <td><select>
+                                                    <option>删除</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                </select></td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
-                                <table class="table_in1" id="datatable2">
-                                    <thead>
-                                    <tr>
-                                        <th>ID号</th>
-                                        <th>名称</th>
-                                        <th><select>
-                                                <option>类型</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select>
-                                        </th>
-                                        <th>时间</th>
-                                        <th>实际消费/元</th>
-                                        <th class="nosort"><select>
-                                                <option>状态</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></th>
-                                        <th class="nosort">操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>sdf100000815</td>
-                                        <td>3互联网大数据新闻编写</td>
-                                        <td>2文案策划</td>
-                                        <td>2016-9-12  15:12:00</td>
-                                        <td>6200</td>
-                                        <td>3预约状态</td>
-                                        <td><select>
-                                                <option>1删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>sdf100000815</td>
-                                        <td>互联网大数据新闻编写</td>
-                                        <td>文案策划</td>
-                                        <td>2016-9-12  15:13:00</td>
-                                        <td>6231400</td>
-                                        <td>35预约状态</td>
-                                        <td><select>
-                                                <option>2删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>sdf100000815</td>
-                                        <td>互联网大数据新闻编写</td>
-                                        <td>文案策划</td>
-                                        <td>2016-9-12  15:12:00</td>
-                                        <td>600</td>
-                                        <td>预约状态</td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                {{--<table class="table_in1" id="datatable2">--}}
+                                    {{--<thead>--}}
+                                    {{--<tr>--}}
+                                        {{--<th>ID号</th>--}}
+                                        {{--<th>名称</th>--}}
+                                        {{--<th><select>--}}
+                                                {{--<option>类型</option>--}}
+                                                {{--<option>1</option>--}}
+                                                {{--<option>2</option>--}}
+                                                {{--<option>3</option>--}}
+                                            {{--</select>--}}
+                                        {{--</th>--}}
+                                        {{--<th>时间</th>--}}
+                                        {{--<th>实际消费/元</th>--}}
+                                        {{--<th class="nosort"><select>--}}
+                                                {{--<option>状态</option>--}}
+                                                {{--<option>1</option>--}}
+                                                {{--<option>2</option>--}}
+                                                {{--<option>3</option>--}}
+                                            {{--</select></th>--}}
+                                        {{--<th class="nosort">操作</th>--}}
+                                    {{--</tr>--}}
+                                    {{--</thead>--}}
+                                    {{--<tbody>--}}
+                                    {{--<tr>--}}
+                                        {{--<td>sdf100000815</td>--}}
+                                        {{--<td>3互联网大数据新闻编写</td>--}}
+                                        {{--<td>2文案策划</td>--}}
+                                        {{--<td>2016-9-12  15:12:00</td>--}}
+                                        {{--<td>6200</td>--}}
+                                        {{--<td>3预约状态</td>--}}
+                                        {{--<td><select>--}}
+                                                {{--<option>1删除</option>--}}
+                                                {{--<option>1</option>--}}
+                                                {{--<option>2</option>--}}
+                                                {{--<option>3</option>--}}
+                                            {{--</select></td>--}}
+                                    {{--</tr>--}}
+                                    {{--<tr>--}}
+                                        {{--<td>sdf100000815</td>--}}
+                                        {{--<td>互联网大数据新闻编写</td>--}}
+                                        {{--<td>文案策划</td>--}}
+                                        {{--<td>2016-9-12  15:13:00</td>--}}
+                                        {{--<td>6231400</td>--}}
+                                        {{--<td>35预约状态</td>--}}
+                                        {{--<td><select>--}}
+                                                {{--<option>2删除</option>--}}
+                                                {{--<option>1</option>--}}
+                                                {{--<option>2</option>--}}
+                                                {{--<option>3</option>--}}
+                                            {{--</select></td>--}}
+                                    {{--</tr>--}}
+                                    {{--<tr>--}}
+                                        {{--<td>sdf100000815</td>--}}
+                                        {{--<td>互联网大数据新闻编写</td>--}}
+                                        {{--<td>文案策划</td>--}}
+                                        {{--<td>2016-9-12  15:12:00</td>--}}
+                                        {{--<td>600</td>--}}
+                                        {{--<td>预约状态</td>--}}
+                                        {{--<td><select>--}}
+                                                {{--<option>删除</option>--}}
+                                                {{--<option>1</option>--}}
+                                                {{--<option>2</option>--}}
+                                                {{--<option>3</option>--}}
+                                            {{--</select></td>--}}
+                                    {{--</tr>--}}
+                                    {{--</tbody>--}}
+                                {{--</table>--}}
                             </div>
-                            <div class="page_1">
+                            <div class="page_1" >
                                 <span class="info">显示第1到1条派单订单，共1条派单订单</span>
-				<span class="pages">
-<a href="" class="prev">上一页</a>
-<a href="" class="cur">1</a>
-<a href="">2</a>
-<a href="">3</a>
-<a href="">4</a>
-<a href="">5</a>
-<span class="sus">...</span>
-<a href="">248</a>
-<a href="" class="next">下一页</a>
-				</span>
+                                <span id="page" class="pages"></span>
                             </div>
                         </div>
 
@@ -307,23 +264,39 @@
                             </ul>
                             <div class="clr"></div>
                         </div>
-                        <div class="row3 row3_2 radius1">
-                            <h3 class="title1"><strong><a href="#">盈利状况</a></strong></h3>
-                            <ul>
-                                <li class="li1">
-                                    <p>分销会员总收益<br/>
-                                        <b>￥2100.00</b></p>
-                                    <span></span></li>
-                                <li class="li2">
-                                    <p>纯分销收益<br/>
-                                        <b>￥1100.00</b></p>
-                                    <span></span></li>
-                                <li class="li3">
-                                    <p>占账户总收益率<br/>
-                                        <b>25%</b></p>
-                                    <span></span></li>
-                            </ul>
-                        </div>
+
+                        @if(Auth::user()->role ==3)
+                            <div class="row3 row3_2 radius1">
+                                <h3 class="title1"><strong><a href="#">会员升级</a></strong></h3>
+                                <div style="margin:3% 20%; width: 60%;"><img src="{{url('Admin/img/bthuiyuan.jpg')}}" width="100%" height="100%"></div>
+                                <p style="width: 80%; margin: 3% 10%; line-height: 25px; color: #999; font-size: 14px">会员升级，拥有独立账户管理分销业务，自由选择添加管理分销账户，灵活设置账户信息等等。</p>
+                            </div>
+
+                            @else
+                            <div class="row3 row3_2 radius1">
+                                <h3 class="title1"><strong><a href="#">盈利状况</a></strong></h3>
+                                <ul>
+                                    <li class="li1">
+                                        <p>分销会员总收益<br/>
+                                            <b>￥0</b></p>
+                                        <span></span></li>
+                                    <li class="li2">
+                                        <p>纯分销收益<br/>
+                                            <b>￥0</b></p>
+                                        <span></span></li>
+                                    <li class="li3">
+                                        <p>占账户总收益率<br/>
+                                            <b>0%</b></p>
+                                        <span></span></li>
+                                </ul>
+                            </div>
+                            @endif
+
+
+
+
+
+
                         <div class="row3 row3_3 radius1">
                             <h3 class="title1"><strong><a href="#">联系我们</a></strong></h3>
                             <div class="row3_3_m">
@@ -351,6 +324,7 @@
 
     <script type="text/javascript">
         /*	日历	*/
+        var type = '2';
         var picker1 = new Pikaday({
             field: document.getElementById('datepicker1'),
             firstDay: 1,
@@ -366,5 +340,60 @@
             yearRange: [2000,2020]
         });
     </script>
+    <script>
+        var pages = 1;
+        laypage({
+            cont: 'page', //容器。值支持id名、原生dom对象，jquery对象,
+            pages: pages, //总页数
+//            curr: location.hash.replace('#!fenye=', ''), //获取hash值为fenye的当前页
+//            hash: 'fenye', //自定义hash值
+            jump: function(obj){
+                $.ajax({
+                    type: "get",
+                    url: "{{url('Admin/getnewspage')}}",
+                    data: {
+                        'page':obj.curr,
+                        'type':'1'
+                    },
+                    success: function (msg) {
+                        if (msg) {
+                            $('#listcontent').html(msg);
+                        } else {
+                            layer.msg(data.msg);
+//                        window.location.reload();
+                        }
+                    }
+                });
+
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var _token = $('input[name="_token"]').val();
+            $("#searchnews").click(function () {
+                $.ajax({
+                    type:"GET",
+                    url:"{{url('Admin/searchnewspage')}}",
+                    data:{
+                        'start':$("#datepicker1").val(),
+                        'end':$("#datepicker2").val(),
+                        'title':$("#keyword").val()
+                    },
+                    success:function (msg) {
+                        if (msg) {
+                            $('#listcontent').html(msg);
+                        } else {
+                            $('#listcontent').html("没有查询到数据！");
+//                        window.location.reload();
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+
 @endsection
 

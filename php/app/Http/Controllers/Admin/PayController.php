@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\In;
 use Latrell\Alipay;
@@ -42,8 +43,6 @@ class PayController extends Controller
     public function index(){
         $alipay = app('alipay.web');
         $order_id = Controller::makePaySn(Auth::id());
-//        dd($order_id);
-//        $order_id=date('YmdHis') . mt_rand(1000,9999);
         $order_price=Input::get('money');
         $goods_name="充值账户";
         $goods_description="";//产品描述暂无
@@ -99,8 +98,11 @@ class PayController extends Controller
 
         switch (Input::get('trade_status')) {
             case 'TRADE_SUCCESS':
-                $order = Order::where('number', '=',Input::get('out_trade_no'))->first();
+                $order = Order::where('number', '=', Input::get('out_trade_no'))->first();
                 $order->state =1;
+                $user = User::find($order->user_id);
+                $user->wealth = $user->wealth + $order->price;
+                $user->save();
                 $order->save();
             case 'TRADE_FINISHED':
                 // TODO: 支付成功，取得订单号进行其它相关操作。
@@ -110,8 +112,10 @@ class PayController extends Controller
                 ]);
                 $order = Order::where('number', '=', Input::get('out_trade_no'))->first();
                 $order->state =1;
+                $user = User::find($order->user_id);
+                $user->wealth = $user->wealth + $order->price;
+                $user->save();
                 $order->save();
-                break;
         }
 
         return 'success';
