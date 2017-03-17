@@ -293,34 +293,30 @@
             var pf_price = $('#pf_price').val();
             var px_price = $('#px_price').val();
             var mb_price = $('#mb_price').val();
-            var network="";
-            var Entrance_level="";
-            var Entrance_form="";
-            var coverage="";
-            var channel="";
-            var standard="";
             //获取所有选中的分类信息
-            $('.sbox_1_item ul li .cur').each(function (key, vel) {
-                 var set_name=$(this).closest('ul').attr('set_name');
-                if (set_name == 'network') {
-                     network = $(this).parent('li').attr('data_id');
-                }
-                if (set_name == 'Entrance_level') {
-                     Entrance_level = $(this).parent('li').attr('data_id');
-                }
-                if (set_name == 'Entrance_form') {
-                     Entrance_form = $(this).parent('li').attr('data_id');
-                }
-                if (set_name == 'coverage') {
-                     coverage = $(this).parent('li').attr('data_id');
-                }
-                if (set_name == 'channel') {
-                     channel = $(this).parent('li').attr('data_id');
-                }
-                if (set_name == 'standard') {
-                    standard = $(this).parent('li').attr('data_id');
-                }
-            });
+			var datan = [];
+			$('.sbox_1_item').each(function(key,vel){
+				var set_name=$(this).find('ul').attr('set_name');
+				datan[set_name] = "";
+				if( $(this).find("ul li a.cur").length <= 1 ){
+					datan[set_name] += $(this).find("ul li a.cur").parent().attr("data_id");
+				}else{
+					$(this).find("ul li a.cur").each(function(key2,vel2){
+						if( key2 == 0 ){
+							datan[set_name] += $(this).parent().attr("data_id");
+						}else{
+							datan[set_name] += "," + $(this).parent().attr("data_id");
+						}
+					});
+				}
+			});
+            var network = datan["network"];
+            var Entrance_level = datan["Entrance_level"];
+            var Entrance_form = datan["Entrance_form"];
+            var coverage = datan["coverage"];
+            var channel = datan["channel"];
+            var standard = datan["standard"];
+			
             //ajax提交申请
             $.ajax({
                 url: '{{route('category.media_save')}}',
@@ -369,27 +365,12 @@
         });
 
         $(".sbox_1_item .m ul li a").click(function () {
-            $(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
-            var option = $(this).parents(".m").prev("span").attr("data");
-            var value = $.trim($(this).html());
-            var li = "<li data='" + option + "'><a href=''>" + value + "</a></li>";
-            if (value == "不限") {
-                $(".sbox_2 .m li[data='" + option + "']").remove();
-            } else if ($(".sbox_2 .m li[data='" + option + "']").length > 0) {
-//		$(".sbox_2 .m li[data='"+option+"']").remove();
-                $(".sbox_2 .m li[data='" + option + "']").find("a").html(value);
-            } else {
-                $(".sbox_2 .m").append(li);
-            }
-            return false;
-        });
-        $(".sbox_2 .m").on("click", "li a", function () {
-
-            var option = $(this).parent("li").attr("data");
-            var value = $.trim($(this).html());
-            $(this).parent("li").remove();
-            $(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li a").removeClass("cur");
-            $(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").addClass("cur");
+			var data_id = $(this).parent().attr("data_id");
+			if( data_id == "0" ){
+				$(this).addClass("cur").parent().siblings("li").find("a").removeClass("cur");
+			}else{
+				$(this).addClass("cur").parent().siblings("li").eq(0).find("a").removeClass("cur");
+			}
             return false;
         });
         $(".sbox_1_item .r a").click(function () {
