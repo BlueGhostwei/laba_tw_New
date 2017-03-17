@@ -316,7 +316,7 @@
             var coverage = datan["coverage"];
             var channel = datan["channel"];
             var standard = datan["standard"];
-			
+			console.log(datan);
             //ajax提交申请
             $.ajax({
                 url: '{{route('category.media_save')}}',
@@ -369,7 +369,14 @@
 			if( data_id == "0" ){
 				$(this).addClass("cur").parent().siblings("li").find("a").removeClass("cur");
 			}else{
-				$(this).addClass("cur").parent().siblings("li").eq(0).find("a").removeClass("cur");
+				if( $(this).hasClass("cur") ){
+					$(this).removeClass("cur");
+					if( $(this).closest("ul").find("a.cur").length < 1 ){
+						$(this).parent().siblings("li").eq(0).find("a").addClass("cur");
+					}
+				}else{
+					$(this).addClass("cur").parent().siblings("li").eq(0).find("a").removeClass("cur");
+				}
 			}
             return false;
         });
