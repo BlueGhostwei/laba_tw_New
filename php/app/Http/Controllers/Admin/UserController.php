@@ -55,7 +55,7 @@ class UserController extends Controller
     public function getResetUsername(){
 //        dd($this->get_security_question());
 //        $this->setStep(1);
-        echo $this->getStep();
+//        echo $this->getStep();
         $user = Auth::user();
 //        echo $user->username;
         return view('Admin.user.reset_Uname',['step'=>$this->getStep(),'question'=>$this->get_security_question(),'phone'=>$user->username]);
