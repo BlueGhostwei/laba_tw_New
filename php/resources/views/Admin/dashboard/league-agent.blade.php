@@ -55,9 +55,9 @@
                         <div id="slideBox" class="slideBox">
                             <div class="bd">
                                 <ul>
-                                    <li><a href="#" target="_blank"><img src="{{url('Admin/images/banner1.jpg')}}" /></a></li>
-                                    <li><a href="#" target="_blank"><img src="{{url('Admin/images/pic2.jpg')}}" /></a></li>
-                                    <li><a href="#" target="_blank"><img src="{{url('Admin/images/pic3.jpg')}}" /></a></li>
+                                    <li><a href="#" target="_blank"><img src="{{url('Admin/img/1.jpg')}}" /></a></li>
+                                    <li><a href="#" target="_blank"><img src="{{url('Admin/img/2.jpg')}}" /></a></li>
+                                    <li><a href="#" target="_blank"><img src="{{url('Admin/img/3.jpg')}}" /></a></li>
                                 </ul>
                             </div>
                             <div class="hd">
@@ -123,22 +123,22 @@
                                     <li class="cur"><a href="#">派单类</a></li>
                                     {{--<li><a href="#">预约类</a></li>--}}
                                 </ul>
-                                {{--<select class="paixu">--}}
-                                    {{--<option value="">默认排序</option>--}}
-                                    {{--<option value="">ID号</option>--}}
-                                    {{--<option value="">名称</option>--}}
-                                    {{--<option value="">类型</option>--}}
-                                    {{--<option value="">时间</option>--}}
-                                    {{--<option value="">实际消费</option>--}}
-                                {{--</select>--}}
+                                <select class="paixu" id="paixu0">
+                                    <option value="">默认排序</option>
+                                    <option value="0">ID号</option>
+                                    <option value="1">名称</option>
+                                    <option value="2">类型</option>
+                                    <option value="3">时间</option>
+                                    <option value="4">实际消费</option>
+                                </select>
                             </div>
                             <div class="tab1_body">
                                 <table class="table_in1 cur" id="datatable1">
                                     <thead>
                                     <tr>
-                                        <th>ID号</th>
-                                        <th>名称</th>
-                                        <th><select>
+                                        <th class="nosort">ID号</th>
+                                        <th class="nosort">名称</th>
+                                        <th class="nosort"><select id="paixu1">
                                                 <option>类型</option>
                                                 <option>1</option>
                                                 <option>2</option>
@@ -146,8 +146,8 @@
                                             </select>
                                         </th>
                                         <th>时间</th>
-                                        <th>实际消费/元</th>
-                                        <th class="nosort"><select>
+                                        <th class="nosort">实际消费/元</th>
+                                        <th class="nosort"><select id="paixu2">
                                                 <option>状态</option>
                                                 <option>1</option>
                                                 <option>2</option>
@@ -243,10 +243,6 @@
                                     {{--</tr>--}}
                                     {{--</tbody>--}}
                                 {{--</table>--}}
-                            </div>
-                            <div class="page_1" >
-                                <span class="info">显示第1到1条派单订单，共1条派单订单</span>
-                                <span id="page" class="pages"></span>
                             </div>
                         </div>
 
@@ -370,40 +366,38 @@
     </script>
 
     <script type="text/javascript">
+//<div id="datatable1_filter" class="dataTables_filter"><label>搜索<input type="search" class="" placeholder="过滤..." aria-controls="datatable1"></label></div>
+		var datatable;
 		$(function () {
 			var dt_option = {
 				"searching" : true,		//是否允许Datatables开启本地搜索
 				"paging" : true,			//是否开启本地分页
-				"pageLength" : 5,			//每页显示记录数
-				"info" : true,
-				"lengthChange" : true,		//是否允许用户改变表格每页显示的记录数 
+				"pageLength" : 6,			//每页显示记录数
+				"lengthChange" : false,		//是否允许用户改变表格每页显示的记录数 
 				"lengthMenu": [ 5, 10, 100 ],		//用户可选择的 每页显示记录数
-				"info" : false,
+				"info" : true,
 				"columnDefs" : [{
 		        	"targets": 'nosort',
 					"orderable": false
 				}],
-				"pagingType": "full_numbers",
+				"pagingType": "simple_numbers",
 				"language": {
 					"search": "搜索",
 					sZeroRecords : "没有查询到数据",
+					"info": "显示第 _PAGE_/_PAGES_ 页，共_TOTAL_条",
+					"infoFiltered": "(筛选自_MAX_条数据)",
+					"infoEmpty": "没有符合条件的数据",
 					oPaginate: {    
 						"sFirst" : "首页",
-						"sPrevious" : "上一页",    
-						"sNext" : "下一页",    
+						"sPrevious" : "上一页",
+						"sNext" : "下一页",
 						"sLast" : "尾页"    
 					},
 					searchPlaceholder: "过滤..."
 				},
-				"paginate": [{
-					"first": "首页",
-					"previous": "前一页",
-					"sNext": "后一页",
-					"sLast": "末页"
-				}],
 				"order" : [[3,"desc"]]
 			};
-			var datatable =  $('#datatable1').DataTable(dt_option);
+			datatable =  $('#datatable1').DataTable(dt_option);
 
             var _token = $('input[name="_token"]').val();
             $("#searchnews").click(function () {
@@ -418,17 +412,43 @@
                     success:function (msg) {
 						console.log(msg);
                         if (msg) {
-							datatable.destroy();
+							if( $.fn.dataTable.isDataTable(" #datatable1 ") ){
+								datatable.destroy();
+							}
 							$('#listcontent').html(msg);
 							datatable =  $('#datatable1').DataTable(dt_option);
                         } else {
-							datatable.destroy();
-                            $('#listcontent').html("没有查询到数据！");
+							if( $.fn.dataTable.isDataTable(" #datatable1 ") ){
+								datatable.destroy();
+							}
+                            $('#listcontent').html("<tr><td colspan='7'>没有查询到数据！</td></tr>");
 //                        window.location.reload();
                         }
                     }
                 })
             })
+			
+			$("#paixu0").change(function(){
+				var option = $(this).val();
+				if( $.fn.dataTable.isDataTable(" #datatable1 ") ){
+					if( option == "" ){
+						datatable.column(3).order("desc").draw();		//默认排序
+					}else{
+						datatable.column(option).order("asc").draw();
+					}
+				}
+			});
+			$("#paixu1").change(function(){
+				var option = $(this).val();
+				if( $.fn.dataTable.isDataTable(" #datatable1 ") ){
+					if( option == "" ){
+						datatable.column(3).order("desc").draw();
+					}else{
+						datatable.column(option).order("asc").draw();
+					}
+				}
+			});
+			
         })
     </script>
 

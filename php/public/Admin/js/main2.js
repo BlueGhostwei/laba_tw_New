@@ -10,102 +10,174 @@ $(function(){
 if( $("#tb1").length>0 ){
 	var myChart = echarts.init(document.getElementById('tb1'));
 	// 指定图表的配置项和数据
-	var option = {
-		title: {
-			text: ''
-		},
-		tooltip : {
-			trigger: 'axis',
-			axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-				type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-			}
-		},
-		legend: {
-			data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎','百度','谷歌','必应','其他']
-		},
-		grid: {
-			left: '3%',
-			right: '4%',
-			bottom: '3%',
-			containLabel: true
-		},
-		xAxis : [
-			{
-				type : 'category',
-				data : ['周一','周二','周三','周四','周五','周六','周日']
-			}
-		],
-		yAxis : [
-			{
-				type : 'value'
-			}
-		],
-		series : [
-			{
-				name:'直接访问',
-				type:'bar',
-				data:[320, 332, 301, 334, 390, 330, 320]
-			},
-			{
-				name:'邮件营销',
-				type:'bar',
-				stack: '广告',
-				data:[120, 132, 101, 134, 90, 230, 210]
-			},
-			{
-				name:'联盟广告',
-				type:'bar',
-				stack: '广告',
-				data:[220, 182, 191, 234, 290, 330, 310]
-			},
-			{
-				name:'视频广告',
-				type:'bar',
-				stack: '广告',
-				data:[150, 232, 201, 154, 190, 330, 410]
-			},
-			{
-				name:'搜索引擎',
-				type:'bar',
-				data:[862, 1018, 964, 1026, 1679, 1600, 1570],
-				markLine : {
-					lineStyle: {
-						normal: {
-							type: 'dashed'
-						}
-					},
-					data : [
-						[{type : 'min'}, {type : 'max'}]
-					]
-				}
-			},
-			{
-				name:'百度',
-				type:'bar',
-				barWidth : 5,
-				stack: '搜索引擎',
-				data:[620, 732, 701, 734, 1090, 1130, 1120]
-			},
-			{
-				name:'谷歌',
-				type:'bar',
-				stack: '搜索引擎',
-				data:[120, 132, 101, 134, 290, 230, 220]
-			},
-			{
-				name:'必应',
-				type:'bar',
-				stack: '搜索引擎',
-				data:[60, 72, 71, 74, 190, 130, 110]
-			},
-			{
-				name:'其他',
-				type:'bar',
-				stack: '搜索引擎',
-				data:[62, 82, 91, 84, 109, 110, 120]
-			}
-		]
-	};
+	var dataMap = {};
+function dataFormatter(obj) {
+    var pList = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    var temp;
+    for (var year = 2002; year <= 2002; year++) {
+        var max = 0;
+        var sum = 0;
+        temp = obj[year];
+        for (var i = 0, l = temp.length; i < l; i++) {
+            max = Math.max(max, temp[i]);
+            sum += temp[i];
+            obj[year][i] = {
+                name : pList[i],
+                value : temp[i]
+            }
+        }
+        obj[year + 'max'] = Math.floor(max / 100) * 100;
+        obj[year + 'sum'] = sum;
+    }
+    return obj;
+}
+
+dataMap.dataGDPt = dataFormatter({
+    //max : 1200,
+    
+    2002:[1525,211,255,542,12,414,414,201,14,44,41,210] /*网络媒体*/  
+});
+
+dataMap.dataGDPs = dataFormatter({
+    //max : 500,
+  
+    2002:[85,14,444,54,41,255,44,51,544,4,21,2] /*户外媒体*/  
+});
+
+dataMap.dataGDP = dataFormatter({
+    //max : 300,
+    
+    2002:[1000,32,255,54,325,365,22,51,544,255,21,2] /*平面媒体*/
+});
+
+dataMap.dataPI = dataFormatter({
+    //max : 250,
+  
+    2002:[54,542,545,21,20,254,2112,21,12,255,24,225] /*记者预约*/
+});
+
+dataMap.dataSI = dataFormatter({
+    //max : 200,
+   
+    2002:[254,247,254,685,62,521,10,255,4,20,45,211] /*广播媒体*/
+});
+
+dataMap.dataTI = dataFormatter({
+    //max : 150,
+    
+    2002:[574,1542,524,254,54,11,452,154,21,452,54,125] /*记者预约*/
+});
+
+dataMap.dataEstate = dataFormatter({
+    //max : 100,
+    
+    2002:[62,82,95,15,0,594,84,35,652,154,150,41] /*广播媒体*/
+});
+
+dataMap.dataFinancial = dataFormatter({
+    //max : 50,
+    
+    2002:[101,20,5,85,84,20,31,156,24,845,45,57] /*电视媒体*/
+});
+
+
+option = {
+    baseOption: {
+        timeline: {
+            // y: 0,
+            axisType: 'category',
+            // realtime: false,
+            // loop: false,
+            autoPlay: true,
+            // currentIndex: 2,
+            playInterval: 1000,
+            // controlStyle: {
+            //     position: 'left'
+            // },
+            
+            label: {
+                formatter : function(s) {
+                    return (new Date(s)).getFullYear();
+                }
+            }
+        },
+        title: {
+           /* subtext: '数据来自国家统计局'*/
+        },
+        tooltip: {},
+        legend: {
+            x: 'center',
+            data: ['网络媒体', '户外媒体', '平面媒体', '电视媒体', '广播媒体', '记者预约', '内容代写', '宣传定制'],
+            
+        },
+        calculable : true,
+        grid: {
+            top: 80,
+            bottom: 50
+        },
+        xAxis: [
+            {
+                'type':'category',
+                'axisLabel':{'interval':0},
+                'data':[
+                    '1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'
+                ],
+                splitLine: {show: false}
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '订单数（条）'
+            }
+        ],
+        series: [
+            {name: '网络媒体', type: 'bar'},
+            {name: '户外媒体', type: 'bar'},
+            {name: '平面媒体', type: 'bar'},
+            {name: '电视媒体', type: 'bar'},
+            {name: '广播媒体', type: 'bar'},
+            {name: '记者预约', type: 'bar'},
+            {name: '广播媒体', type: 'bar'},
+            {name: '记者预约', type: 'bar'},
+            {
+                name: '分类订单占比',
+                type: 'pie',
+                center: ['85%', '35%'],
+                radius: '28%'
+            }
+        ]
+    },
+    options: [
+        {
+            /*title: {text: '2002全国宏观经济指标'},*/
+            series: [
+            	{data: dataMap.dataGDPt['2002']},
+            	{data: dataMap.dataGDPs['2002']},
+                {data: dataMap.dataGDP['2002']},
+                {data: dataMap.dataFinancial['2002']},
+                {data: dataMap.dataEstate['2002']},
+                {data: dataMap.dataPI['2002']},
+                {data: dataMap.dataSI['2002']},
+                {data: dataMap.dataTI['2002']},
+
+
+                {data: [
+                    {name: '网络媒体', value: dataMap.dataPI['2002sum']},
+                    {name: '户外媒体', value: dataMap.dataSI['2002sum']},
+                    {name: '平面媒体', value: dataMap.dataTI['2002sum']},
+                    {name: '电视媒体', value: dataMap.dataPI['2002sum']},
+                    {name: '广播媒体', value: dataMap.dataSI['2002sum']},
+                    {name: '记者预约', value: dataMap.dataTI['2002sum']},
+                    {name: '内容代写', value: dataMap.dataPI['2002sum']},
+                    {name: '宣传定制', value: dataMap.dataSI['2002sum']},
+
+                ]}
+            ]
+        },
+        
+    ]
+};
 	// 使用刚指定的配置项和数据显示图表。
 	myChart.setOption(option);	
 }

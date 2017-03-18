@@ -9,14 +9,15 @@
     <link href="{{url('Admin/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('Admin/css/style.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('Admin/css/style2.css')}}" rel="stylesheet" type="text/css" />
+<!--
     <script type="text/javascript" src="{{url('Admin/js/jquery-2.1.1.min.js')}}"></script>
-    <script type="text/javascript" src="{{url('Admin/js/layer.js')}}"></script>
+-->
     <script type="text/javascript" src="{{url('Admin/js/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('Admin/js/layer.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/plugins.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.touchslider.min.js')}}"  ></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.SuperSlide.2.1.1.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/jquery.dataTables.min.js')}}"></script>
-    <script type="text/javascript" src="{{url('Admin/js/echarts.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('Admin/js/moment.min.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/date.js')}}"></script>
     <script type="text/javascript" src="{{url('Admin/js/main2.js')}}"></script>
@@ -24,11 +25,18 @@
     <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor/ueditor.config.js')}}"></script>
     <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor/ueditor.all.min.js')}}"> </script>
     <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/zh-cn.js')}}"></script>
+	<!--[if lt IE9]> 
+	<script type="text/javascript" src="{{url('Admin/js/html5shiv.min.js')}}"></script>
+	<script type="text/javascript" src="{{url('Admin/js/formdata.js')}}"></script>
+	<![endif]-->
     @yield('header_related')
 </head>
 <body>
 @include('Admin.layout.leftbar')
 @yield('content')
 @include('Admin.layout.bottom')
+
+<script type="text/javascript" src="{{url('Admin/js/echarts.min.js')}}"></script>
+
 </body>
 </html>

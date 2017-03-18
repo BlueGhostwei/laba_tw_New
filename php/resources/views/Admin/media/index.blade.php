@@ -200,7 +200,7 @@
 								<input type="file" name="file" id="Manuscripts" class="txt6" 
 									style="display:none;opacity:0;"	/>
 							</form>
-							<form id="form5" method="post" action="{{--{{route('media.Member_order')}}--}}">
+							<form id="form5">
                                     <div class="WIn2">
                                         <h2>新闻内容</h2>
                                         <div class="WMain1">
@@ -238,7 +238,7 @@
                                                             <div class="WMain3 WMain3_1"><p><i class="LGntas">*</i>内容编辑:
                                                                 </p>
                                                                 <script id="container" name="content" type="text/plain"
-                                                                        style="width:90%;height:300px;width:auto;"></script>
+                                                                        style="width:90%;aheight:300px;width:auto;"></script>
                                                             </div>
                                                         </div>															
 															
@@ -293,7 +293,7 @@
                                                                 <p>还可能输入<b>500</b>个字</p>
                                                             </div>
                                                         </div>
-                                                        <div class="WMain3" style="padding:0 0 20px 0;position:relative;"><p><i class="LGntas"></i></p>
+                                                        <div class="WMain3" style="padding:0 0 20px 0;position:relative;"><p><i class="LGntas"></i>&nbsp;</p>
                                                             <label><input type="checkbox" value="1" name="agree" id="admit"/>我已经阅读并同意云媒体交易平台习家规则</label>
                                                         </div>
                                                     </li>
@@ -575,7 +575,8 @@
 		nums		每页显示条数				10
 		laypage_l($("#wrapper_i"), $("#demo1"), $("#wrapper_i tr"), $("#wrapper_i tr").length, 10);
 	*/
-	function laypage_l($id1, $id2, $data, rows, nums = 10){
+	function laypage_l($id1, $id2, $data, rows, nums){
+		nums = nums || 10;
 		$(".sbox_3 h4 strong b").html(rows);
 		$(".sbox_2 span.r b").html(rows);
 		layui.use(['laypage', 'layer'], function(){
@@ -657,7 +658,7 @@
 				if(ret.sta == 1){
 					$('input[name="name2_2"]').val(ret.md5);
 				}else{
-					layer.msg(ret.msg);
+					layer.msg('头像上传失败');
 				}
 			});
 		});
@@ -689,7 +690,7 @@
 	$('#datepicker1').val(moment().add(30,"minutes").format('YYYY-MM-DD'));
 	
 	/*	底部提交按钮	*/
-	var form5data = {};
+	var form5data = [];
 	$("#btn_sub").click(function(){
 		form5data['id'] = [];
 		$("#select_media tr[rst_id!=0]").each(function(){			//已选媒体ID 数组
@@ -701,9 +702,9 @@
 			form5data['name2_1'] = $("input[name=name2_1]").val();			//稿件内容》外部连接
 			form5data['Manuscripts'] = $("input[name=name2_2]").val();		//稿件内容》上传文档	稿件导入
 			form5data['content'] = ue.getContent();							//稿件内容》内部编辑	内容编辑		获取编辑器的内容
-
+			
 		form5data['name3'] = $("input[name=name3]").val();				//关键字
-
+		
 		form5data['name4'] = $("input[name=name4]").val();				//开始时间
 		form5data['name4'] += " " + $("select[name=name4_1]").val() + ":" + $("select[name=name4_2]").val() + ":00";
 		form5data['name5'] = $("input[name=name5]").val();				//截止时间
@@ -732,6 +733,7 @@
 $.validator.setDefaults({
 	submitHandler: function() {
 		console.log("表单提交");
+		
 		var flag = 0;
 		if( form5data['id'] == "" ){
 			flag = 1;
@@ -739,25 +741,26 @@ $.validator.setDefaults({
 			return false;
 		}
 		console.log("继续提交");
-		var key = "news";
+		
+		var key = "test1";
 		$.ajax({
-			url: '{{route('media.Member_order')}}',
+			url: '{{route('media.release')}}',
 			data: {
-				'key' : key,
-                'form5data' : {
-					"media_id": form5data["id"],
-					"title": form5data["name1"],
-					"Manuscripts_attr": form5data["name2"],
-						"url_line": form5data["name2_1"],
-						"Manuscripts": form5data["Manuscripts"],
-						"content": form5data["content"],
-					"keyword": form5data["name3"],
-					"start_time": form5data["name4"],
-					"end_time": form5data["name5"],
-					"remark": form5data["name6"],
+				'keyword' : key
+				,'form5data' : {
+					"id": form5data["id"],
+					"name1": form5data["name1"],
+					"name2": form5data["name2"],
+						"name2_1": form5data["name2_1"],
+						"name2_2": form5data["Manuscripts"],
+						"name2_3": form5data["content"],
+					"name3": form5data["name3"],
+					"name4": form5data["name4"],
+					"name5": form5data["name5"],
+					"name6": form5data["name6"],
 					"agree": form5data["agree"]
-				},
-                '_token' : _token
+				}
+				,'_token' : _token
 			},
 			type: 'post',
 			dataType: "json",
@@ -766,7 +769,6 @@ $.validator.setDefaults({
 				console.log(data);
 				if (data.sta == '0') {
 					layer.msg(data.msg || '提交成功');
-                    window.location.href="{{route('user.order_list')}}"
 				} else {
 					layer.msg(data.msg || '提交失败');
 				}
@@ -779,6 +781,7 @@ $.validator.setDefaults({
 		});
 	}
 });
+
 	$("#form5").validate({
 		// onfocusout: false,
 		// onkeyup: false,
@@ -838,6 +841,21 @@ $.validator.setDefaults({
 		}
 		return flag;
 	}, "请选择开始时间24小时后，7天之内的时间");
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
 @endsection
 

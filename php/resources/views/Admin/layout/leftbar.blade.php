@@ -52,6 +52,7 @@
             @if(!empty(get_order()))
                 @foreach(get_order() as $key =>$vel)
                 <li><a href="">
+						<div class="GWxuanxiang"><input type="checkbox" name="checkItem" ></div>
                         <div class="IOimg"><img src="{{get_media_img($vel['media_id'])}}"/>
                             <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
                         </div>
@@ -72,9 +73,8 @@
     <ul class="sidebar-panel nav">
 
         <li>
-            <div class="header">
+			<div class="header inactive">
                 <span class="label" id="sd1">网络媒体</span>
-                <span class="arrow up"></span>
 			</div>
             <ul class="menu">
                     <li><a href="{{route('media.release')}}">
@@ -110,9 +110,9 @@
             </ul>
         </li>
         <li>
-            <div class="header">
+			<div class="header inactive">
                 <span class="label" id="sd3">户外媒体</span>
-                <span class="arrow up"></span>					</div>
+			</div>
             <ul class="menu">
                 <li><a href=""><div class="nd1">地标媒体</div></a></li>
                 <li><a href=""><div class="nd2">户外大牌</div></a></li>
@@ -127,18 +127,17 @@
             </ul>
         </li>
         <li>
-            <div class="header">
-                <span class="label" id="sd3">权限管理</span>
-                <span class="arrow up"></span></div>
+			<div class="header inactive">
+                <span class="label" id="sd1">权限管理</span>
+			</div>
             <ul class="menu">
                 <li><a href="{{route('acl.role.index')}}"><div class="nd1">角色列表</div></a></li>
             </ul>
         </li>
         <li>
-            <div class="header">
-                <span class="label" id="sd3">会员中心</span>
-                <span class="arrow up"></span>
-            </div>
+			<div class="header inactive">
+                <span class="label" id="sd1">会员中心</span>
+			</div>
             <ul class="menu">
                 <li><a href="{{route('member.info')}}">
                         <div class="nd1n">会员信息</div>
@@ -177,10 +176,9 @@
                 <span class="label" id="sd8">宣传定制</span>					</div>
         </li>
         <li>
-            <div class="header">
-                <span class="label" id="sd3">平台管理</span>
-                <span class="arrow up"></span>
-            </div>
+			<div class="header inactive">
+                <span class="label" id="sd1">平台管理</span>
+			</div>
             <ul class="menu">
                 <li><a href="{{route('category.index')}}">
                         <div class="nd1n">分类管理</div>
@@ -194,9 +192,9 @@
             </ul>
         </li>
         <li>
-            <div class="header">
-                <span class="label" id="sd3">媒体供应商</span>
-                <span class="arrow up"></span>					</div>
+			<div class="header inactive">
+                <span class="label" id="sd1">媒体供应商</span>
+			</div>
             <ul class="menu">
                 <li><a href=""><div class="nd1">活动订单</div></a></li>
                 <li><a href=""><div class="nd2">预约订单</div></a></li>
@@ -212,30 +210,30 @@
     var t1=TouchScroll('apDiv1',{vOffset:0,mouseWheel:true,keyPress:false})
     $(function(){
 		
-        $(".menu a").each(function(){
+/*         $(".menu a").each(function(){
             var href1 = $(this).attr("href");
             var href2 = window.location.href;
-            if( href2.indexOf(href1)>0 ){
+            if( href1 != "" && href1 != "#" && href2 == href1 ){
                 $(this).parents(".menu").prev(".header").trigger("click");
                 $(this).parent("li").addClass("cur");
             }
-        });
+        }); */
+
+ 		var current_url = $.trim($("#current_url").html());
+		if( current_url != "" && current_url != "#" ){
+			$(".sidebar .menu li a").each(function(){
+				var url = $.trim($(this).attr("href"));
+				if( url == current_url ){
+					$(this).parent().addClass("cur")
+						.closest(".menu").prev(".header").trigger("click");
+				}
+			});
+		}
 
         $(".ITuser").click(function(){
             $(".HYrukou").toggle();
         });
 
-		var current_url = $.trim($("#current_url").html());
-		if( current_url != "" && current_url != "#" ){
-			$(".sidebar .menu li a").each(function(){
-				var url = $.trim($(this).attr("href"));
-				if( url == current_url ){
-					$(this).parent().addClass("selected").css("border-bottom","none")
-						.closest(".menu").slideDown()
-						.prev(".header").find(".arrow").addClass("down").removeClass("up");
-				}
-			});
-		}
 		
 	});
 </script>
