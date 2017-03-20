@@ -33,15 +33,16 @@ body{ background:#204186}
 .IIO_nt span{ color:#ff0000; margin:0 5px;}
 .ITorder{ width:260px; height:490px; float:left; margin-bottom:10px;}
 .ITorder li{ float:left; width:220px; height:60px; padding:15px 20px 5px 20px;}
-.IOimg{ width:50px; height:50px; float:left; position:relative; margin-right:20px;}
+.IOimg{ width:50px; height:50px; float:left; position:relative; margin-right:15px;}
 .IOimg img{ width:50px; height:50px;}
 .IOweixin{ width:20px; height:20px; position:relative; top:-15px; left:35px;border-radius:50px; z-index:2; overflow:hidden}
 .IOweixin img{width:20px; height:20px;border-radius:50px;}
-.IOtext{ width:150px; height:auto; float:left;}
+.IOtext{ width:130px; height:auto; float:left;}
 .IOtext h3{ font-size:14px; line-height:30px; color:#fff; }
 .IOtext p{ color:#7190d1;font-size:12px; line-height:20px;}
 .ITorder li:hover{background-color:rgba(255,255,255,.1);}
 .IObu{ float:left;width:260px; height:auto;}
+.GWxuanxiang{width: 25px; height:auto;float: left; margin-top: 20px;}
 
 .sidebar {width: 245px;position:absolute; z-index:0; left:0; top:60px;z-index: 500; background:#204186;}
 .sidebar * { list-style: none; }
