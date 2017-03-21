@@ -136,19 +136,19 @@ class UserController extends Controller
             $user_order = [];
             foreach ($order as $k => $v) {
                 $result = News::where('id', $v)
-                    ->select('title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
+                    ->select('id','title', 'start_time', 'price','remark', 'created_at', 'news_type')
                     ->get()->toArray();
                 $user_order[$k] = array_first($result);
             }
         } else {
             $user_order = News::where('user_id', Auth::id())
-                ->select('title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
+                ->select('id','title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
                 ->orderBy('id', 'desc')->get()->toArray();
         }
         $count=count($user_order);
         return view('Admin.user.order_list', ['user_order' => $user_order,'count'=>$count]);
     }
-    
+
 
     //ios登陆
     public function Api_postLogin()

@@ -30,7 +30,7 @@
                                     <tbody>
                                     @if(isset($user_order) && !empty($user_order))
                                         @foreach($user_order as $ky =>$vs)
-                                            <tr>
+                                            <tr order_id="{{$vs['id']}}">
                                                 <td><label><input type="checkbox" name="checkItem" data-price="{{$vs['price']}}"/></label>
                                                 </td>
                                                 @if($vs['news_type']=="news")
