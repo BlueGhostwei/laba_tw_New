@@ -31,7 +31,7 @@
                                     @if(isset($user_order) && !empty($user_order))
                                         @foreach($user_order as $ky =>$vs)
                                             <tr order_id="{{$vs['id']}}">
-                                                <td><label><input type="checkbox" name="checkItem" data-price="{{$vs['price']}}"/></label>
+                                                <td><label><input type="checkbox" name="check_Item" data-price="{{$vs['price']}}"/></label>
                                                 </td>
                                                 @if($vs['news_type']=="news")
                                                 <td>新闻发布</td>
@@ -44,7 +44,7 @@
                                             @endforeach
                                         @endif
                                    {{-- <tr>
-                                        <td><label><input type="checkbox" name="checkItem"
+                                        <td><label><input type="checkbox" name="check_Item"
                                                           data-price="100000.00"/></label></td>
                                         <td>新闻发布</td>
                                         <td>活动标题</td>
@@ -82,7 +82,7 @@
                 <input type="password" name="pass" placeholder="请输入您的平台密码" class="pass" />
             </div>
             <div class="item">
-                <button type="submit" class="sub">支付</button>
+                <button type="submit" class="sub" id="pay">支付</button>
             </div>
         </form>
     </div>
@@ -92,7 +92,7 @@
 
             var total=0;
             var rows_order=0;
-            $("input[name='checkItem']").each(function(){
+            $("input[name='check_Item']").each(function(){
                 var price=parseFloat($(this).attr("data-price"));
                 if( $(this).is(":checked") ){
                     total += price;
@@ -110,9 +110,9 @@
         /*	全选	*/
         $("#checkall").on("click",function(){
             if( $(this).is(":checked") ) {
-                $("input[name='checkItem']").prop("checked",true);
+                $("input[name='check_Item']").prop("checked",true);
             }else{
-                $("input[name='checkItem']").prop("checked",false);
+                $("input[name='check_Item']").prop("checked",false);
             }
             reset_total();
         });
@@ -123,7 +123,7 @@
             layer.confirm("确定要删除选中的订单吗？",{
                 btn:["确定2","取消1"]
             },function(){
-                $("input[name='checkItem']").each(function(){
+                $("input[name='check_Item']").each(function(){
                     if( $(this).is(":checked") ){
                         $(this).closest("tr").remove();
                     }
@@ -135,17 +135,79 @@
             });
         });
         /*	点击结算弹出支付	*/
+		var orderdata = [];
         $("#settle").click(function(){
             event.preventDefault();
-            layer.open({
-                type: 1,
-                title: " ",
-                shadeClose: true, //开启遮罩关闭
-                skin: 'pay_info_w', //加上class设置样式
-                area: ['430px'], //宽高
-                content: $(".pay_info")
-            });
+			if( $("input[name=check_Item]:checked").length>0 ){
+				var _token = $("input[name=_token]").val();
+				var order_id = "";
+				var price = $.trim($("#sum b").html());
+				$("input[name=check_Item]:checked").each(function(){
+					var order_id2 = $(this).closest("tr").attr("order_id");
+					if( order_id == "" ){
+						order_id += order_id2;
+					}else{
+						order_id += "," + order_id2;
+					}
+				});
+			
+				orderdata["_token"] = _token;
+				orderdata["order_id"] = order_id;
+				orderdata["price"] = price;
+
+				layer.open({
+					type: 1,
+					title: " ",
+					shadeClose: true, //开启遮罩关闭
+					skin: 'pay_info_w', //加上class设置样式
+					area: ['430px'], //宽高
+					content: $(".pay_info")
+				});
+			}else{
+				layer.msg("请选择订单");
+			}
         });
+		/*	支付	*/
+		$("#pay").click(function(){
+			var pass = $("input[name=pass]").val();
+			console.log(orderdata);
+			console.log(pass);
+			
+			if( $.trim(pass) == "" || pass.length < 6 ){
+				layer.msg("密码不能为空或者小于6位");
+				return false;
+			}
+			$.ajax({
+					url: '',
+					data: {
+						'order_id' : orderdata["order_id"],
+						'price' : orderdata["price"],
+						'password' : pass,
+						'_token' : orderdata["_token"]
+					},
+					type: 'post',
+					dataType: "json",
+					success: function (data) {
+						console.log("支付成功");
+						layer.close(1);
+						console.log(data);
+						if (data.sta == '0') {
+                            window.location.href=url;
+						} else {
+							layer.msg(data.msg || '提交失败');
+						}
+					},
+					error: function (data) {
+						console.log(data);
+						layer.msg(data.msg || '网络发生错误');
+						return false;
+					}
+				});
+			
+			return false;
+		});
+		
+		
         reset_total();
     </script>
 @endsection
