@@ -51,6 +51,7 @@
         <ul class="ITorder" id="apDiv1">
             @if(!empty(get_order()))
                 @foreach(get_order() as $key =>$vel)
+                    {{ csrf_field() }}
                 <li><a href="" data_id="{{$vel['id']}}" >
 						<div class="GWxuanxiang"><input type="checkbox" name="checkItem" ></div>
                         <div class="IOimg"><img src="{{get_media_img($vel['media_id'])}}"/>
@@ -246,20 +247,19 @@
 						id += "," + data_id;
 					}
 				});
-				console.log(id)
-				console.log(_token)
-				$.ajax({
-					url: '{{route('media.release')}}',
+               var url="{{route('user.order_list')}}"+"?order="+id;
+                window.location.href=url;
+				/*$.ajax({
+					url: '{{route('user.order_list')}}',
 					data: {
-						'id' : id,
+						'order_id' : id,
 						'_token' : _token
 					},
 					type: 'post',
 					dataType: "json",
 					success: function (data) {
-						console.log(data);
 						if (data.sta == '0') {
-							layer.msg(data.msg || '提交成功');
+                            window.location.href=url;
 						} else {
 							layer.msg(data.msg || '提交失败');
 						}
@@ -269,7 +269,7 @@
 						layer.msg(data.msg || '网络发生错误');
 						return false;
 					}
-				});
+				});*/
 			}else{
 				layer.msg('已选商品不能为空');
 			}

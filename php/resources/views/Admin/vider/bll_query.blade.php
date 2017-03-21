@@ -12,7 +12,7 @@
                         <ul class="tab">
                             <a href="{{route('vider.Event_list')}}">  <li>活动订单</li></a>
                             <li><a href="">预约订单</a></li>
-                            <li><a href="resource_management.php">资源管理</a></li>
+                           {{-- <li><a href="resource_management.php">资源管理</a></li>--}}
                             <a href="{{route('vider.bill_query')}}"> <li class="cur">账单查询</li></a>
                             <a href="{{route('vider.user_center')}}"> <li>用户中心</li></a>
                             </ul>

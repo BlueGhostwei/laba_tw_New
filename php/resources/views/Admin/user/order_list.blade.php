@@ -9,7 +9,7 @@
                 <div class="ndt" style="margin-top:40px;padding-bottom:0;">
 
                     <div class="hdorder radius1">
-                        <h3 class="title1"><strong><a href="#">全部定单<i>（51）</i></a></strong></h3>
+                        <h3 class="title1"><strong><a href="#">全部定单<i>@if(isset($count)&&!empty($count)){{$count}}@endif</i></a></strong></h3>
                         <div class="dhorder_m">
 
                             <div class="tab1" style="height:30px;">
@@ -79,7 +79,7 @@
         <p>任务将由所下单媒体审核，若资源审核成功后便会执行发布，稍后注意前往我的喇叭传媒平台查看</p>
         <form action="" method="post" id="form1">
             <div class="item">
-                <input type="password" name="pass" placeholder="请输入您的平台支付密码" class="pass" />
+                <input type="password" name="pass" placeholder="请输入您的平台密码" class="pass" />
             </div>
             <div class="item">
                 <button type="submit" class="sub">支付</button>

@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
         Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
         Route::get('Admin/user/order_list',['as'=>'user.order_list','uses'=>'UserController@order_list']);//会员订单列表
+        Route::post('Admin/user/order_list','UserController@order_redirect');//会员订单跳转
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
         //用户中心
