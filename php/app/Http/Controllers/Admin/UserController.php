@@ -136,17 +136,81 @@ class UserController extends Controller
             $user_order = [];
             foreach ($order as $k => $v) {
                 $result = News::where('id', $v)
-                    ->select('id','title', 'start_time', 'price','remark', 'created_at', 'news_type')
+                    ->select('id', 'title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
                     ->get()->toArray();
                 $user_order[$k] = array_first($result);
             }
         } else {
             $user_order = News::where('user_id', Auth::id())
-                ->select('id','title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
+                ->select('id', 'title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
                 ->orderBy('id', 'desc')->get()->toArray();
         }
-        $count=count($user_order);
-        return view('Admin.user.order_list', ['user_order' => $user_order,'count'=>$count]);
+        $count = count($user_order);
+        return view('Admin.user.order_list', ['user_order' => $user_order, 'count' => $count]);
+    }
+
+    /**
+     * @return mixed
+     * 用户提交结算订单
+     * array:4 [
+     * "order_id" => "8,7"//订单id
+     * "price" => "222"//价格
+     * "password" => "123456"//密码
+     * "_token" => "jrEtqwTIbKwnnBBKSnjjayD46pOBqMwAT5qJZMph"
+     * ]
+     */
+    public function Settlement()
+    {
+        $arr = Input::all();
+        if ($arr) {
+            //验证密码
+            $pass=$arr['password'];
+            if(Hash::check($pass, Auth::user()->password) == false){
+                return json_encode(['msg'=>'密码错误，请重新输入','sta'=>'1','data'=>'']);
+            }
+            //获取订单号
+            $arr_p=[];
+            $order_id=explode(',',$arr['order_id']);
+            foreach ($order_id as $k =>$v){
+                $price=News::where(['id'=>$v,'user_id'=>Auth::id()])->select('price','status')->first();
+                if($price->status=='2'){//订单已支付
+                    return json_encode(['msg'=>'参数错误，请刷新页面重试！','sta'=>'1','data'=>'']);
+                }
+                if(empty($arr_p)){
+                    $arr_p[$k]=$price->price;
+                }else{
+                    $arr_p=$arr_p[0]+$price->price;
+                }
+            }
+            //对比价格（对比前端页面传过来的价格，true结算，false反馈）
+           if(!empty($arr_p) && $arr_p==$arr['price']){
+               //查询账号余额
+               if(Auth::user()->wealth < $arr['price'] ){
+                   return json_encode(['msg'=>'账户余额不足，请充值！','sta'=>'1','data'=>'']);
+               }
+               //扣除金额
+               //修改订单状态
+               DB::transaction(function() use($arr,$order_id){
+
+                   $wealth=Auth::user()->wealth - $arr['price'];
+                   User::where('id',Auth::id())->update(['wealth'=>$wealth]);
+                   foreach ($order_id as $key =>$vel){
+                       News::where('id',$vel)->update(['status'=>'2']);
+                   }
+                   $rvb=['sta'=>1,'time'=>time()];
+                   Session::set('pay_status',$rvb);
+               });
+               $status=Session::get('pay_status');
+               if(!empty($status) && $status['sta']==1 && time()-($status['time']+20)<=0){
+                   return json_encode(['msg'=>'支付成功','sta'=>'0','data'=>'']);
+               }else{
+                   Session::forget('pay_status');
+                   return json_encode(['msg'=>'支付失败','sta'=>'1','data'=>'']);
+               }
+           }else{
+               return json_encode(['msg'=>'参数错误，请刷新页面重试!','sta'=>'1','data'=>'']);
+           }
+        }
     }
 
 

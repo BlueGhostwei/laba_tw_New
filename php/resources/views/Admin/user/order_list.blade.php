@@ -28,6 +28,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    {{ csrf_field() }}
                                     @if(isset($user_order) && !empty($user_order))
                                         @foreach($user_order as $ky =>$vs)
                                             <tr order_id="{{$vs['id']}}">
@@ -170,15 +171,12 @@
 		/*	支付	*/
 		$("#pay").click(function(){
 			var pass = $("input[name=pass]").val();
-			console.log(orderdata);
-			console.log(pass);
-			
 			if( $.trim(pass) == "" || pass.length < 6 ){
 				layer.msg("密码不能为空或者小于6位");
 				return false;
 			}
 			$.ajax({
-					url: '',
+					url: "{{route('user.Settlement')}}",
 					data: {
 						'order_id' : orderdata["order_id"],
 						'price' : orderdata["price"],
@@ -188,17 +186,15 @@
 					type: 'post',
 					dataType: "json",
 					success: function (data) {
-						console.log("支付成功");
-						layer.close(1);
-						console.log(data);
+						/*layer.close(1);*/
 						if (data.sta == '0') {
-                            window.location.href=url;
+                            layer.msg(data.msg || '提交失败');
+                            window.location.href='/';
 						} else {
 							layer.msg(data.msg || '提交失败');
 						}
 					},
 					error: function (data) {
-						console.log(data);
 						layer.msg(data.msg || '网络发生错误');
 						return false;
 					}
