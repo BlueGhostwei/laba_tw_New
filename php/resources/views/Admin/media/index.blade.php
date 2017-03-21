@@ -658,7 +658,7 @@
 				if(ret.sta == 1){
 					$('input[name="name2_2"]').val(ret.md5);
 				}else{
-					layer.msg('头像上传失败');
+					layer.msg('文件上传失败');
 				}
 			});
 		});

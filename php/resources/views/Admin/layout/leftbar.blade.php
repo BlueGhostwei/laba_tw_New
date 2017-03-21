@@ -51,7 +51,7 @@
         <ul class="ITorder" id="apDiv1">
             @if(!empty(get_order()))
                 @foreach(get_order() as $key =>$vel)
-                <li><a href="">
+                <li><a href="" data_id="{{$vel['id']}}" >
 						<div class="GWxuanxiang"><input type="checkbox" name="checkItem" ></div>
                         <div class="IOimg"><img src="{{get_media_img($vel['media_id'])}}"/>
                             <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>

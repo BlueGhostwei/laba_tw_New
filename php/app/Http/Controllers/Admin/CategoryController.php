@@ -11,6 +11,7 @@ use DB;
 use Auth;
 use Illuminate\Routing\Route;
 use Input;
+use Session;
 use App\Models\Category;
 use App\Models\Media_community;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate;
@@ -128,7 +129,7 @@ class CategoryController extends Controller
                 return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
         }
-        if (Controller::isMobile($request->mobile_number) == false) {
+        if (Controller::isMobile(trim($request->mobile_number)) == false) {
             return json_encode(['msg' => "联系人电话不合法", 'sta' => "1", 'data' => ""], JSON_UNESCAPED_UNICODE);
         }
         if(!empty(Input::get('media_id'))){
@@ -136,22 +137,40 @@ class CategoryController extends Controller
             $new=array_splice($arr,1);
             $result = Media_community::where('id',Input::get('media_id'))->update($new );
         }else{
-           $result = Media_community::create($request->only($media->getFillable()));
-             //创建媒体供应商账号
-            $user= new User();
-            //$rand_num=Controller::getRandChar(6);
-            $user->username=$request->mobile_number;
-            $user->password='123456';
-            $user->role='1';
-            $user->confirm='1';
-            $user->media_id=$result->id;//绑定媒体
-            $rst=$user->save();
+            //$result = Media_community::create($request->only($media->getFillable()));
+            $arr=$request->all();
+            DB::transaction(function() use($arr){
+               $result = Media_community::create($arr);
+                $set_user=User::where('username',$arr['mobile_number'])->select('id')->get()->toArray();
+               if($set_user){
+                   $rv=array('msg'=>'联系人电话已被占用','phone'=>$arr['mobile_number']);
+                   Session::set('save_err',$rv);
+                   DB::rollback();//事务回滚
+               }else{
+                   //dd(234123);
+                   $user= new User();
+                   //$rand_num=Controller::getRandChar(6);
+                   $user->username=$arr['mobile_number'];
+                   $user->password='123456';
+                   $user->role='1';
+                   $user->confirm='1';
+                   //$user->media_id=$result->id;//绑定媒体
+                   $rst=$user->save();
+                   if (!$rst) {
+                       DB::rollback();//事务回滚
+                   }
+               }
+            });
        }
-        if ($rst) {
-            return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
-        } else {
-            return json_encode(['msg' => "请求失败", 'sta' => "1", 'data' => ""], JSON_UNESCAPED_UNICODE);
+        $get_err=Session::get('save_err');
+        if(!empty($get_err) ){
+            if($get_err['phone']==trim($request->mobile_number)){
+                return json_encode(['msg' =>$get_err['msg'], 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }
+            Session::forget('save_err');
         }
+        return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => ''], JSON_UNESCAPED_UNICODE);
+
     }
 
     /**

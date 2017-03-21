@@ -89,6 +89,7 @@ class MediaController extends Controller
             $data_list = DB::table('media_community')
                 ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
                 ->orderBy('id', 'desc')->paginate(10);
+
             $data_list = $this->to_sql($data_list);
         }
         return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
@@ -307,11 +308,14 @@ class MediaController extends Controller
             if (strtotime($data['start_time']) > strtotime($data['end_time'])) {
                 return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
-            //生成订单号
+
             $data['news_type']=$arr['key'];
+            //查询价格
             $data['price']='14231';
+            //生成订单号
             $data['order_code']=Controller::makePaySn(Auth::id());
             $data['media_id']=implode(',',$data['media_id']);
+            dd($data['media_id']);
             $data['start_time']=strtotime($data['start_time']);
             $data['end_time']=strtotime($data['end_time']);
             $result = News::create($data);
