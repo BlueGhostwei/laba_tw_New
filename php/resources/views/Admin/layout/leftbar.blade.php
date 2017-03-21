@@ -234,6 +234,46 @@
             $(".HYrukou").toggle();
         });
 
+		$("#button").click(function(){
+			var id = "";
+			var _token = $("input[name=_token]").val();
+			if( $("#apDiv1 li input[name=checkItem]:checked").length>0 ){
+				$("#apDiv1 li input[name=checkItem]:checked").each(function(){
+					var data_id = $(this).closest("a").attr("data_id");
+					if( id == "" ){
+						id += data_id;
+					}else{
+						id += "," + data_id;
+					}
+				});
+				console.log(id)
+				console.log(_token)
+				$.ajax({
+					url: '{{route('media.release')}}',
+					data: {
+						'id' : id,
+						'_token' : _token
+					},
+					type: 'post',
+					dataType: "json",
+					success: function (data) {
+						console.log(data);
+						if (data.sta == '0') {
+							layer.msg(data.msg || '提交成功');
+						} else {
+							layer.msg(data.msg || '提交失败');
+						}
+					},
+					error: function (data) {
+						console.log(data);
+						layer.msg(data.msg || '网络发生错误');
+						return false;
+					}
+				});
+			}else{
+				layer.msg('已选商品不能为空');
+			}
+		});
 		
 	});
 </script>
