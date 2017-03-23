@@ -315,7 +315,6 @@ class MediaController extends Controller
             //生成订单号
             $data['order_code']=Controller::makePaySn(Auth::id());
             $data['media_id']=implode(',',$data['media_id']);
-            dd($data['media_id']);
             $data['start_time']=strtotime($data['start_time']);
             $data['end_time']=strtotime($data['end_time']);
             $result = News::create($data);
