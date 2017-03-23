@@ -773,23 +773,23 @@ $.validator.setDefaults({
 		var key = "test1";
 		$.ajax({
 			url: '{{route('media.release')}}',
-			data: {
-				'keyword' : key
-				,'form5data' : {
-					"id": form5data["id"],
-					"name1": form5data["name1"],
-					"name2": form5data["name2"],
-						"name2_1": form5data["name2_1"],
-						"name2_2": form5data["Manuscripts"],
-						"name2_3": form5data["content"],
-					"name3": form5data["name3"],
-					"name4": form5data["name4"],
-					"name5": form5data["name5"],
-					"name6": form5data["name6"],
-					"agree": form5data["agree"]
-				}
-				,'_token' : _token
-			},
+            data: {
+                'keyword' : key,
+                'form5data' : {
+                    "media_id": form5data["id"],
+                    "title": form5data["name1"],
+                    "Manuscripts_attr": form5data["name2"],
+                    "url_line": form5data["name2_1"],
+                    "Manuscripts": form5data["Manuscripts"],
+                    "content": form5data["content"],
+                    "keyword": form5data["name3"],
+                    "start_time": form5data["name4"],
+                    "end_time": form5data["name5"],
+                    "remark": form5data["name6"],
+                    "agree": form5data["agree"]
+                },
+                '_token' : _token
+            },
 			type: 'post',
 			dataType: "json",
 			stopAllStart: true,
