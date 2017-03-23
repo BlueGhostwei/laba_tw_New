@@ -4,7 +4,6 @@ $(function(){
 	if( $(".slideBox").length>0 ){
 		$(".slideBox").slide({mainCell:".bd ul",effect:"fold",autoPlay:true,delayTime:700});
 	}
-
 	
 // 首页投放分布
 if( $("#tb1").length>0 ){
@@ -34,52 +33,43 @@ function dataFormatter(obj) {
 
 dataMap.dataGDPt = dataFormatter({
     //max : 1200,
-    
-    2002:[1525,211,255,542,12,414,414,201,14,44,41,210] /*网络媒体*/  
+	2002:[1525,211,255,542,12,414,414,201,14,44,41,210] /*网络媒体*/  
 });
 
 dataMap.dataGDPs = dataFormatter({
     //max : 500,
-  
-    2002:[85,14,444,54,41,255,44,51,544,4,21,2] /*户外媒体*/  
+	2002:[85,14,444,54,41,255,44,51,544,4,21,2] /*户外媒体*/  
 });
 
 dataMap.dataGDP = dataFormatter({
     //max : 300,
-    
-    2002:[1000,32,255,54,325,365,22,51,544,255,21,2] /*平面媒体*/
+	2002:[1000,32,255,54,325,365,22,51,544,255,21,2] /*平面媒体*/
 });
 
 dataMap.dataPI = dataFormatter({
     //max : 250,
-  
-    2002:[54,542,545,21,20,254,2112,21,12,255,24,225] /*记者预约*/
+	2002:[54,542,545,21,20,254,2112,21,12,255,24,225] /*内容代写*/
 });
 
 dataMap.dataSI = dataFormatter({
     //max : 200,
-   
-    2002:[254,247,254,685,62,521,10,255,4,20,45,211] /*广播媒体*/
+	2002:[254,247,254,685,62,521,10,255,4,20,45,211] /*宣传定制*/
 });
 
 dataMap.dataTI = dataFormatter({
     //max : 150,
-    
-    2002:[574,1542,524,254,54,11,452,154,21,452,54,125] /*记者预约*/
+	2002:[574,1542,524,254,54,11,452,154,21,452,54,125] /*记者预约*/
 });
 
 dataMap.dataEstate = dataFormatter({
     //max : 100,
-    
-    2002:[62,82,95,15,0,594,84,35,652,154,150,41] /*广播媒体*/
+	2002:[62,82,95,15,0,594,84,35,652,154,150,41] /*广播媒体*/
 });
 
 dataMap.dataFinancial = dataFormatter({
     //max : 50,
-    
-    2002:[101,20,5,85,84,20,31,156,24,845,45,57] /*电视媒体*/
+	2002:[101,20,5,85,84,20,31,156,24,845,45,57] /*电视媒体*/
 });
-
 
 option = {
     baseOption: {
@@ -88,13 +78,13 @@ option = {
             axisType: 'category',
             // realtime: false,
             // loop: false,
-            autoPlay: true,
+            autoPlay: false,
             // currentIndex: 2,
             playInterval: 1000,
             // controlStyle: {
             //     position: 'left'
             // },
-            
+            show: false,
             label: {
                 formatter : function(s) {
                     return (new Date(s)).getFullYear();
@@ -107,8 +97,7 @@ option = {
         tooltip: {},
         legend: {
             x: 'center',
-            data: ['网络媒体', '户外媒体', '平面媒体', '电视媒体', '广播媒体', '记者预约', '内容代写', '宣传定制'],
-            
+            data: ['网络媒体', '户外媒体', '平面媒体', '电视媒体', '广播媒体', '记者预约', '内容代写', '宣传定制']
         },
         calculable : true,
         grid: {
@@ -128,7 +117,8 @@ option = {
         yAxis: [
             {
                 type: 'value',
-                name: '订单数（条）'
+                name: '订单数（条）',
+				interval: 100
             }
         ],
         series: [
@@ -138,8 +128,8 @@ option = {
             {name: '电视媒体', type: 'bar'},
             {name: '广播媒体', type: 'bar'},
             {name: '记者预约', type: 'bar'},
-            {name: '广播媒体', type: 'bar'},
-            {name: '记者预约', type: 'bar'},
+            {name: '内容代写', type: 'bar'},
+            {name: '宣传定制', type: 'bar'},
             {
                 name: '分类订单占比',
                 type: 'pie',
@@ -161,7 +151,6 @@ option = {
                 {data: dataMap.dataSI['2002']},
                 {data: dataMap.dataTI['2002']},
 
-
                 {data: [
                     {name: '网络媒体', value: dataMap.dataPI['2002sum']},
                     {name: '户外媒体', value: dataMap.dataSI['2002sum']},
@@ -170,12 +159,10 @@ option = {
                     {name: '广播媒体', value: dataMap.dataSI['2002sum']},
                     {name: '记者预约', value: dataMap.dataTI['2002sum']},
                     {name: '内容代写', value: dataMap.dataPI['2002sum']},
-                    {name: '宣传定制', value: dataMap.dataSI['2002sum']},
-
+                    {name: '宣传定制', value: dataMap.dataSI['2002sum']}
                 ]}
             ]
-        },
-        
+        }        
     ]
 };
 	// 使用刚指定的配置项和数据显示图表。
@@ -190,8 +177,6 @@ option = {
 		return false;
 	});
 
-
-
 /*	媒体供应商_活动订单	*/
 /*	$(".nav_hdorder .tab li a").click(function(){
 		$(this).parent("li").addClass("cur").siblings("li").removeClass("cur");
@@ -201,12 +186,7 @@ option = {
 
 
 
-
-
-
-
 });	
-
 
 //	首页搜索条左边时间
 function showtime(){
@@ -222,21 +202,8 @@ function showtime(){
 	},1000);
 }
 
-
-
-
-
 function SetFrameHeight(o) {
        var mainheight = $(o).contents().find("body").children("div").height() + 30;
        $(o).height(mainheight);
  }
-
-
-
-
-
-
-
-
-
 

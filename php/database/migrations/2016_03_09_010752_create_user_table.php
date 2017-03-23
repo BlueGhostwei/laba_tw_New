@@ -46,8 +46,7 @@ class CreateUserTable extends Migration
 
             // 性别 0女, 1男
             $table->tinyInteger('gender')->default(1);
-
-
+            $table->integer('media_id')->commit('媒体供应商绑定媒体id');
             // 移动电话, 固话
             $table->char('user_phone',15)->nullable()->index();
 

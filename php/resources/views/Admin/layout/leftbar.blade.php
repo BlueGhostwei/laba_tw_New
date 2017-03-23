@@ -51,7 +51,8 @@
         <ul class="ITorder" id="apDiv1">
             @if(!empty(get_order()))
                 @foreach(get_order() as $key =>$vel)
-                <li><a href="">
+                    {{ csrf_field() }}
+                <li><a href="" data_id="{{$vel['id']}}" >
 						<div class="GWxuanxiang"><input type="checkbox" name="checkItem" ></div>
                         <div class="IOimg"><img src="{{get_media_img($vel['media_id'])}}"/>
                             <div class="IOweixin"><img src="{{url('Admin/img/1atn.jpg')}}"/></div>
@@ -196,7 +197,7 @@
                 <span class="label" id="sd1">媒体供应商</span>
 			</div>
             <ul class="menu">
-                <li><a href=""><div class="nd1">活动订单</div></a></li>
+                <li><a href="{{route('vider.Event_list')}}"><div class="nd1">活动订单</div></a></li>
                 <li><a href=""><div class="nd2">预约订单</div></a></li>
                 <li><a href=""><div class="nd3">资源管理</div></a></li>
                 <li><a href=""><div class="nd4">账单查询</div></a></li>
@@ -234,6 +235,45 @@
             $(".HYrukou").toggle();
         });
 
+		$("#button").click(function(){
+			var id = "";
+			var _token = $("input[name=_token]").val();
+			if( $("#apDiv1 li input[name=checkItem]:checked").length>0 ){
+				$("#apDiv1 li input[name=checkItem]:checked").each(function(){
+					var data_id = $(this).closest("a").attr("data_id");
+					if( id == "" ){
+						id += data_id;
+					}else{
+						id += "," + data_id;
+					}
+				});
+               var url="{{route('user.order_list')}}"+"?order="+id;
+                window.location.href=url;
+				/*$.ajax({
+					url: '{{route('user.order_list')}}',
+					data: {
+						'order_id' : id,
+						'_token' : _token
+					},
+					type: 'post',
+					dataType: "json",
+					success: function (data) {
+						if (data.sta == '0') {
+                            window.location.href=url;
+						} else {
+							layer.msg(data.msg || '提交失败');
+						}
+					},
+					error: function (data) {
+						console.log(data);
+						layer.msg(data.msg || '网络发生错误');
+						return false;
+					}
+				});*/
+			}else{
+				layer.msg('已选商品不能为空');
+			}
+		});
 		
 	});
 </script>

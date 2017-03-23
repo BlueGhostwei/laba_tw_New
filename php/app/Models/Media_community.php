@@ -52,7 +52,7 @@ class Media_community extends Eloquent
                 "coverage"=>"required",
                 "channel"=>"required",
                 "principal"=>"required|min:2",
-                "user_Eail"=>"required|email",
+                "user_Eail"=>"required|email|unique:".$this->getTable(),
                 "user_QQ"=>"required",
                 "address"=>"required",
                 "Zip_code"=>"required",

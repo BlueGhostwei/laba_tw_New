@@ -68,15 +68,6 @@ class PayController extends Controller
             $order->save();
             return json_encode(['msg'=>'','sta'=>'0','data'=>$alipay->getPayLink()]);
         }
-
-
-
-
-//        $alipay->setQrPayMode('4'); //该设置为可选，添加该参数设置，支持二维码支付。
-
-
-        // 跳转到支付页面。
-
     }
 
 
@@ -86,8 +77,6 @@ class PayController extends Controller
      * 支付宝网页异步提示
      *
      */
-
-
     public function webnotify(){
         // 验证请求。
         if (! app('alipay.web')->verify()) {
@@ -123,7 +112,6 @@ class PayController extends Controller
                 $user->save();
                 $order->save();
         }
-
         return 'success';
     }
 

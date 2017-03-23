@@ -105,6 +105,7 @@ class MediaController extends Controller
             $data_list = DB::table('media_community')
                 ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
                 ->orderBy('id', 'desc')->paginate(10);
+
             $data_list = $this->to_sql($data_list);
         }
         return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
@@ -308,28 +309,6 @@ class MediaController extends Controller
      */
     public function Member_order()
     {
-
-       /* $arr=array (
-            '_token' => 'ayvU2z93V4fmDPFLYawV3PRvPZpWEkAQc2hSRJ36',
-            'key'=>'news',
-            'form5data' => array (
-                    'Manuscripts' => '',
-                    'Manuscripts_attr' => '1',
-                    'agree' => '1',
-                    'price'=>'200',
-                    'content' => '',
-                    'end_time' => '2017-03-18 18:58:00',
-                    'keyword' => '没有，主题',
-                    'media_id' => array (
-                        0 => '18',
-                        1 => '19',
-                    ),
-                    'remark' => '没有备注',
-                    'start_time' => '2017-03-15 23:58:00',
-                    'title' => '没有主题',
-                    'url_line' => 'http://www.5idev.com/p-php_fwrite.shtml',
-                ),
-        );*/
         $arr = Input::all();
         if(!empty(Input::get('form5data')) && empty($arr['form5data'])){
             $data=Input::get('form5data');
@@ -418,11 +397,14 @@ class MediaController extends Controller
             if (strtotime($data['start_time']) > strtotime($data['end_time'])) {
                 return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
-            //生成订单号
+
             $data['news_type']=$arr['key'];
+            //查询价格
             $data['price']='14231';
+            //生成订单号
             $data['order_code']=Controller::makePaySn(Auth::id());
             $data['media_id']=implode(',',$data['media_id']);
+            dd($data['media_id']);
             $data['start_time']=strtotime($data['start_time']);
             $data['end_time']=strtotime($data['end_time']);
             $result = News::create($data);

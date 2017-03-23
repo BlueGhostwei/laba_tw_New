@@ -108,6 +108,21 @@
 									<a href="">修改</a>
 								</span>
                                             </li>
+                                            <li><span class="sp1">支付密码</span>
+                                                <span class="sp2">用于平台支付</span>
+								<span class="sp3">
+                                            @if(isset(Auth::user()->security) && Auth::user()->security =="1")
+                                        <i class="ok">已设置</i>
+                                    @else
+                                        <i class="not-ok">未设置</i>
+                                    @endif
+
+								</span>
+								<span class="sp4">
+									<a href="{{route('member.safety_update',"security")}}">修改</a>
+								</span>
+                                            </li>
+
                                         </ul>
                                     </div>
                                 </div>

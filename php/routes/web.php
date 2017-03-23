@@ -90,12 +90,18 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
         Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
         Route::get('Admin/user/order_list',['as'=>'user.order_list','uses'=>'UserController@order_list']);//会员订单列表
+        Route::post('Admin/user/order_list','UserController@order_redirect');//会员订单跳转
+        Route::post('Admin/user/Settlement',['as'=>'user.Settlement','uses'=>"UserController@Settlement"]);//结算订单
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
         //用户中心
         Route::get('Admin/user/ginfo','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
+        //媒体供应商
+        Route::get('Admin/vider/Event_list',['as'=>'vider.Event_list','uses'=>'MediaProviderController@Event_list']);
+        Route::get('Admin/vider/user_center',['as'=>'vider.user_center','uses'=>'MediaProviderController@user_center']);
+        Route::get('Admin/vider/bill_query',['as'=>'vider.bill_query','uses'=>'MediaProviderController@bill_query']);
 
         // 文件上传, 图片处理
         Route::post('upload', 'UploadController@index');

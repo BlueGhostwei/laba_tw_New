@@ -72,9 +72,10 @@
 
                     <!--	搜索条	-->
                     <div class="searchbar clearfix">
+						{{ csrf_field() }}
                         <div class="s_date">
 			<span class="sp1">
-				<span>Monday</span><b>1</b><i>Feb</i>{{ csrf_field() }}
+				<span>Monday</span><b>1</b><i>Feb</i>
 			</span>
 			<span class="sp2">
 				<span>AM</span><b>01:01</b>

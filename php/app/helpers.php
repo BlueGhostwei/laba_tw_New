@@ -606,14 +606,19 @@ if (!function_exists('sendMessage')){
 
 //首页获取未支付订单
 function get_order(){
-    $list=News::where('user_id',Auth::id())->where('status','1')->where('release_sta','1')->orderBy('id','desc')->limit(20)->get();
+    $list=News::where('user_id',Auth::id())->where('status','1')->where('release_sta','1')->orderBy('id','desc')->limit(20)->get()->toArray();
     return $list;
 }
 function get_media_img($id){
     if(!empty($id)){
         $id=explode(',',$id);
         $media=Media_community::where('id',$id[0])->select('media_md5')->first();
-        return md52url($media->media_md5);
+        if($media){
+            return md52url($media->media_md5);
+        }else{
+            return url('Admin/img/bn66.png');
+        }
+
     }else{
         return url('Admin/img/bn66.png');
     }

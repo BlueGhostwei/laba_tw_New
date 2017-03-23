@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Config;
+use App\Models\User;
 use Redirect;
 use DB;
 use Auth;
 use Illuminate\Routing\Route;
 use Input;
+use Session;
 use App\Models\Category;
 use App\Models\Media_community;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate;
@@ -98,6 +100,7 @@ class CategoryController extends Controller
             "principal.required" => "媒体负责人不能为空",
             "user_Eail.required" => "邮箱不能为空",
             "user_Eail.email" => "请输入正确的邮箱",
+            "user_Eail.unique" => "该邮箱已经被占用",
             "user_QQ.required" => "QQ不能为空",
             "address.required" => "联系地址不能为空",
             "Zip_code.required" => "邮编不能为空",
@@ -119,7 +122,6 @@ class CategoryController extends Controller
         }else{
             $validator = Validator::make($request->all(), $media->rules()['media_rule'], $message);
         }
-
         $messages = $validator->messages();
         if ($validator->fails()) {
             $msg = $messages->toArray();
@@ -127,24 +129,48 @@ class CategoryController extends Controller
                 return json_encode(['sta' => "0", 'msg' => $v[0], 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
         }
-        if (Controller::isMobile($request->mobile_number) == false) {
+        if (Controller::isMobile(trim($request->mobile_number)) == false) {
             return json_encode(['msg' => "联系人电话不合法", 'sta' => "1", 'data' => ""], JSON_UNESCAPED_UNICODE);
         }
-
         if(!empty(Input::get('media_id'))){
             $arr=$request->all();
             $new=array_splice($arr,1);
             $result = Media_community::where('id',Input::get('media_id'))->update($new );
         }else{
-            $result = Media_community::create($request->only($media->getFillable()));
-           // Media_community::where('id',$result->id)->update(['user_id'=>$user_id]);
+            //$result = Media_community::create($request->only($media->getFillable()));
+            $arr=$request->all();
+            DB::transaction(function() use($arr){
+               $result = Media_community::create($arr);
+                $set_user=User::where('username',$arr['mobile_number'])->select('id')->get()->toArray();
+               if($set_user){
+                   $rv=array('msg'=>'联系人电话已被占用','phone'=>$arr['mobile_number']);
+                   Session::set('save_err',$rv);
+                   DB::rollback();//事务回滚
+               }else{
+                   //dd(234123);
+                   $user= new User();
+                   //$rand_num=Controller::getRandChar(6);
+                   $user->username=$arr['mobile_number'];
+                   $user->password='123456';
+                   $user->role='1';
+                   $user->confirm='1';
+                   //$user->media_id=$result->id;//绑定媒体
+                   $rst=$user->save();
+                   if (!$rst) {
+                       DB::rollback();//事务回滚
+                   }
+               }
+            });
+       }
+        $get_err=Session::get('save_err');
+        if(!empty($get_err) ){
+            if($get_err['phone']==trim($request->mobile_number)){
+                return json_encode(['msg' =>$get_err['msg'], 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }
+            Session::forget('save_err');
         }
-        if ($result) {
+        return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => ''], JSON_UNESCAPED_UNICODE);
 
-            return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
-        } else {
-            return json_encode(['msg' => "请求失败", 'sta' => "1", 'data' => ""], JSON_UNESCAPED_UNICODE);
-        }
     }
 
     /**
