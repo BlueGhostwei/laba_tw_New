@@ -73,9 +73,6 @@ class UploadController extends Controller
      */
     public function index()
     {
-		//返回类型
-		$return_type = Input::get('return_type');
-		
         // 有效文件
         
         $key = Input::get('fileKey', 'file');
@@ -191,47 +188,24 @@ class UploadController extends Controller
 
         //压缩图片
         $resize = Input::get('resize');
-
-
         if($resize){
             $resize_img = resize_img($md5,$resize,true);
-
             File::put(config_path('rebate.php'), sprintf("<?php%s%sreturn %s;%s", PHP_EOL, PHP_EOL, var_export($resize, true), PHP_EOL));
+                return json_encode([
+                    'sta' => 1,
+                    'msg' => '上传成功',
+                    'md5' => $md5,
+                    'url' => $this->md52url($md5),
+                    'resize_img' => $resize_img
+                ]);
 
-            if( $return_type == "string" ){
-				return json_encode([
-					'sta' => 1,
-					'msg' => '上传成功',
-					'md5' => $md5,
-					'url' => $this->md52url($md5),
-					'resize_img' => $resize_img
-				]);
-			}else{
-				return Response::json([
-					'sta' => 1,
-					'msg' => '上传成功',
-					'md5' => $md5,
-					'url' => $this->md52url($md5),
-					'resize_img' => $resize_img
-				]);
-			}
         }
-
-		if( $return_type == "string" ){
-			return json_encode([
-				'sta' => 1,
-				'msg' => '上传成功',
-				'md5' => $md5,
-				'url' => $this->md52url($md5)
-			]);
-		}else{
-			return Response::json([
-				'sta' => 1,
-				'msg' => '上传成功',
-				'md5' => $md5,
-				'url' => $this->md52url($md5)
-			]);
-		}
+        return json_encode([
+            'sta' => 1,
+            'msg' => '上传成功',
+            'md5' => $md5,
+            'url' => $this->md52url($md5)
+        ]);
     }
 
 
