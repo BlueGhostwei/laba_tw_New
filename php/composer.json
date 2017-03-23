@@ -13,7 +13,8 @@
         "intervention/image": "2.3.*",
         "socialiteproviders/weixin": "3.0.*",
         "predis/predis": "^1.1",
-        "latrell/alipay": "dev-master"
+        "latrell/alipay": "dev-master",
+        "simplesoftwareio/simple-qrcode": "1.3.*"
 
     },
     "require-dev": {

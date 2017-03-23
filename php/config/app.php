@@ -179,6 +179,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
 
     ],
 
@@ -230,6 +231,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image'=>Intervention\Image\Facades\Image::class,
         'Input'     => Illuminate\Support\Facades\Input::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
     ],
 
 ];

@@ -15,6 +15,7 @@
 
 Route::get('/alipay/webnotify', ['as' => 'website.pay', 'uses' => 'Admin\PayController@webnotify']);
 Route::get('/alipay/webreturn', ['as' => 'website.pay', 'uses' => 'Admin\PayController@webreturn']);
+Route::get('qrcode',['as' => 'qrcode', 'uses' => 'Admin\QrcodeController@index']);
 
 
 
@@ -44,6 +45,7 @@ Route::group(['middleware' => 'guest'], function () {
         Route::get('Admin/password/pass_Overlay', ['as' => 'Admin.pass_Overlay', 'uses' => 'PasswordController@pass_find_Overlay']);
         Route::get('Admin/password/pass_info', ['as' => 'Admin.pass_info', 'uses' => 'PasswordController@pass_info']);
         Route::post('Admin/password/pass_Overlay','PasswordController@pass_find_update');
+        Route::any('Admin/password/pass_find_api','PasswordController@pass_find_api');
         Route::post('Admin/password/getuser', ['as' => 'Admin.pass.getuser', 'uses' => 'PasswordController@getuser']);
         Route::post('Admin/password/email', ['as' => 'pass.email', 'uses' => 'PasswordController@send_email']);//邮件
         Route::post('Admin/find_password', 'PasswordController@postIndex');
@@ -91,7 +93,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
         //用户中心
-        Route::post('Admin/user/info','UserController@update_info');//会员信息
+        Route::get('Admin/user/ginfo','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
 
@@ -161,6 +163,15 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/searchnews',['as'=>'admin.searchnews','uses'=>'DashboardController@searchNews']);
         Route::get('Admin/searchnewspage',['as'=>'admin.searchnewspage','uses'=>'DashboardController@searchNewspage']);
 //        Route::get('/Admin/test',['uses'=>'UserController@test']);
+
+        Route::get('Admin/withdraw',['as'=>'admin.withdraw','uses'=>'UserController@show_withdraw']);
+
+        Route::post('Admin/newuser',['as'=>'admin.newuser','uses'=>'UserController@get_new_user']);
+
+        Route::post('Admin/getwithdraw',['as'=>'admin.getwithdraw','uses'=>'UserController@get_withdraw_data']);
+        Route::post('Admin/withdraw',['as'=>'admin.withdraw','uses'=>'UserController@withdraw']);
+        Route::get('Admin/withdrawlist',['as'=>'admin.withdrawlist','uses'=>'UserController@show_withdraw_list']);
+        Route::get('Admin/getnews','DashboardController@getnews');
     });
 
 });
