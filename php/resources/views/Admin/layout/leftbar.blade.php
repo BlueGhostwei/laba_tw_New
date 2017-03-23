@@ -14,8 +14,8 @@
         <div class="IName">
             <p class="name">@if(isset(Auth::user()->username) && Auth::user()->username!=null){{Auth::user()->username}}@endif</p>
             <p class="account">认证账户</p>
-            <a href="{{route('user.logout')}}"
-               style="line-height:20px; font-size:10px;  color: #cbc631; padding: 0 10px;">退出</a>
+            {{--<a href="{{route('user.logout')}}"
+               style="line-height:20px; font-size:10px;  color: #cbc631; padding: 0 10px;">退出</a>--}}
         </div>
         <div class="sidepanel-open-button"></div>
     </div>
@@ -24,14 +24,14 @@
 <div class="HYrukou">
     <li><a href="" class="nd2">会员信息</a></li>
     <li><a href="" class="nd2">会员信息</a></li>
-    <li><a href="" class="nd2">会员信息</a></li>
+    <li><a href="{{route('user.logout')}}" class="nd2">退出</a></li>
 </div>
 <!--右弹购物车-->
 <div role="tabpanel" class="sidepanel" style="display:none">
     <div style="background:#204186; float:left; width:260px; height:auto;">
         <div class="Hlogo"><img src="{{url('Admin/img/bn66.png')}}"/></div>
         <div class="IName">
-            <p class="name">1171801173@qq.com</p>
+            <p class="name">@if(isset(Auth::user()->username) && Auth::user()->username!=null){{Auth::user()->username}}@endif</p>
             <p class="account">认证账户</p>
         </div>
         <div class="sidepanel-open-button"></div>
@@ -47,7 +47,7 @@
         </div>
     </div>
     <div style="background:#1d3a78; float:left; width:260px; height:auto;">
-        <div class="IIO_nt">购物车共：<span> @if(!empty(get_order())){{count(get_order())}}@endif</span>个</div>
+        <div class="IIO_nt">购物车共：<span> @if(!empty(get_order())){{count(get_order())}} @else 0 @endif</span>个</div>
         <ul class="ITorder" id="apDiv1">
             @if(!empty(get_order()))
                 @foreach(get_order() as $key =>$vel)
@@ -198,10 +198,6 @@
 			</div>
             <ul class="menu">
                 <li><a href="{{route('vider.Event_list')}}"><div class="nd1">活动订单</div></a></li>
-                <li><a href=""><div class="nd2">预约订单</div></a></li>
-                <li><a href=""><div class="nd3">资源管理</div></a></li>
-                <li><a href=""><div class="nd4">账单查询</div></a></li>
-                <li><a href=""><div class="nd5">用户中心</div></a></li>
             </ul>
         </li>
     </ul>

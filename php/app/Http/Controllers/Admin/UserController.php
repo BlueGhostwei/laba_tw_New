@@ -70,7 +70,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return $this|\Illuminate\Http\RedirectResponse
-     * 验证用户登录
+     * 验证用户登录 手机号码邮箱登陆
      */
     public function post_login(Request $request)
     {
@@ -138,23 +138,35 @@ class UserController extends Controller
             $order = explode(',', $order);
             $user_order = [];
             foreach ($order as $k => $v) {
-                $result = News::where('id', $v)
+                $result = News::where(['id'=> $v,'status'=>'1'])
                     ->select('id', 'title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
                     ->get()->toArray();
                 $user_order[$k] = array_first($result);
             }
         } else {
-            $user_order = News::where('user_id', Auth::id())
+            $user_order = News::where(['user_id'=> Auth::id(),'status'=>'1'])
                 ->select('id', 'title', 'start_time', 'price', 'remark', 'created_at', 'news_type')
-                ->orderBy('id', 'desc')->get()->toArray();
+                ->orderBy('id', 'desc')->get()->toArray();//未支付订单
         }
         $count = count($user_order);
         return view('Admin.user.order_list', ['user_order' => $user_order, 'count' => $count]);
     }
 
     /**
+     *支付页面跳转封装函数最终返回url地址
+     */
+    public function Jump_page(){
+        if(Input::get('to')=='success'){
+            return view('Admin.pay.paySuccess');
+        }elseif(Input::get('to')=='error'){
+            return view('Admin.pay.payFail');
+        }else{
+            return Redirect()->route('admin.dashboard');
+        }
+    }
+    /**
      * @return mixed
-     * 用户提交结算订单
+     * 用户订单处理
      * array:4 [
      * "order_id" => "8,7"//订单id
      * "price" => "222"//价格
@@ -165,6 +177,15 @@ class UserController extends Controller
     public function Settlement()
     {
         $arr = Input::all();
+        //取消订单
+        if (isset($arr['type']) && $arr['type']=='cancel_order'){
+            $order_id=explode(',',$arr['order_id']);
+            foreach ($order_id as $k=>$v){
+              $price=News::where(['id'=>$v,'user_id'=>Auth::id()])->delete();
+            }
+            return json_encode(['msg'=>'请求成功','sta'=>'0','data'=>'']);
+        }
+        //支付订单
         if ($arr) {
             //验证密码
             $pass=$arr['password'];
@@ -176,25 +197,25 @@ class UserController extends Controller
             $order_id=explode(',',$arr['order_id']);
             foreach ($order_id as $k =>$v){
                 $price=News::where(['id'=>$v,'user_id'=>Auth::id()])->select('price','status')->first();
-                if($price->status=='2'){//订单已支付
+                if($price && $price->status=='2'){//订单已支付
                     return json_encode(['msg'=>'参数错误，请刷新页面重试！','sta'=>'1','data'=>'']);
                 }
                 if(empty($arr_p)){
                     $arr_p[$k]=$price->price;
                 }else{
-                    $arr_p=$arr_p[0]+$price->price;
+                    $arr_p=array_first($arr_p)+$price->price;
                 }
             }
             //对比价格（对比前端页面传过来的价格，true结算，false反馈）
-           if(!empty($arr_p) && $arr_p==$arr['price']){
+           if(!empty($arr_p) && array_first($arr_p)==$arr['price']){
                //查询账号余额
                if(Auth::user()->wealth < $arr['price'] ){
                    return json_encode(['msg'=>'账户余额不足，请充值！','sta'=>'1','data'=>'']);
                }
                //扣除金额
                //修改订单状态
+               //事务处理
                DB::transaction(function() use($arr,$order_id){
-
                    $wealth=Auth::user()->wealth - $arr['price'];
                    User::where('id',Auth::id())->update(['wealth'=>$wealth]);
                    foreach ($order_id as $key =>$vel){
@@ -204,11 +225,12 @@ class UserController extends Controller
                    Session::set('pay_status',$rvb);
                });
                $status=Session::get('pay_status');
-               if(!empty($status) && $status['sta']==1 && time()-($status['time']+20)<=0){
-                   return json_encode(['msg'=>'支付成功','sta'=>'0','data'=>'']);
+               if(!empty($status) && $status['sta']==1 && time()-($status['time']+20)<=0){//条件判断
+                   //返回支付状态，订单id，以备客户申请发票
+                   return json_encode(['msg'=>'支付成功','sta'=>'0','data'=>$arr['order_id']]);
                }else{
                    Session::forget('pay_status');
-                   return json_encode(['msg'=>'支付失败','sta'=>'1','data'=>'']);
+                   return json_encode(['msg'=>'支付失败','sta'=>'1','data'=>$arr['order_id']]);
                }
            }else{
                return json_encode(['msg'=>'参数错误，请刷新页面重试!','sta'=>'1','data'=>'']);
@@ -217,7 +239,10 @@ class UserController extends Controller
     }
 
 
-    //ios登陆
+    /**
+     * @return mixed
+     * ios登陆
+     */
     public function Api_postLogin()
     {
         $username = Input::get('username');

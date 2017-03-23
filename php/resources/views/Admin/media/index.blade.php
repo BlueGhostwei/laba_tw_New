@@ -399,22 +399,44 @@
 	});
 			 
 	$(".sbox_1_item .m ul li a").click(function () {
-		$(this).addClass("cur").parent("li").siblings("li").find("a").removeClass("cur");
 		var option = $(this).parents(".m").prev("span").attr("data");
-		var data_id = $(this).parent("li").attr("data_id");
 		var value = $.trim($(this).html());
+		if( typeof($(this).parent().attr("data_id")) == "undefined" ){
+			var data_id = "-1";
+		}else{
+			var data_id = $(this).parent().attr("data_id");
+		}
 		var li = "<li data='" + option + "' data_id='" + data_id + "'><a href=''>" + value + "</a></li>";
-//		console.log(li+"__"+value);
-		if (value == "不限") {
+		
+		if( data_id == "-1" ){
+			$(this).addClass("cur").parent().siblings("li").find("a").removeClass("cur");
 			$(".sbox_2 .m li[data='" + option + "']").remove();
-		} else if ($(".sbox_2 .m li[data='" + option + "']").length > 0) {
-			//$(".sbox_2 .m li[data='"+option+"']").remove();
-			$(".sbox_2 .m li[data='" + option + "']").find("a").html(value).parent("li").attr("data_id",data_id);
-		} else {
-			$(".sbox_2 .m").append(li);
+		}else{
+			if( option == "option_5" ){
+				if( $(this).hasClass("cur") ){
+					$(this).removeClass("cur");
+					$(this).parent().siblings("li").eq(0).find("a").addClass("cur");
+					$(".sbox_2 .m li[data='" + option + "'][data_id='" + data_id + "'").remove();
+				}else{
+					$(this).addClass("cur").parent().siblings("li").find("a").removeClass("cur");
+					$(".sbox_2 .m li[data='" + option + "']").remove();
+					$(".sbox_2 .m").append(li);
+				}
+			}else{
+				if( $(this).hasClass("cur") ){
+					$(this).removeClass("cur");
+					$(".sbox_2 .m li[data='" + option + "'][data_id='" + data_id + "'").remove();
+					if( $(this).closest("ul").find("a.cur").length < 1 ){
+						$(this).parent().siblings("li").eq(0).find("a").addClass("cur");
+					}
+				}else{
+					$(this).addClass("cur").parent().siblings("li").eq(0).find("a").removeClass("cur");
+					$(".sbox_2 .m").append(li);
+				}
+			}
 		}
 		
-		var  opt = getDataArr();
+		var  opt = getDataArr2();
 		var  key ='category_id';
 		var  dt=[];
 		for(var i=0;i< opt.length;i++){
@@ -436,14 +458,15 @@
 			url: '{{route('media.release')}}',
 			data: {
 				'keyword':key,
-				'data': [
-					{"category_id": opt[0]["category_id"], "data_id": opt[0]["data_id"]},
-					{"category_id": opt[1]["category_id"], "data_id": opt[1]["data_id"]},
-					{"category_id": opt[2]["category_id"], "data_id": opt[2]["data_id"]},
-					{"category_id": opt[3]["category_id"], "data_id": opt[3]["data_id"]},
-					{"category_id": opt[4]["category_id"], "data_id": opt[4]["data_id"]},
-					{"category_id": opt[5]["category_id"], "data_id": opt[5]["data_id"]}
-				],
+				// 'data': [
+					// {"category_id": opt[0]["category_id"], "data_id": opt[0]["data_id"]},
+					// {"category_id": opt[1]["category_id"], "data_id": opt[1]["data_id"]},
+					// {"category_id": opt[2]["category_id"], "data_id": opt[2]["data_id"]},
+					// {"category_id": opt[3]["category_id"], "data_id": opt[3]["data_id"]},
+					// {"category_id": opt[4]["category_id"], "data_id": opt[4]["data_id"]},
+					// {"category_id": opt[5]["category_id"], "data_id": opt[5]["data_id"]}
+				// ],
+				'data': opt,
 				'_token': _token
 			},
 			type: 'post',
@@ -511,6 +534,32 @@
 		return false;
 	});
 
+	function getDataArr2() {
+		var opt_2 = [];
+		$('.sbox_1_item').each(function(key,vel){
+				opt_2[key] = "";
+				if( $(this).find("ul li a.cur").length <= 1 ){
+					if( typeof($(this).find("ul li a.cur").parent().attr("data_id")) == "undefined" ){
+						var data_id = "-1";
+					}else{
+						var data_id = $(this).find("ul li a.cur").parent().attr("data_id");
+					}
+					opt_2[key] = data_id;
+				}else{
+					$(this).find("ul li a.cur").each(function(key2,vel2){
+						if( key2 == 0 ){
+							opt_2[key] += $(this).parent().attr("data_id");
+						}else{
+							opt_2[key] += "," + $(this).parent().attr("data_id");
+						}
+					});
+				}
+		});
+		console.log("opt_2:");
+		console.log(opt_2);
+		return opt_2;
+		
+	}
 	function getDataArr() {
 		var opt_1 = [];
 		$(".sbox_1_item").each(function () {
@@ -528,13 +577,15 @@
 		return opt_1;
 
 	}
-	
+
 	$(".sbox_2 .m").on("click", "li a", function () {
 		var option = $(this).parent("li").attr("data");
+		var data_id = $(this).parent("li").attr("data_id");
 		var value = $.trim($(this).html());
 		$(this).parent("li").remove();
-		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li a").removeClass("cur");
-		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").click();
+//		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li[data_id='" + data_id + "'] a").removeClass("cur");
+		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li[data_id='" + data_id + "'] a").click();
+//		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").click();
 //		$(".sbox_1_item span.l[data='" + option + "']").next(".m").find("ul li:first-child a").addClass("cur");
 		return false;
 	});
@@ -773,23 +824,23 @@ $.validator.setDefaults({
 		var key = "test1";
 		$.ajax({
 			url: '{{route('media.release')}}',
-			data: {
-				'keyword' : key
-				,'form5data' : {
-					"id": form5data["id"],
-					"name1": form5data["name1"],
-					"name2": form5data["name2"],
-						"name2_1": form5data["name2_1"],
-						"name2_2": form5data["Manuscripts"],
-						"name2_3": form5data["content"],
-					"name3": form5data["name3"],
-					"name4": form5data["name4"],
-					"name5": form5data["name5"],
-					"name6": form5data["name6"],
-					"agree": form5data["agree"]
-				}
-				,'_token' : _token
-			},
+            data: {
+                'keyword' : key,
+                'form5data' : {
+                    "media_id": form5data["id"],
+                    "title": form5data["name1"],
+                    "Manuscripts_attr": form5data["name2"],
+                    "url_line": form5data["name2_1"],
+                    "Manuscripts": form5data["Manuscripts"],
+                    "content": form5data["content"],
+                    "keyword": form5data["name3"],
+                    "start_time": form5data["name4"],
+                    "end_time": form5data["name5"],
+                    "remark": form5data["name6"],
+                    "agree": form5data["agree"]
+                },
+                '_token' : _token
+            },
 			type: 'post',
 			dataType: "json",
 			stopAllStart: true,
