@@ -75,7 +75,7 @@ class UploadController extends Controller
     {
         // 有效文件
         
-        $key = Input::get('fileKey', 'file');
+        $key = Input::get('fileKey','file');
         $file = Input::file($key);
         if (!$file || !$file->isValid()) return Response::json(array('sta' => 0, 'msg' => '无效的文件'));
         // 文件类型
@@ -212,7 +212,16 @@ class UploadController extends Controller
         ]);
     }
 
-
+//    public function upload(){
+//        $byte = Input::get('fileKey','file');
+//        $byte = str_replace(' ','',$byte);   //处理数据
+//        $byte = str_ireplace("<",'',$byte);
+//        $byte = str_ireplace(">",'',$byte);
+//        $byte=pack("H*",$byte);      //16进制转换成二进制
+//        $filename = time().'jpg';
+//        file_put_contents($filename,$byte);
+//
+//    }
     public function Cut_out(){
         //$new_id=11;
         //$set_pid=News::where('id',$new_id)->select('pid')->first();

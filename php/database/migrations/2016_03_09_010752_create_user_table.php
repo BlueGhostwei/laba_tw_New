@@ -21,7 +21,7 @@ class CreateUserTable extends Migration
             $table->string('username', 100)->unique();
 
             // 邮箱, 唯一
-            $table->string('user_Eail', 100)->nullable();
+            $table->string('user_Eail', 100)->unique()->nullable();
 
             // 密码, hash 值
             $table->string('password', 60);
@@ -55,7 +55,7 @@ class CreateUserTable extends Migration
             $table->string('wechat', 20)->nullable();*/
 
             // QQ
-            $table->integer('user_QQ')->nullable();
+            $table->string('user_QQ',30)->nullable();
 
             // 用户角色
             $table->tinyInteger('role')->default(1)->index();
@@ -79,6 +79,8 @@ class CreateUserTable extends Migration
             $table->integer('created_by')->unsigned()->default(0);
 
             $table->string('remarks', 100)->nullable();
+
+            $table->string('address',100)->nullable();
             // 自动维护的创建修改时间
             $table->timestamps();
             // 软删除
