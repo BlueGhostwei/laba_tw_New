@@ -479,22 +479,27 @@ class UserController extends Controller
         $money = Input::get('money');
         $payment = Input::get('payment');
         if($money>$user->wealth){
-            die(json_encode(['msg'=>'提现金额不能大于账户余额！','sta'=>'0','data'=>'']));
+            return json_encode(['msg'=>'提现金额不能大于账户余额！','sta'=>'1','data'=>'']);
         }
         $type = Input::get('type');
+        if(in_array('',Input::all())){
+            return json_encode(['msg'=>'不允许参数为空！','sta'=>'1','data'=>'']);
+        }
         $rsl = Hash::check($password, $user->password);
         if($rsl){
             $wealthlog = new Wealthlog();
             $wealthlog->user_id = $user->id;
-            $wealthlog->ordernumber = Controller::makePaySn(Auth::id());
+            $wealthlog->username = $user->username;
+            $wealthlog->order_code = Controller::makePaySn(Auth::id());
             $wealthlog->price = $money;
             $wealthlog->payment = $payment;
             $wealthlog->paytype = $type;
             $wealthlog->type = 0;
+            $wealthlog->title = '提现';
             $wealthlog->maketime = time();
             $wealthlog->money = $user->wealth;
             if($wealthlog->save()){
-                return json_encode(['msg'=>'操作成功，提现金额将会在24小时后到账。！','sta'=>'1','data'=>'']);
+                return json_encode(['msg'=>'操作成功，提现金额将会在24小时后到账。！','sta'=>'0','data'=>'']);
             }else{
                 return json_encode(['msg'=>'操作错误！','sta'=>'1','data'=>'']);
             }
@@ -505,7 +510,7 @@ class UserController extends Controller
 
 
     /**
-     * 返回提现列表
+     * 返回提现列表界面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show_withdraw_list(){
@@ -514,15 +519,21 @@ class UserController extends Controller
         return view('Admin/user/withdraw_list',['lists'=>$this->get_withdraw_list(),'type'=>$type]);
     }
 
+    /**
+     *
+     * 返回提现列表数据
+     * @return \Illuminate\Database\Query\Builder|\Illuminate\Support\Collection
+     */
+
     public function get_withdraw_list(){
         if (empty(Input::all())){
-            $data = DB::table('wealthlog')->limit(6)->orderBy('id','DESC')->get();
+            $data = DB::table('wealthlog')->limit(10)->orderBy('id','DESC')->get();
         }else{
             $page = Input::get('page');
             $keyword = Input::get('keyword');
             $starttime = empty(Input::get('start'))?null:Input::get('start');
             $end = empty(Input::get('end'))?null:Input::get('end');
-            $rev = '6';
+            $rev = '10';
             $offset = ($page-1)*$rev;
             $data = Db::table('wealthlog');
             if (!empty($keyword)){
@@ -540,6 +551,71 @@ class UserController extends Controller
         return $data;
     }
 
+    public function get_order_list(){
+//        dd($this->get_my_order());
+        return view('Admin/user/myorder',['lists'=>$this->get_my_order()]);
+    }
+
+    public function get_my_order(){
+        $type = Input::get('type');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $page = Input::get('page');
+        if(empty($type)&&empty($start)&&empty($end)&&empty($page)){
+            $data = DB::table('wealthlog')->where('user_id','=',Auth::id())->limit(10)->orderBy('id','DESC')->get();
+        }else{
+            $rev = '10';
+            $offset = ($page-1)*$rev;
+            $data = Db::table('wealthlog');
+            if(!empty($type)){
+                $data->where('type','=',$type);
+            }
+            if(!empty($start)&&!empty($end)){
+                $data->whereBetween('maketime', [strtotime($start), strtotime($end)]);
+            }
+            if(empty($type)||(empty($starttime)&&empty($end))){
+                $data->skip($offset)->take($rev);
+            }
+            $data->orderBy('id','DESC');
+            $data = $data->get();
+        }
+        return $data;
+    }
+    public function finish_withdraw(){
+        $id = Input::get('id');
+        if (empty($id)){
+            return response()->json(['msg'=>'参数不能为空！','sta'=>'1','data'=>'']);
+        }else{
+            $weathlog = Wealthlog::find($id);
+            $user = User::find($weathlog->user_id);
+            if($weathlog->state==1){
+                return response()->json(['msg'=>'该提现已完成！','sta'=>'1','data'=>'']);
+            }else{
+                $price = $weathlog->price;
+                $wealth = $user->wealth;
+                if($price>$wealth){
+                    $weathlog->state = 2;
+                    $weathlog->remark = '操作失败！余额不足!';
+                    $weathlog->save();
+                    return response()->json(['msg'=>'操作失败！余额不足!','sta'=>'1','data'=>'']);
+                }else{
+                    $bool = DB::transaction(function () use($price,$wealth,$weathlog,$user){
+                        $wealth = $wealth - $price;
+                        $weathlog->state = 1;
+                        $user->wealth = $wealth;
+                        $weathlog->save();
+                        $user->save();
+                    });
+                    if ($bool){
+                        return response()->json(['msg'=>'操作失败！','sta'=>'1','data'=>'']);
+                    }else{
+                        return response()->json(['msg'=>'操作成功!','sta'=>'0','data'=>'']);
+                    }
+                }
+            }
+
+        }
+    }
 
     /**
      * @param Request $request
@@ -702,7 +778,7 @@ class UserController extends Controller
     {
         $data = Input::get('data');
         if (count($data) == 0) {
-            die(json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']));
+            return json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']);
         }
         $checkbool = 0;
         for ($i = 0; $i < count($data); $i++) {

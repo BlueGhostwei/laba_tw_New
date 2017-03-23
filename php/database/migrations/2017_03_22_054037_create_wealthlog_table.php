@@ -26,7 +26,7 @@ class CreateWealthlogTable extends Migration
             //账户余额
             $table->decimal('money')->default(0)->commmit('账户余额');
             //订单号
-            $table->string('ordernumber',100)->commit("订单号");
+            $table->string('order_code',100)->commit("订单号");
             //创建时间
             $table->integer('maketime');
             //备注
@@ -40,7 +40,7 @@ class CreateWealthlogTable extends Migration
             //账号类型
             $table->integer('paytype')->commit('支付方式');
             //URL
-            $table->text('url')->commit('链接地址');
+            $table->text('url')->nullable()->commit('链接地址');
             //标题
             $table->string('title',100)->commit('标题');
             $table->timestamps();

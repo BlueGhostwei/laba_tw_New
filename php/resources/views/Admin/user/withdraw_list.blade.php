@@ -56,8 +56,10 @@
                                         <td>{{$list->created_at}}</td>
                                         @if($list->state==0)
                                             <td>审核</td>
-                                        @else
+                                        @elseif($list->state==1)
                                             <td>完成</td>
+                                        @else
+                                            <td>错误</td>
                                         @endif
                                         <td><a href="javascript:void(0)" onclick="withdraw({{$list->id}})">完成</a></td>
                                     </tr>
@@ -72,8 +74,47 @@
                 </div></div>
         </div></div>
     <script type="text/javascript">
+
         function withdraw(id) {
-            console.log(id);
+            {{--$.ajax({--}}
+                {{--type:"POST",--}}
+                {{--url:"{{url('Admin/finish_withdraw')}}",--}}
+                {{--data:{--}}
+                    {{--id:id--}}
+                {{--},--}}
+                {{--success:function(data) {--}}
+
+                    {{--layer.msg(data['msg']);--}}
+
+                {{--}--}}
+
+            {{--})--}}
+
+        layer.confirm('确定操作么？', {
+                btn: ['确定','放弃'] //按钮
+            }, function(){
+                $.ajax({
+                    type:"POST",
+                    url:"{{url('Admin/finish_withdraw')}}",
+                    data:{
+                        id:id
+                    },
+                    success:function (data) {
+
+                            if(data.sta==0){
+                                layer.msg(data.msg, {icon: 1});
+                            }else{
+                            layer.alert(data.msg, {icon: 2});
+                        }
+
+
+                    }
+
+                })
+
+            })
+
         }
+
     </script>
 @endsection

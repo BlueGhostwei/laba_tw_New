@@ -178,6 +178,8 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::post('Admin/withdraw',['as'=>'admin.withdraw','uses'=>'UserController@withdraw']);
         Route::get('Admin/withdrawlist',['as'=>'admin.withdrawlist','uses'=>'UserController@show_withdraw_list']);
         Route::get('Admin/getnews','DashboardController@getnews');
+        Route::get('Admin/myorder',['as'=>'admin.myorder','uses'=>'UserController@get_order_list']);
+        Route::post('Admin/finish_withdraw',['as'=>'admin.finishwithdraw','uses'=>'UserController@finish_withdraw']);
     });
 
 });
