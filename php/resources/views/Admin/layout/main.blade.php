@@ -25,9 +25,9 @@
     <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor/ueditor.config.js')}}"></script>
     <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/ueditor/ueditor.all.min.js')}}"> </script>
     <script type="text/javascript" charset="utf-8" src="{{url('Admin/js/zh-cn.js')}}"></script>
+	<script type="text/javascript" src="{{url('Admin/js/jquery.form.min.js')}}"></script>
 	<!--[if lt IE 9]> 
 	<script type="text/javascript" src="{{url('Admin/js/html5shiv.min.js')}}"></script>
-	<script type="text/javascript" src="{{url('Admin/js/formdata.js')}}"></script>
 	<![endif]-->
     @yield('header_related')
 </head>

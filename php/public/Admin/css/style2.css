@@ -331,7 +331,7 @@ body .sbox_5 .WMain3 .time1-error,
 body .sbox_5 .WMain3 .time2-error{	color:#f00;		}
 #datepicker1-error,
 #datepicker2-error{	display:none!important;		}
-
+#name2_2-error{		float:right;	}
 
 /*	问答任务列表	*/
 table.table_in1_2{	margin:0 auto;	border-left:1px solid #F2F2F2;	border-right:1px solid #F2F2F2;	}
@@ -747,7 +747,9 @@ ul.list_art1 li .rb a.more{	color:#333333;	font-size:12px;	float:right;	margin-r
 
 
 
-
+/*	上传文件框	*/
+#shangchuan .txt7{	width:67px;	}
+#Manuscripts{	height:36px;cursor:pointer;opacity:0;filter:alpha(opacity=0);z-index:1000;width:67px;padding:0;background:red;	}
 
 
 

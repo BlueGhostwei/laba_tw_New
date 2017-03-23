@@ -195,9 +195,9 @@
 						</div>
 						<div class="sbox_5" style=" ">
 							<!--	稿件上传表单	-->
-							<form id="form1" method="post">
+							<form id="form1" style="position:absolute;z-index:1000;">
 								{{ csrf_field() }}
-								<input type="file" name="file" id="Manuscripts" class="txt6" 
+								<input type="file" name="file" id="Manuscripts" class="txt6 txt6_up" 
 									style="display:none;opacity:0;"	/>
 							</form>
 							<form id="form5">
@@ -213,12 +213,12 @@
                                                         </div>
                                                         <div class="WMain3"><p><i class="LGntas">*</i>稿件内容:</p>
                                                             <label><input type="radio" name="name2" value="1" checked 
-                                                                          onclick="waibu.style.display='';shangchuan.style.display='none';bianji.style.display='none';"
+                                                                          onclick="waibu.style.display='';shangchuan.style.display='none';bianji.style.display='none';$('#Manuscripts').hide();"
                                                                           checked/>外部连接</label>
                                                             <label><input type="radio" name="name2" value="2"  
-                                                                          onclick="shangchuan.style.display='';waibu.style.display='none';bianji.style.display='none';"/>上传文档</label>
+                                                                          onclick="shangchuan.style.display='';waibu.style.display='none';bianji.style.display='none';$('#Manuscripts').show();setOffset('#Manuscripts','#upload_file');"/>上传文档</label>
                                                             <label><input type="radio" name="name2" value="3" 
-                                                                          onclick="bianji.style.display='';waibu.style.display='none';shangchuan.style.display='none';"/>内部编辑</label>
+                                                                          onclick="bianji.style.display='';waibu.style.display='none';shangchuan.style.display='none';$('#Manuscripts').hide();"/>内部编辑</label>
                                                         </div>
                                                         <div id="waibu" title="外部连接">
                                                             <div class="WMain3"><p><i class="LGntas">*</i>外部链接:</p>
@@ -228,8 +228,8 @@
 														</div>
                                                         <div id="shangchuan" title="上传文档" style="display: none;">
 															<div class="WMain3 WMain3_2"><p><i class="LGntas">*</i>稿件导入:</p>
-																	<input type="text" name="name2_2" id="name2_2" class="txt6" />
-																	<button type="button" name="upload_file" id="upload_file" class="txt7" style="height:32px;" />
+																	<input type="text" name="name2_2" id="name2_2" class="txt6" readonly />
+																	<button type="button" name="upload_file" id="upload_file" class="txt7" style="height:32px;" >
 																	导入</button><br/>
 																	<span style="margin-left: 145px;">选填，如果您的文章已编辑完成，请复制链接到此处，并点击“导入”。</span>
 															</div>
@@ -640,10 +640,39 @@
 	});
 
 	/*	稿件上传	*/
+	var options = {
+        url : "{{url('upload')}}",
+		type : "post",
+		data : { return_type : "string" },
+		enctype: 'multipart/form-data',
+        success : function(ret) {
+			console.log("ret1:")
+			console.log(typeof(ret))
+			console.log(ret)
+			if( typeof(ret) == "string" ){	ret = JSON.parse(ret);	}
+			if(ret.sta == "1"){
+				layer.msg('文件上传成功');
+				$('input[name="name2_2"]').val(ret.md5);
+			}else{
+				layer.msg(ret.msg);
+			}
+        },  
+        error : function(ret){  
+			layer.msg("网络错误");
+			console.log(ret);
+			console.log(JSON.parse(ret.responseText).msg);
+        },  
+		clearForm : false,
+        timeout : 100000
+    };
+	
 	$("#upload_file").click(function(){
 		$("#Manuscripts").click();
-		$("#Manuscripts").change(function () {
-			//创建FormData对象
+	});
+	
+	$("#Manuscripts").change(function () {
+		$("#form1").ajaxSubmit(options);
+/* 			//创建FormData对象
 			var data = new FormData($('#form1')[0]);
 			$.ajax({
 				url: '{{url('upload')}}',
@@ -660,8 +689,7 @@
 				}else{
 					layer.msg('文件上传失败');
 				}
-			});
-		});
+			}); */
 	});
 	
 	
@@ -718,8 +746,8 @@
 			form5data['agree'] = "0";
 		}
 		
-		console.log("click:");
-		console.log(form5data);
+//		console.log("click:");
+//		console.log(form5data);
 	});
 	
 	$("input[name=agree]").change(function(){
@@ -842,16 +870,15 @@ $.validator.setDefaults({
 		return flag;
 	}, "请选择开始时间24小时后，7天之内的时间");
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+/*	将ele1定位到ele2	*/
+function setOffset(ele1,ele2){
+	var top = $(ele2).offset().top;
+	var left = $(ele2).offset().left;
+	$(ele1).show().offset({"left":left,"top":top});
+	console.log(left)
+	console.log(top)
+}	
+setOffset("#Manuscripts","#upload_file");
 	
 	
 	
