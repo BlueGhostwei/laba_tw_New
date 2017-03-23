@@ -12,6 +12,7 @@ use Illuminate\Validation\Rules\In;
 use Redirect;
 use Response;
 use DB;
+use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-//        $page =  ceil(count(Db::table('news')->get())/6);
+        //        $page =  ceil(count(Db::table('news')->get())/6);
         return view('Admin.dashboard.league-agent',['news'=>DB::table('news')->get()]);
     }
 
@@ -38,10 +39,12 @@ class DashboardController extends Controller
     }
     public function getNewspage(){
         $page = Input::get('page');
-
         $page = empty($page)?1:$page;
         $data = $this->getNewslist($page);
         return view('Admin.dashboard.newspage',['data'=>$data]);
+    }
+    public function getnews(){
+        return json_encode(['msg'=>'msg','sta'=>'0','data'=>$this->getNewslist(1)]);
     }
 
     public function searchNewspage(){

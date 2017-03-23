@@ -18,6 +18,12 @@ class PayController extends Controller
 {
 
     /**
+     *
+     * ios支付宝签名
+     */
+
+
+    /**
      * @return mixed
      * 手机支付
      */

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\AclRole;
 use App\Models\AclUser;
 use App\Models\News;
+use App\Models\Order;
+use App\Models\Wealthlog;
+use League\Flysystem\Exception;
 use Session;
 use Hash;
 use Illuminate\Http\Request;
@@ -267,6 +270,7 @@ class UserController extends Controller
                 'username' => $username,
                 'password' => $password,
                 'redirect' => $redirect,
+                'role'=>$set_user[0]['role']
             ]);
             //dd(json_encode($data));
             return json_encode(['sta' => "0", 'msg' => "请求成功", 'data' => $data], JSON_UNESCAPED_UNICODE);
@@ -381,7 +385,9 @@ class UserController extends Controller
         foreach ($user as $k => $v) {
             $user[$k] = !empty($user[$k]) ? $v : "";
         }
-        return json_encode(['msg' => '', 'sta' => "0", 'data' => $user]);
+        $user['user_avatar'] = md52url($user['user_avatar']);
+        return json_encode(['msg'=>'','sta'=>"0",'data'=>$user]);
+
     }
 
     /**
@@ -452,6 +458,113 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * 显示提现界面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show_withdraw(){
+        $user = Auth::user();
+        $type = Config::get('payway');
+        return view('Admin.user.withdraw',['types'=>$type,'wealth'=>$user->wealth]);
+    }
+
+    /**
+     * 返回最新的8个用户数据
+     * @return string
+     */
+    public function get_new_user(){
+        $users = User::select('username','nickname','user_avatar')->orderBy('id','DESC')->limit(8)->get();
+        foreach ($users as $user=>$value){
+            $value->user_avatar = md52url($value->user_avatar);
+        }
+        return json_encode(['msg'=>'获取成功！','sta'=>"0",'data'=>$users]);
+    }
+
+    /**
+     * IOS 接口 获取提现相关内容
+     * @return string
+     */
+
+    public function get_withdraw_data(){
+        $user = Auth::user();
+        $wealth = $user->wealth;
+        $type = Config::get('payway');
+        return json_encode(['msg'=>'获取成功！','sta'=>'0','data'=>['wealth'=>$wealth,'type'=>$type]]);
+    }
+
+    /**
+     *
+     *生成提现订单接口
+     * @param password个人密码 money提现金额 payment提现账号 type提现方式
+     * @return string
+     */
+    public function withdraw(){
+        $user = Auth::user();
+        $password = Input::get('password');
+        $money = Input::get('money');
+        $payment = Input::get('payment');
+        if($money>$user->wealth){
+            die(json_encode(['msg'=>'提现金额不能大于账户余额！','sta'=>'0','data'=>'']));
+        }
+        $type = Input::get('type');
+        $rsl = Hash::check($password, $user->password);
+        if($rsl){
+            $wealthlog = new Wealthlog();
+            $wealthlog->user_id = $user->id;
+            $wealthlog->ordernumber = Controller::makePaySn(Auth::id());
+            $wealthlog->price = $money;
+            $wealthlog->payment = $payment;
+            $wealthlog->paytype = $type;
+            $wealthlog->type = 0;
+            $wealthlog->maketime = time();
+            $wealthlog->money = $user->wealth;
+            if($wealthlog->save()){
+                return json_encode(['msg'=>'操作成功，提现金额将会在24小时后到账。！','sta'=>'1','data'=>'']);
+            }else{
+                return json_encode(['msg'=>'操作错误！','sta'=>'1','data'=>'']);
+            }
+        }else{
+            return json_encode(['msg'=>'密码错误！','sta'=>'1','data'=>'']);
+        }
+    }
+
+
+    /**
+     * 返回提现列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show_withdraw_list(){
+        $type = Config::get('payway');
+        $type =array_column($type, 'name', 'id');
+        return view('Admin/user/withdraw_list',['lists'=>$this->get_withdraw_list(),'type'=>$type]);
+    }
+
+    public function get_withdraw_list(){
+        if (empty(Input::all())){
+            $data = DB::table('wealthlog')->limit(6)->orderBy('id','DESC')->get();
+        }else{
+            $page = Input::get('page');
+            $keyword = Input::get('keyword');
+            $starttime = empty(Input::get('start'))?null:Input::get('start');
+            $end = empty(Input::get('end'))?null:Input::get('end');
+            $rev = '6';
+            $offset = ($page-1)*$rev;
+            $data = Db::table('wealthlog');
+            if (!empty($keyword)){
+                $data->where('username','like','%'.$keyword.'%');
+            }
+            if (!empty($starttime)&&!empty($end)){
+                $data->whereBetween('maketime', [strtotime($starttime), strtotime($end)]);
+            }
+            if(empty($keyword)||(empty($starttime)&&empty($end))){
+                $data->skip($offset)->take($rev);
+            }
+            $data->orderBy('id','DESC');
+            $data = $data->get();
+        }
+        return $data;
+    }
+
 
     /**
      * @param Request $request
@@ -460,6 +573,8 @@ class UserController extends Controller
      */
     public function update_info(Request $request)
     {
+        ob_start();
+
         $id = Auth::id();
         $type = Input::get('type');
         $Old_pass = Input::get('old_pass');
@@ -467,6 +582,7 @@ class UserController extends Controller
         $user_Eail = Input::get('user_Eail');
         $user_code = Input::get('user_code');
         $user = User::find($id);
+
         switch ($type) {
             case "update_info";
                 if ($user) {
@@ -481,20 +597,32 @@ class UserController extends Controller
                         }
                     }
                     $result = User::where('id', $id)->update([
-                        'user_avatar' => $request->user_avatar,
-                        'company_name' => $request->company_name,
-                        'user_phone' => $request->user_phone,
-                        'nickname' => $request->nickname,
-                        'contact_person' => $request->contact_person,
-                        'user_Eail' => "$request->user_Eail",
-                        'user_QQ' => $request->user_QQ
+                        'user_avatar' => isset($request->user_avatar)?$request->user_avatar:"\\0",
+                        'company_name' => isset($request->company_name)?$request->company_name:"\0",
+                        'user_phone' => isset($request->user_phone)?$request->user_phone:"\0",
+                        'nickname' => isset($request->nickname)?$request->nickname:"\0",
+                        'contact_person' => isset($request->contact_person)?$request->contact_person:"\0",
+                        'user_Eail' => isset($request->user_Eail)?$request->user_Eail:"\0",
+                        'user_QQ' => isset($request->user_QQ)?$request->user_QQ:"\0",
+                        'address'=>isset($request->address)?$request->address:''
                     ]);
+
+
+
+
+
                     if ($result) {
                         return json_encode(['msg' => '更新资料成功', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
                     } else {
                         return json_encode(['msg' => '更新资料失败', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
                     }
                 }
+                $str = ob_get_contents();
+                dd($str);
+                ob_end_clean();
+                $fp = fopen("test.html","w+");
+                fwrite($fp,$str);
+                fclose($fp);
                 break;
             case "update_pass";
                 if (!empty($Old_pass)) {
@@ -551,6 +679,7 @@ class UserController extends Controller
                 }
                 break;
         }
+
     }
 
     /**
@@ -661,6 +790,7 @@ class UserController extends Controller
 //        dd($users);
         foreach ($users as $k => $v) {
 //            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
+
             if ($users[$k]['created_by'] != 0) {
                 $users[$k]['created_by'] = User::find($users[$k]['created_by'])->username;
             } else {
@@ -675,7 +805,7 @@ class UserController extends Controller
     {
         $type = Input::get('type');
         $username = Input::get('username');
-//        dd($username);
+
         $users = User::orderBy('user.id', 'Desc')->select('user.username', 'user.id', 'user.role', 'user.created_at', 'user.created_by', 'user.lock', 'acl_user.acl_name', 'user.wealth')->join('acl_user', 'user.role', 'acl_user.acl_id')->where('user.username', 'like', '%' . $username . '%')->paginate(10);
         foreach ($users as $k => $v) {
 //            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
@@ -707,6 +837,8 @@ class UserController extends Controller
             $user = null;
         } else {
             $user = User::find($id);
+            $user->pic = md52url($user->user_avatar);
+//            dd($user);
         }
         return view('Admin.user.userAdd', ['user' => $user, 'aclusers' => $acl]);
     }
@@ -720,11 +852,12 @@ class UserController extends Controller
     public function addUser_api(Request $request)
     {
         $data = $request->all();
+//        dd($data);
         $type = $data['type'];
         $id = intval($data['id']);
         switch ($type) {
             case 'add':
-                $passbool = $data['pass'] == $data['pass1'];
+$passbool = $data['pass'] == $data['pass1'];
                 $bool = !empty($data['username']) && !empty($data['pass']) && !empty($data['pass1']) && !empty($data['role']) && isset($data['lock']);
                 if ($bool && $passbool) {
                     if (empty(User::where('username', $data['username'])->first())) {
@@ -735,13 +868,17 @@ class UserController extends Controller
                         $user->role = $data['role'];
                         $user->contact_person = $data['person'];
                         $user->user_Eail = $data['mail'];
-                        $user->created_by = Auth::id();
-                        $user->user_phone = $data['phone'];
+                        $user->created_by =Auth::id();
+                        $user->address = $data['address'];
                         $user->lock = $data['lock'];
-                        if ($user->save()) {
-                            return json_encode(['msg' => '添加成功！', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                        } else {
-                            return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                        $user->user_avatar=$data['pic'];
+                        $user->company_name =$data['company'];
+                        $user->user_QQ =$data['qq'];
+                        if($user->save()){
+                            return json_encode(['msg' => '添加成功！', 'sta' => '0', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                        }else{
+                            return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+
                         }
                     } else {
 //                            dd(User::where('username', $data['username'])->first());
@@ -764,10 +901,15 @@ class UserController extends Controller
                     $user->user_Eail = $data['mail'];
                     $user->user_phone = $data['phone'];
                     $user->lock = $data['lock'];
-                    if ($user->save()) {
-                        return json_encode(['msg' => '修改成功！', 'sta' => '0', 'data' => ''], JSON_UNESCAPED_UNICODE);
-                    } else {
-                        return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    $user->address = $data['address'];
+                    $user->user_avatar=$data['pic'];
+                    $user->company_name =$data['company'];
+                    $user->user_QQ =$data['qq'];
+                    if($user->save()){
+                        return json_encode(['msg' => '修改成功！', 'sta' => '0', 'data' =>''], JSON_UNESCAPED_UNICODE);
+                    }else{
+                        return json_encode(['msg' => '内部错误！', 'sta' => '1', 'data' =>''], JSON_UNESCAPED_UNICODE);
+
                     }
                 } else {
                     return json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);

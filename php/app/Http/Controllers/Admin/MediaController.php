@@ -79,6 +79,22 @@ class MediaController extends Controller
                     ->orderBy('id', 'desc')->get()->toArray();
                 $data_list = $this->to_sql_array($data_list);
             } else {
+                $data = array (
+                    0 => '6,24',
+                    1 => '1,10',
+                    2 => '2,4',
+                    3 => '3,233,706,1006',
+                    4 => '4,14',
+                    5 => '5,21,19',
+                    6 => '6,24',
+                );
+
+
+                dd($this->build_sql_ios());
+                $handle = fopen('log.txt','a+');
+                fwrite($handle,var_export(Input::all(),true));
+                fwrite($handle,"\r\n");
+                fclose($handle);
                 $media_cate = Input::get('data');
                 $sql = $this->build_sql($media_cate);
                 $data_list = DB::select($sql);
@@ -160,6 +176,15 @@ class MediaController extends Controller
      */
     protected function build_sql($array)
     {
+        $data = array (
+            0 => '0,16,31,29',
+            1 => '1,10',
+            2 => '2,4',
+            3 => '3,233,706,1006',
+            4 => '4,14',
+            5 => '5,21,19',
+            6 => '6,24',
+        );
 
         $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
         foreach ($array as $k => $v) {
@@ -176,6 +201,39 @@ class MediaController extends Controller
         return $sql;
     }
 
+
+    public function build_sql_ios(){
+        $data = array (
+            0 => '5,21,19',
+            1 => '1,10',
+            2 => '2,4',
+            3 => '3,233,706,1006',
+            4 => '4,14',
+            5 => '5,21,19',
+            6 => '6,24',
+        );
+        $price = Config::get('price');
+        $sqlarr = array_column($price, 'sql', 'id');
+        dd($sqlarr);
+        $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
+        foreach ($data as $k => $v) {
+            $arr = explode(',',$v);
+            $key = $arr[0]; unset($arr[0]);
+            asort($arr);
+            $arr = implode(",",$arr);
+            if($arr =='0'){
+            }else{
+                if($key == '5'){
+                }else{
+                    $sql .= "instr(concat(',',".Get_Set_Name($key).",','),',$arr,')<>0 AND ";
+                }
+            }
+        }
+        $sql = substr($sql, 0, -4);
+        $sql .= " order by id desc";
+        return $sql;
+    }
+
     /**
      * @param $data_list
      * @return mixed
@@ -184,16 +242,47 @@ class MediaController extends Controller
     protected function to_sql_array($data_list)
     {
         foreach ($data_list as $k => $vel) {
-            $vel->coverage = empty(DB::table('region')->where('id', $vel->coverage)->pluck('name')->first()) ? '' : DB::table('region')->where('id', $vel->coverage)->pluck('name')->first();
-            //$vel->network = DB::table('category')->where('id', $vel->network)->select('name', 'id')->get()->toArray();
-            $vel->Entrance_level = empty(DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first()) ? '' : DB::table('category')->where('id', $vel->Entrance_level)->pluck('name')->first();
-            $vel->Entrance_form = empty(DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first()) ? '' : DB::table('category')->where('id', $vel->Entrance_form)->pluck('name')->first();
-            $vel->channel = empty(DB::table('category')->where('id', $vel->channel)->pluck('name')->first()) ? '' : DB::table('category')->where('id', $vel->channel)->pluck('name')->first();
-            $vel->standard = empty(DB::table('category')->where('id', $vel->standard)->pluck('name')->first()) ? '' : DB::table('category')->where('id', $vel->standard)->pluck('name')->first();
+            if($vel->coverage==0){
+                $vel->coverage ='不限';
+            }else{
+                $arr = explode(',',$vel->coverage);
+                $vel->coverage = '';
+//                dd($arr);
+//                dd($vel->coverage);
+                for($i=0;$i<count($arr);$i++){
+                    $vel->coverage .=  DB::table('region')->where('id', $arr[$i])->pluck('name')->first();
+                    $vel->coverage .=',';
+                }
+            }
+
+
+            $vel->Entrance_level = $this->get_category($vel->Entrance_level);
+            $vel->Entrance_form = $this->get_category($vel->Entrance_form);
+            $vel->channel = $this->get_category($vel->channel);
+            $vel->standard = $this->get_category($vel->standard);
+
+
+
+
             $vel->media_md5 = empty(md52url($vel->media_md5)) ? '' : md52url($vel->media_md5);
             $vel->diagram_img = empty(md52url($vel->diagram_img)) ? '' : md52url($vel->diagram_img);
         }
         return $data_list;
+    }
+    public function get_category($key){
+        if($key==0){
+            $key ='不限';
+        }else{
+            $arr = explode(',',$key);
+            $key = '';
+//                dd($arr);
+//                dd($vel->coverage);
+            for($i=0;$i<count($arr);$i++){
+                $key .=  DB::table('category')->where('id', $arr[$i])->pluck('name')->first();
+                $key .=',';
+            }
+        }
+        return $key;
     }
 
     protected function to_sql($data_list)

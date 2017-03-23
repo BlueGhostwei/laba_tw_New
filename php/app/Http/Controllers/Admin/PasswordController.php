@@ -126,6 +126,99 @@ class PasswordController extends Controller
         }
     }
 
+
+    public function pass_find_api()
+    {
+        $username = Input::get('username');
+        $user_code = Input::get('user_code');
+        $send_type = Input::get('send_type');
+        $user_pass = Input::get('password');
+//        $username = '454960120@qq.com';
+//        $user_code = 4293;
+//        $send_type = 1;
+//        $user_pass = '123456';
+        if(empty($user_pass)||strlen($user_pass)<6){
+            return json_encode(['msg' => '密码不能为空或短于6位！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+        }
+
+        if ($send_type != null && $send_type == 0) {
+            $sel_user = User::Where('username', $username)->get();
+            if (!empty($sel_user)) {
+                //发送手机验证码
+                $set_user = Redis::get('user_SMS');
+                $v1 = json_decode($set_user, true);
+                if ($v1['type'] == 'find_pass' && $username == $v1['user_phone']) {
+                    if ($v1['code'] == $user_code) {
+                        $end_time=$v1['Send_time'];
+                        $endtime = date('Y-m-d H:i:s', $end_time + 180);
+                        $this_time = date('Y-m-d H:i:s', time());
+                        $second = intval((strtotime($this_time) - strtotime($endtime)) % 86400);
+                        if ($second <> 0 && $second < 0) { //小于零
+                            $array2 = array(
+                                'user_phone' => $username,
+                                'Send_time' => time(),
+                                'code' => $user_code,
+                                'type' => 0,
+                                'sta' => true
+                            );
+                            Redis::del('uses_SMS');
+                            Redis::set('uses_find', json_encode($array2));
+                            $result= User::where('username', $username)->update(['password' => bcrypt($user_pass)]);
+                            return json_encode(['msg' => '修改成功！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+//                            return Redirect::route('Admin.pass_Overlay', ['username' => $username]);
+                        }else{
+                            Redis::del('uses_SMS');
+                            return json_encode(['msg' => '验证失败，验证超时！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+                        }
+                    } else {
+                        return json_encode(['msg' => '验证码错误！'.$user_code, 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    }
+                } else {
+                    return json_encode(['msg' => '请求错误！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+
+                }
+            } else {
+                return json_encode(['msg' => '该手机号码与用户绑定的手机号码不一致！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }
+
+        }else{
+            //邮箱验证
+            $sel_user = User::Where('user_Eail', $username)->get();
+            if (empty($sel_user)){
+                return json_encode(['msg' => '该邮箱未绑定用户！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+            }else{
+                $set_user = Redis::get('pass_email');
+                $v1 = json_decode($set_user, true);
+                if ($username==$v1['user_Eail'] && $user_code==$v1['user_code']){
+                    $end_time=$v1['send_time'];
+                    $endtime = date('Y-m-d H:i:s', $end_time + 180);
+                    $this_time = date('Y-m-d H:i:s', time());
+                    $second = intval((strtotime($this_time) - strtotime($endtime)) % 86400);
+                    if ($second <> 0 && $second < 0) { //小于零
+                        $array2 = array(
+                            'pass_email' => $username,
+                            'Send_time' => time(),
+                            'code' => $user_code,
+                            'type' => 1,
+                            'sta' => true
+                        );
+                        Redis::del('pass_email');
+                        Redis::set('uses_find',json_encode($array2));
+                        $result= User::where('user_Eail', $username)->update(['password' => bcrypt($user_pass)]);
+                        return json_encode(['msg' => '', 'sta' => 0, 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }else{
+                        return json_encode(['msg' => '请求失败,验证超时！', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+                    }
+                }else{
+                    return json_encode(['msg' => '验证码错误！'.$user_code, 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
+                }
+
+            }
+        }
+    }
+
+
+
     /**
      *
      * 重置密码
@@ -151,7 +244,7 @@ class PasswordController extends Controller
                 if (isset($rvb['user_phone']) && $rvb['user_phone'] == $user && $rvb['sta'] == true && $rvb['sta']==0) {
                     Redis::del('uses_find');
                     $result= User::where('username', $user)->update(['password' => bcrypt($user_pass)]);
-                    return json_encode(['msg' => '请求成功', 'sta' => 1, 'data' => '']);
+                    return json_encode(['msg' => '请求成功', 'sta' => 0, 'data' => '']);
                 }elseif($user && $rvb['sta'] == true && $rvb['sta']==1){
                     Redis::del('uses_find');
                     $result= User::where('username', $user)->update(['password' => bcrypt($user_pass)]);
@@ -280,9 +373,11 @@ class PasswordController extends Controller
      */
     public function send_email()
     {
+//        dd(Input::all());
         if(!empty(Input::get('username')) && !empty(Input::get('user_email'))){
-            $result= User::where('username',Input::get('username'))->orWhere('user_Eail',Input::get('user_email'))->select('id')->get()->toArray();
+            $result= User::where('username',Input::get('username'))->Where('user_Eail',Input::get('user_email'))->select('id')->get()->toArray();
             //调用邮件接
+//            dd($result);
             if(!empty($result)){
                 $rand_code=Controller::get_random();
                 $msg="尊敬的用户，您的验证码是：".$rand_code;
@@ -307,6 +402,10 @@ class PasswordController extends Controller
             return json_encode(['msg' => '邮件发送失败，请完善信息', 'sta' => 1, 'data' => ''], JSON_UNESCAPED_UNICODE);
         }
     }
+
+
+
+
 
 
 
