@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/user/safety_update/{s1}',['as'=>'member.safety_update','uses'=>'UserController@safety_update']);
 
         //用户中心
-        Route::get('Admin/user/ginfo','UserController@update_info');//会员信息
+        Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
         Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
         //媒体供应商
@@ -178,12 +178,12 @@ Route::group(['middleware' => ['auth','acl']], function () {
 
         Route::post('Admin/newuser',['as'=>'admin.newuser','uses'=>'UserController@get_new_user']);
 
-        Route::post('Admin/getwithdraw',['as'=>'admin.getwithdraw','uses'=>'UserController@get_withdraw_data']);
-        Route::post('Admin/withdraw',['as'=>'admin.withdraw','uses'=>'UserController@withdraw']);
-        Route::get('Admin/withdrawlist',['as'=>'admin.withdrawlist','uses'=>'UserController@show_withdraw_list']);
+        Route::post('Admin/getwithdraw',['as'=>'admin.getwithdraw','uses'=>'UserController@get_withdraw_data']);//获取提现信息
+        Route::post('Admin/withdraw',['as'=>'admin.withdraw','uses'=>'UserController@withdraw']);//提现
+        Route::get('Admin/withdrawlist',['as'=>'admin.withdrawlist','uses'=>'UserController@show_withdraw_list']);//提现列表
         Route::get('Admin/getnews','DashboardController@getnews');
-        Route::get('Admin/myorder',['as'=>'admin.myorder','uses'=>'UserController@get_order_list']);
-        Route::post('Admin/finish_withdraw',['as'=>'admin.finishwithdraw','uses'=>'UserController@finish_withdraw']);
+        Route::get('Admin/myorder',['as'=>'admin.myorder','uses'=>'UserController@get_order_list']);//会员账单
+        Route::post('Admin/finish_withdraw',['as'=>'admin.finishwithdraw','uses'=>'UserController@finish_withdraw']);//完成提现
     });
 
 });

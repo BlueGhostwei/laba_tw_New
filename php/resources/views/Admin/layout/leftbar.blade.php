@@ -146,8 +146,11 @@
                 <li><a href="{{route('member.Onlnetop_up')}}">
                         <div class="nd2n">在线充值</div>
                     </a></li>
-                <li><a href="{{route('user.order_list')}}">
-                        <div class="nd2n">我的订单</div>
+                <li><a href="{{route('admin.withdraw')}}">
+                        <div class="nd2n">账户提现</div>
+                    </a></li>
+                <li><a href="{{route('admin.withdrawlist')}}">
+                        <div class="nd2n">提现列表</div>
                     </a></li>
             </ul>
         </li>
@@ -189,6 +192,12 @@
                     </a></li>
                 <li><a href="{{route('category.media_List')}}">
                         <div class="nd3n">媒体列表</div>
+                    </a></li>
+                <li><a href="{{route('admin.adduser')}}">
+                        <div class="nd3n">新增用户</div>
+                    </a></li>
+                <li><a href="{{route('admin.userlist')}}">
+                        <div class="nd3n">用户管理</div>
                     </a></li>
             </ul>
         </li>

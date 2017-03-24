@@ -74,6 +74,13 @@ class DashboardController extends Controller
         return DB::select($sql);
     }
 
+    public function get_news(){
+        $type = Input::get('type');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $order = Input::get('order');
+    }
+
 
 
 }

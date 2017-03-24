@@ -113,52 +113,6 @@
                                     @endif
                                     </tbody>
                                 </table>
-                                <table class="table_in1">
-                                    <thead>
-                                    <tr>
-                                        <th>日期</th>
-                                        <th>订单号</th>
-                                        <th>订单类型</th>
-                                        <th>订单名称</th>
-                                        <th>截图/链接</th>
-                                        <th>金额</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-
-                                    <tr>
-                                        <td>2016.8.18</td>
-                                        <td>24r34f66</td>
-                                        <td>新闻任务</td>
-                                        <td>秒分必争创业</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
-                                        <td><span class="color_red2">80元</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table class="table_in1">
-                                    <thead>
-                                    <tr>
-                                        <th>日期</th>
-                                        <th>订单号</th>
-                                        <th>订单类型</th>
-                                        <th>订单名称</th>
-                                        <th>截图/链接</th>
-                                        <th>金额</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>2016.8.18</td>
-                                        <td>24r34f66</td>
-                                        <td>新闻任务</td>
-                                        <td>秒分必争创业</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
-                                        <td><span class="color_red2">80元</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
                             </div>
 
                         </div>
