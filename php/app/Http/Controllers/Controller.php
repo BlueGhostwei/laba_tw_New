@@ -108,6 +108,10 @@ class Controller extends BaseController
           }
         }
         $sql=rtrim(trim($sql),"AND");
+        $sql2='SELECT '.$set_data.' FROM '.$table.' WHERE ';
+        if(trim($sql)==trim($sql2)){
+           $sql='SELECT '.$set_data.' FROM '.$table.' ORDER BY id DESC';
+        }
         return $sql;
     }
     protected function get_part($sql,$set_data,$id){
