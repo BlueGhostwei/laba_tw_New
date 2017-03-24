@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Wealthlog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\In;
 use Latrell\Alipay;
@@ -53,19 +54,24 @@ class PayController extends Controller
         $goods_name="充值账户";
         $goods_description="";//产品描述暂无
         $alipay->setOutTradeNo($order_id);
-        $alipay->setTotalFee($order_price);
+        $alipay->setTotalFee(0.01);
         $alipay->setSubject($goods_name);
         $alipay->setBody($goods_description);
         if ($order_price<10){
             return json_encode(['msg'=>'每次充值不能低于10元！','sta'=>'1']);
         }else{
-            $order = new Order();
-            $order->type =1;
-            $order->user_id=Auth::id();
-            $order->price = $order_price;
-            $order->title = '账户充值';
-            $order->number = $order_id;
-            $order->save();
+            $user = Auth::user();
+            $wealthlog = new Wealthlog();
+            $wealthlog->type =1;
+            $wealthlog->user_id=$user->id;
+            $wealthlog->username = $user->username;
+            $wealthlog->money = $user->wealth;
+            $wealthlog->price = $order_price;
+            $wealthlog->maketime = time();
+            $wealthlog->paytype = 0;
+            $wealthlog->title = '账户充值';
+            $wealthlog->order_code = $order_id;
+            $wealthlog->save();
             return json_encode(['msg'=>'','sta'=>'0','data'=>$alipay->getPayLink()]);
         }
     }
@@ -93,24 +99,40 @@ class PayController extends Controller
 
         switch (Input::get('trade_status')) {
             case 'TRADE_SUCCESS':
-                $order = Order::where('number', '=', Input::get('out_trade_no'))->first();
-                $order->state =1;
-                $user = User::find($order->user_id);
-                $user->wealth = $user->wealth + $order->price;
+                $wealthlog = Wealthlog::where('order_code', '=', Input::get('out_trade_no'))->first();
+                $wealthlog->state =1;
+                if(!empty(Input::get('buyer_logon_id'))){
+                    $wealthlog->payment = Input::get('buyer_logon_id');
+                }else{
+                    $wealthlog->payment = Input::get('seller_email');
+                }
+                $user = User::find($wealthlog->user_id);
+                $user->wealth = $user->wealth + $wealthlog->price;
                 $user->save();
-                $order->save();
+                $wealthlog->save();
             case 'TRADE_FINISHED':
                 // TODO: 支付成功，取得订单号进行其它相关操作。
-                Log::debug('Alipay notify post data verification success.', [
-                    'out_trade_no' => Input::get('out_trade_no'),
-                    'trade_no' => Input::get('trade_no')
-                ]);
-                $order = Order::where('number', '=', Input::get('out_trade_no'))->first();
-                $order->state =1;
-                $user = User::find($order->user_id);
-                $user->wealth = $user->wealth + $order->price;
+                $wealthlog = Wealthlog::where('order_code', '=', Input::get('out_trade_no'))->first();
+                $wealthlog->state =1;
+                if(!empty(Input::get('buyer_logon_id'))){
+                    $wealthlog->payment = Input::get('buyer_logon_id');
+                }else{
+                    $wealthlog->payment = Input::get('seller_email');
+                }
+                $user = User::find($wealthlog->user_id);
+                $user->wealth = $user->wealth + $wealthlog->price;
                 $user->save();
-                $order->save();
+                $wealthlog->save();
+            case 'TRADE_CLOSED':
+                $wealthlog = Wealthlog::where('order_code', '=', Input::get('out_trade_no'))->first();
+                $wealthlog->state =2;
+                if(!empty(Input::get('buyer_logon_id'))){
+                    $wealthlog->payment = Input::get('buyer_logon_id');
+                }else{
+                    $wealthlog->payment = Input::get('seller_email');
+                }
+                $wealthlog->remark = '用户放弃付款！';
+                $wealthlog->save();
         }
         return 'success';
     }

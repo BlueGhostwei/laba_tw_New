@@ -452,9 +452,9 @@ class UserController extends Controller
     {
 //        dd($this->get_security_question());
         if (empty($this->get_security_question())) {
-            return sendMessage(null, '没有设置密保问题！');
+            return response()->json(['msg'=>'没有设置密保！','sta'=>'1','data'=>'']);
         } else {
-            return sendMessage($this->get_security_question(), '获取成功！');
+            return response()->json(['msg'=>'获取成功！','sta'=>'0','data'=>$this->get_security_question()]);
         }
     }
 
@@ -552,7 +552,7 @@ class UserController extends Controller
 
     public function get_withdraw_list(){
         if (empty(Input::all())){
-            $data = DB::table('wealthlog')->limit(10)->orderBy('id','DESC')->get();
+            $data = DB::table('wealthlog')->where('type','=','0')->limit(10)->orderBy('id','DESC')->get();
         }else{
             $page = Input::get('page');
             $keyword = Input::get('keyword');
@@ -561,6 +561,7 @@ class UserController extends Controller
             $rev = '10';
             $offset = ($page-1)*$rev;
             $data = Db::table('wealthlog');
+            $data->where('type','=','0');
             if (!empty($keyword)){
                 $data->where('username','like','%'.$keyword.'%');
             }
@@ -649,7 +650,6 @@ class UserController extends Controller
      */
     public function update_info(Request $request)
     {
-        ob_start();
 
         $id = Auth::id();
         $type = Input::get('type');
@@ -693,12 +693,7 @@ class UserController extends Controller
                         return json_encode(['msg' => '更新资料失败', 'sta' => '1', 'data' => ''], JSON_UNESCAPED_UNICODE);
                     }
                 }
-                $str = ob_get_contents();
-                dd($str);
-                ob_end_clean();
-                $fp = fopen("test.html","w+");
-                fwrite($fp,$str);
-                fclose($fp);
+
                 break;
             case "update_pass";
                 if (!empty($Old_pass)) {
@@ -866,7 +861,7 @@ class UserController extends Controller
 //        dd($users);
         foreach ($users as $k => $v) {
 //            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
-
+            $users[$k]['ordernum'] = Wealthlog::where('user_id','=',$users[$k]['id'])->count();
             if ($users[$k]['created_by'] != 0) {
                 $users[$k]['created_by'] = User::find($users[$k]['created_by'])->username;
             } else {

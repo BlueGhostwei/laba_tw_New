@@ -37,6 +37,7 @@
                                         <th>用户名</th>
                                         <th>管理分组</th>
                                         <th>创建时间</th>
+                                        <th>订单数</th>
                                         <th>账户余额</th>
                                         <th>创建人</th>
                                         <th>状态</th>
@@ -51,6 +52,7 @@
                                             <td>{{$user->username}}</td>
                                             <td>{{$user->acl_name}}</td>
                                             <td>{{$user->created_at}}</td>
+                                            <td>{{$user->ordernum}}</td>
                                             <td>{{$user->wealth}}</td>
                                             <td>{{$user->created_by}}</td>
                                             <td>
