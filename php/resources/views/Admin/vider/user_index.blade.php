@@ -3,7 +3,6 @@
 @section('header_related')
 @endsection
 @section('content')
-
     <div class="w100 nav_hdorder clearfix clr">
         <div class="content">
             <div class="Invoice" style="background:#fff;">
@@ -32,7 +31,6 @@
                         <div class="tab">
                             <a href="javascript:;" class="on">资料编辑</a>
                             <a href="javascript:;">安全设置</a>
-                            <a href="javascript:;">收款帐号</a>
                         </div>
                         <div class="Hcontent">
                             <ul>
@@ -61,7 +59,6 @@
                                     </div>
                                 </li>
                                 <li>安全设置</li>
-                                <li>收款帐号</li>
                             </ul>
                         </div>
                     </div>

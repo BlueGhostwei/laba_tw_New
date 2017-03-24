@@ -1,5 +1,5 @@
 @extends('Admin.layout.main')
-@section('title', '首页')
+@section('title', '我的订单')
 @section('header_related')
 @endsection
 @section('content')
@@ -9,12 +9,10 @@
                 <div class="ndt" style="margin-top:40px;padding-bottom:0;">
 
                     <div class="hdorder radius1">
-                        <h3 class="title1"><strong><a href="#">全部定单<i>@if(isset($count)&&!empty($count)){{$count}}@endif</i></a></strong></h3>
+                        <h3 class="title1"><strong><a href="#">我的订单<i>@if(isset($count)&&!empty($count)){{$count}}@endif</i></a></strong></h3>
                         <div class="dhorder_m">
-
                             <div class="tab1" style="height:30px;">
                             </div>
-
                             <div class="tab1_body" style="min-height:515px;">
                                 <table class="table_in1 cur">
                                     <thead>
@@ -29,7 +27,7 @@
                                     </thead>
                                     <tbody>
                                     {{ csrf_field() }}
-                                    @if(isset($user_order) && !empty($user_order))
+                                    @if(isset($user_order) && !empty($user_order[0]))
                                         @foreach($user_order as $ky =>$vs)
                                             <tr order_id="{{$vs['id']}}">
                                                 <td><label><input type="checkbox" name="check_Item" data-price="{{$vs['price']}}"/></label>
@@ -88,6 +86,7 @@
         </form>
     </div>
     <script type="text/javascript">
+        var _token = $("input[name=_token]").val();
         /*	计算金额	*/
         function reset_total(){
 
@@ -121,26 +120,61 @@
         /*	删除选中订单	*/
         $("#delorder").click(function(){
             event.preventDefault();
-            layer.confirm("确定要删除选中的订单吗？",{
-                btn:["确定2","取消1"]
-            },function(){
-                $("input[name='check_Item']").each(function(){
-                    if( $(this).is(":checked") ){
-                        $(this).closest("tr").remove();
-                    }
+            if( $("input[name=check_Item]:checked").length>0 ){
+                layer.confirm("确定要删除选中的订单吗？",{
+                    btn:["确定","取消"]
+                },function(){
+                    //请求后台接口
+                    var order_id = "";
+                    $("input[name=check_Item]:checked").each(function(){
+                        var order_id2 = $(this).closest("tr").attr("order_id");
+                        if( order_id == "" ){
+                            order_id += order_id2;
+                        }else{
+                            order_id += "," + order_id2;
+                        }
+                    });
+                    $.ajax({
+                        url: "{{route('user.Settlement')}}",
+                        data: {
+                            'type':'cancel_order',
+                            'order_id' : order_id,
+                            '_token' :_token
+                        },
+                        type: 'post',
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.sta == '0') {
+                                layer.msg(data.msg || '提交失败');
+                                reset_total();
+                            } else {
+                                layer.msg(data.msg || '提交失败');
+                            }
+                        },
+                        error: function (data) {
+                            layer.msg(data.msg || '网络发生错误');
+                            return false;
+                        }
+                    });
+                    $("input[name='check_Item']").each(function(){
+                        if( $(this).is(":checked") ){
+                            $(this).closest("tr").remove();
+                        }
+                    });
+                    return false;
+                },function(){
+                    layer.msg('删除已取消', {icon: 1});
                 });
-                layer.msg('删除成功', {icon: 1});
-                reset_total();
-            },function(){
-                layer.msg('删除已取消', {icon: 1});
-            });
+            }else{
+                layer.msg("请选择订单");
+            }
+
         });
         /*	点击结算弹出支付	*/
 		var orderdata = [];
         $("#settle").click(function(){
             event.preventDefault();
 			if( $("input[name=check_Item]:checked").length>0 ){
-				var _token = $("input[name=_token]").val();
 				var order_id = "";
 				var price = $.trim($("#sum b").html());
 				$("input[name=check_Item]:checked").each(function(){
@@ -189,7 +223,7 @@
 						/*layer.close(1);*/
 						if (data.sta == '0') {
                             layer.msg(data.msg || '提交失败');
-                            window.location.href='/';
+                            window.location.href="{{route('pay.results')}}"+"?to=success&order_id="+data.data;
 						} else {
 							layer.msg(data.msg || '提交失败');
 						}

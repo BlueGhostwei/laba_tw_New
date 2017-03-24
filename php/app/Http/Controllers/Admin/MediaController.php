@@ -21,7 +21,6 @@ class MediaController extends Controller
 
     public function selec_key()
     {
-
         $data_list = DB::table('media_community')
             ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
             ->orderBy('id', 'desc')->paginate(10);
@@ -79,24 +78,11 @@ class MediaController extends Controller
                     ->orderBy('id', 'desc')->get()->toArray();
                 $data_list = $this->to_sql_array($data_list);
             } else {
-                $data = array (
-                    0 => '6,24',
-                    1 => '1,10',
-                    2 => '2,4',
-                    3 => '3,233,706,1006',
-                    4 => '4,14',
-                    5 => '5,21,19',
-                    6 => '6,24',
-                );
-
-
-                dd($this->build_sql_ios());
-                $handle = fopen('log.txt','a+');
-                fwrite($handle,var_export(Input::all(),true));
-                fwrite($handle,"\r\n");
-                fclose($handle);
                 $media_cate = Input::get('data');
-                $sql = $this->build_sql($media_cate);
+                $table='media_community';
+                $set_data=" network,Entrance_level,Entrance_form,channel,standard,coverage,media_md5,diagram_img,media_name,pf_price,px_price,mb_price,Website_Description";
+                $sql=Controller::joint_sql($table,$set_data,$media_cate);
+                // $sql = $this->build_sql($media_cate);
                 $data_list = DB::select($sql);
                 $data_list = $this->to_sql_array($data_list);
             }
@@ -176,7 +162,7 @@ class MediaController extends Controller
      */
     protected function build_sql($array)
     {
-        $data = array (
+       /* $data = array (
             0 => '0,16,31,29',
             1 => '1,10',
             2 => '2,4',
@@ -184,7 +170,7 @@ class MediaController extends Controller
             4 => '4,14',
             5 => '5,21,19',
             6 => '6,24',
-        );
+        );*/
 
         $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
         foreach ($array as $k => $v) {
@@ -254,16 +240,10 @@ class MediaController extends Controller
                     $vel->coverage .=',';
                 }
             }
-
-
             $vel->Entrance_level = $this->get_category($vel->Entrance_level);
             $vel->Entrance_form = $this->get_category($vel->Entrance_form);
             $vel->channel = $this->get_category($vel->channel);
             $vel->standard = $this->get_category($vel->standard);
-
-
-
-
             $vel->media_md5 = empty(md52url($vel->media_md5)) ? '' : md52url($vel->media_md5);
             $vel->diagram_img = empty(md52url($vel->diagram_img)) ? '' : md52url($vel->diagram_img);
         }
@@ -275,8 +255,6 @@ class MediaController extends Controller
         }else{
             $arr = explode(',',$key);
             $key = '';
-//                dd($arr);
-//                dd($vel->coverage);
             for($i=0;$i<count($arr);$i++){
                 $key .=  DB::table('category')->where('id', $arr[$i])->pluck('name')->first();
                 $key .=',';

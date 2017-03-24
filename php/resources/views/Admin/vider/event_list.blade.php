@@ -1,5 +1,5 @@
 @extends('Admin.layout.main')
-@section('title', '媒体供应商-活动列表')
+@section('title', '媒体供应商-活动订单')
 @section('header_related')
 @endsection
 @section('content')
@@ -68,7 +68,6 @@
                                     <li><a href="#">已完成</a></li>
                                     <li><a href="#">已流单</a></li>
                                     <li><a href="#">已拒单</a></li>
-                                    <li><a href="#">已取消</a></li>
                                 </ul>
                             </div>
                             <div class="tab1_body">
@@ -102,15 +101,14 @@
                                             <td>{{date('Y-m-d H:i ',$v->end_time)}}</td>
                                             <td><span class="color_red1">{{$v->price}}</span></td>
                                             <td>已受理</td>
-                                            <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                                alt="完成链接/截图"/></a></td>
+                                            <td><img class="link" src="{{url('Admin/images/ico_link.png')}}"
+                                                                                alt="完成链接/截图"/></td>
                                             <td><span class="color_green">优</span></td>
                                             <td>合格</td>
                                             <td><span class="color_red2">80元</span></td>
-                                            <td><select>
-                                                    <option>查看</option>
-                                                    <option>删除</option>
-                                                </select></td>
+                                            <td>
+                                                <a href="{{route('order.details',$v->id)}}"><span>查看</span></a>&nbsp;
+                                            </td>
                                         </tr>
                                         @endforeach
                                         @else
@@ -137,246 +135,6 @@
                                         @endif
                                     </tbody>
                                 </table>
-                                <table class="table_in1">
-                                    <thead>
-                                    <tr>
-                                        <th>订单号</th>
-                                        <th>资源名称</th>
-                                        <th>活动名称</th>
-                                        <th>开始时间</th>
-                                        <th>结束时间</th>
-                                        <th>价格</th>
-                                        <th>订单状态</th>
-                                        <th>完成链接/截图</th>
-                                        <th>质检状态</th>
-                                        <th>质检处理</th>
-                                        <th>质检扣款</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table class="table_in1">
-                                    <thead>
-                                    <tr>
-                                        <th>订单号</th>
-                                        <th>资源名称</th>
-                                        <th>活动名称</th>
-                                        <th>开始时间</th>
-                                        <th>结束时间</th>
-                                        <th>价格</th>
-                                        <th>订单状态</th>
-                                        <th>完成链接/截图</th>
-                                        <th>质检状态</th>
-                                        <th>质检处理</th>
-                                        <th>质检扣款</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table class="table_in1">
-                                    <thead>
-                                    <tr>
-                                        <th>订单号</th>
-                                        <th>资源名称</th>
-                                        <th>活动名称</th>
-                                        <th>开始时间</th>
-                                        <th>结束时间</th>
-                                        <th>价格</th>
-                                        <th>订单状态</th>
-                                        <th>完成链接/截图</th>
-                                        <th>质检状态</th>
-                                        <th>质检处理</th>
-                                        <th>质检扣款</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>24r34f66</td>
-                                        <td>广告发布</td>
-                                        <td>秒分必争创业</td>
-                                        <td>2016.8.18</td>
-                                        <td>2016.8.27</td>
-                                        <td><span class="color_red1">￥2830</span></td>
-                                        <td>已受理</td>
-                                        <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
-                                                                            alt="完成链接/截图"/></a></td>
-                                        <td><span class="color_green">优</span></td>
-                                        <td>合格</td>
-                                        <td><span class="color_red2">80元</span></td>
-                                        <td><select>
-                                                <option>删除</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
                             </div>
                             <div style="padding:30px 33px;background:#fff;">
                                 <div class="info_hdorder clearfix">
@@ -385,7 +143,6 @@
                                         <li>总订单数0个/0元</li>
                                         <li>已完成0个/0元</li>
                                         <li>流单数0个/0元</li>
-                                        <li>取消数0个/0元</li>
                                         <li>拒单数0个/0元</li>
                                     </ul>
                                 </div>

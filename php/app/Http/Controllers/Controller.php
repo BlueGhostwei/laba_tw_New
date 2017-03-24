@@ -6,6 +6,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use DB;
+use Config;
 
 
 class Controller extends BaseController
@@ -54,16 +56,70 @@ class Controller extends BaseController
             . sprintf('%03d', (float) microtime() * 1000)
             . sprintf('%03d', (int) $member_id % 1000);
     }
+
+    /**
+     * @param $length
+     * @return null|string
+     * 输入对应长度返回对应随机字符串
+     */
     public function getRandChar($length){
         $str = null;
         $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
         $max = strlen($strPol)-1;
-
         for($i=0;$i<$length;$i++){
             $str.=$strPol[rand(0,$max)];//rand($min,$max)生成介于min和max两个数之间的一个随机整数
         }
-
         return $str;
+    }
+    /**
+     *分类获取，id排序规则（从小到大,中间用逗号隔开）
+     * 输入表名，与查询字段
+     * $data格式为‘参数1，参数2，参数3’
+     * 查询格式设定，
+     */
+    public function joint_sql($table,$set_data ,$data,$sel_type=null){
+        if($set_data==null){
+            $sql='SELECT * FROM ';
+        }else{
+            $sql='SELECT '.$set_data.' FROM '.$table.' WHERE ';
+        }
+        foreach ($data as $k=>$v){
+            switch ($k){
+               case 0;
+                   $sql=$this->get_part($sql,'network',$v);
+                break;
+               case '1';
+                   $sql=$this->get_part($sql,'Entrance_level',$v);
+                break;
+                case '2';
+                    $sql=$this->get_part($sql,'Entrance_form',$v);
+                    break;
+                case '3';
+                    $sql=$this->get_part($sql,'coverage',$v);
+                    break;
+                case '4';
+                    $sql=$this->get_part($sql,'channel',$v);
+                    break;
+                case '5';
+                   if($v !='-1'){
+                       $sql =$sql.Config::get('price')[$v]['sql'] ;
+                   }
+                    break;
+          }
+        }
+        $sql=rtrim(trim($sql),"AND");
+        return $sql;
+    }
+    protected function get_part($sql,$set_data,$id){
+        $rst=explode(',',$id);
+        if(!empty($rst)){
+            foreach ($rst as $ky=>$rv){
+               if($rv!=="-1"){
+                   $sql=$sql." instr(concat(',',$set_data,','),',$rv,')<>0 AND ";
+               }
+            }
+        }
+        return $sql;
     }
 
 }
