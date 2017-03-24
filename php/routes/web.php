@@ -121,6 +121,8 @@ Route::group(['middleware' => ['auth','acl']], function () {
         //网银支付
 
         Route::get('acl/role/index', ['as' => 'acl.role.index', 'uses' => 'AclRoleController@index']);
+        Route::get('acl/role/edit/{id}', ['as' => 'acl.role.edit', 'uses' => 'AclRoleController@edit']);
+        Route::post('acl/role/update/{id}', ['as' => 'acl.role.update', 'uses' => 'AclRoleController@update']);
         /* Route::get('acl/role/edit/{id}', ['as' => 'acl.role.edit', 'uses' => 'AclRoleController@edit']);*/
         //Route::post('acl/role/update/{id}', ['as' => 'acl.role.update', 'uses' => 'AclRoleController@update']);
        /* Route::get('acl/resource/index', ['as' => 'acl.resource.index', 'uses' => 'AclResourceController@index']);
