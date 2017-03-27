@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\AclRole;
 use App\Models\AclUser;
+use App\Models\Message;
 use App\Models\News;
 use App\Models\Order;
 use App\Models\Wealthlog;
@@ -622,6 +623,7 @@ class UserController extends Controller
                 if($price>$wealth){
                     $weathlog->state = 2;
                     $weathlog->remark = '操作失败！余额不足!';
+
                     $weathlog->save();
                     return response()->json(['msg'=>'操作失败！余额不足!','sta'=>'1','data'=>'']);
                 }else{
@@ -629,6 +631,11 @@ class UserController extends Controller
                         $wealth = $wealth - $price;
                         $weathlog->state = 1;
                         $user->wealth = $wealth;
+                        $message = new Message();
+                        $message->title = '提现完成';
+                        $message->receive = $weathlog->user_id;
+                        $message->message = '你于'.$weathlog->created_at.'发起的余额提现已完成！';
+                        $message->save();
                         $weathlog->save();
                         $user->save();
                     });

@@ -81,7 +81,7 @@ class MediaController extends Controller
             } else {
                 $media_cate = Input::get('data');
                 $table='media_community';
-                $set_data=" network,Entrance_level,Entrance_form,channel,standard,coverage,media_md5,diagram_img,media_name,pf_price,px_price,mb_price,Website_Description";
+                $set_data="id,network,Entrance_level,Entrance_form,channel,standard,coverage,media_md5,diagram_img,media_name,pf_price,px_price,mb_price,Website_Description";
                 $sql=Controller::joint_sql($table,$set_data,$media_cate);
                 // $sql = $this->build_sql($media_cate);
                 $data_list = DB::select($sql);
@@ -414,6 +414,8 @@ class MediaController extends Controller
      */
     protected function to_sql_array($data_list)
     {
+        $type = Config::get('mediatype');
+        $type = array_column($type,'media_name','media_id');
         foreach ($data_list as $k => $vel) {
             if($vel->coverage==0){
                 $vel->coverage ='不限';
@@ -427,6 +429,7 @@ class MediaController extends Controller
                     $vel->coverage .=',';
                 }
             }
+            $vel->media_type = $type[$vel->media_type];
             $vel->Entrance_level = $this->get_category($vel->Entrance_level);
             $vel->Entrance_form = $this->get_category($vel->Entrance_form);
             $vel->channel = $this->get_category($vel->channel);
@@ -624,6 +627,16 @@ class MediaController extends Controller
     public function Wechat_market()
     {
         return view('Admin.media.wechat_market');
+    }
+    public function search(){
+        $data = $this->get_search_data();
+        $data = $this->to_sql_array($data);
+        return view('Admin.dashboard.searchpage',['data'=>$data,'keyword'=>Input::get('keyword')]);
+    }
+    public function get_search_data(){
+        $keyword = empty(Input::get('keyword'))?'':Input::get('keyword');
+        $data = Media_community::where('media_name','like','%'.$keyword.'%')->orderBy('id','desc')->get();
+        return $data;
     }
 
 

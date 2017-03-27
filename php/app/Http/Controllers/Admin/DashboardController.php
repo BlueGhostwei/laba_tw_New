@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Media_community;
+use App\Models\Message;
 use App\Models\News;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -12,6 +14,7 @@ use Illuminate\Validation\Rules\In;
 use Redirect;
 use Response;
 use DB;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class DashboardController extends Controller
@@ -78,7 +81,34 @@ class DashboardController extends Controller
         $type = Input::get('type');
         $start = Input::get('start');
         $end = Input::get('end');
+        $page = Input::get('page');
+        $keyword = Input::get('keyword');
+        $newstype = Input::get('newstype');
         $order = Input::get('order');
+    }
+
+
+
+    public function showMessage(){
+        return view('Admin.dashboard.messagepage',['read'=>$this->getMessage(1),'unread'=>$this->getMessage(0)]);
+    }
+
+    public function getMessage($type){
+        $data = Message::where('receive','=',Auth::id())->where('read','=',$type)->get();
+        return $data;
+    }
+
+    public function messageDetail(){
+        $id = Input::get('id');
+        return view('Admin.dashboard.messagedetail',['data'=>$this->getMessageById($id)]);
+    }
+
+    public function getMessageById($id){
+        $data = Message::find($id);
+//        dd($data);
+        $data->read();
+        $data->save();
+        return $data;
     }
 
 

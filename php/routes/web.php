@@ -184,6 +184,9 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/getnews','DashboardController@getnews');
         Route::get('Admin/myorder',['as'=>'admin.myorder','uses'=>'UserController@get_order_list']);//会员账单
         Route::post('Admin/finish_withdraw',['as'=>'admin.finishwithdraw','uses'=>'UserController@finish_withdraw']);//完成提现
+        Route::get('Admin/message',['as'=>'admin.message','uses'=>'DashboardController@showMessage']);
+        Route::get('Admin/message/detail',['as'=>'admin.message.detail','uses'=>'DashboardController@messageDetail']);
+        Route::get('Admin/search',['as'=>'admin.search','uses'=>'MediaController@search']);
     });
 
 });

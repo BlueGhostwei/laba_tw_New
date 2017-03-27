@@ -9,7 +9,7 @@
             @else
                 <img src="{{url('Admin/img/bn66.png')}}"/>
             @endif
-            <div class="Hltext">5</div>
+            <div class="Hltext">{{get_message_num()}}</div>
         </div>
         <div class="IName">
             <p class="name">@if(isset(Auth::user()->username) && Auth::user()->username!=null){{Auth::user()->username}}@endif</p>
@@ -36,8 +36,8 @@
         </div>
         <div class="sidepanel-open-button"></div>
         <div style="width:260px; float:left; height:auto;">
-            <div class="IT_nt1">
-                <div class="Hltext">5</div>
+            <div class="IT_nt1" onclick="window.open('{{url('Admin/message')}}')">
+                <div class="Hltext" >{{get_message_num()}}</div>
             </div>
             <div class="IT_nt2">
                 <div class="Hltext">5</div>

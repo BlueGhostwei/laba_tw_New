@@ -83,10 +83,10 @@
                         </div>
                         <script type="text/javascript">showtime();</script>
                         <div class="s_search">
-                            <form class="form1" method="" action="">
+                            <form class="form1" method="get" action="{{url('Admin/search')}}">
                                 <input class="sub1" type="submit" name="submit" value="搜媒体" />
                                 <div class="w_txt1">
-                                    <input class="txt1" type="text" value="" placeholder="请输入媒体名称关键词，例：”新浪网”" />
+                                    <input class="txt1" type="text" name="keyword" value="" placeholder="请输入媒体名称，例：”新浪网”" />
                                 </div>
                             </form>
                         </div>

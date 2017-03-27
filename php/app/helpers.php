@@ -5,6 +5,7 @@ use App\Models\AclRole;
 use App\Http\Controllers\Admin\UploadController;
 use App\Models\User;
 use  App\Models\News;
+use App\Models\Message;
 use App\Models\Media_community;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Arr;
@@ -623,5 +624,11 @@ function get_media_img($id){
         return url('Admin/img/bn66.png');
     }
 }
+
+function get_message_num(){
+    $num = Message::where('receive','=',Auth::id())->where('read','=','0')->count();
+    return $num;
+}
+
 
 
