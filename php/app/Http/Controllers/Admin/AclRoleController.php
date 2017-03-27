@@ -6,10 +6,10 @@ use App\Models\AclResource;
 use App\Models\AclRole;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Input;
 use App\Models\AclUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Input;
 
 /**
  * 角色管理
@@ -99,11 +99,6 @@ class AclRoleController extends Controller
             'resource' => $resource,
             'roleResource' => $roleResource,
         ]);
-       /* return view('Admin.acl.role.form', [
-            'role' => $id,
-            'resource' => $resource,
-            'roleResource' => $roleResource,
-        ]);*/
     }
 
     /**
@@ -115,15 +110,11 @@ class AclRoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-            
         $this->validate($request, [
             'resource' => 'required'
         ]);
-        
         AclRole::where('role', $id)->delete();
-
         $resource = $request->get('resource');
-
         $aclRole = new AclRole();
         $data = [];
         foreach ($resource as $item) {
@@ -138,10 +129,7 @@ class AclRoleController extends Controller
                 $data[] = ['role' => $id, 'resource' => $item];
             }
         }
-
-
         $aclRole->insert($data);
-
         return \Redirect::route('acl.role.index')->withErrors('更新角色权限成功');
     }
 

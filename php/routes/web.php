@@ -41,7 +41,7 @@ Route::group(['middleware' => 'guest'], function () {
         Route::get('Admin/password', ['as' => 'Admin.find_password', 'uses' => 'PasswordController@getIndex']);
         Route::get('Admin/password/pass_find', ['as' => 'Admin.pass_find', 'uses' => 'PasswordController@pass_find']);
         Route::get('Admin/password/pass_find_second', ['as' => 'Admin.pass_find_second', 'uses' => 'PasswordController@pass_find_second']);
-        Route::post('Admin/password/pass_find_send', ['as' => 'Admin.pass_find_send', 'uses' => 'PasswordController@pass_find_send']);
+        Route::post('Admin/password/pass_find_send','PasswordController@pass_find_send');
         Route::get('Admin/password/pass_Overlay', ['as' => 'Admin.pass_Overlay', 'uses' => 'PasswordController@pass_find_Overlay']);
         Route::get('Admin/password/pass_info', ['as' => 'Admin.pass_info', 'uses' => 'PasswordController@pass_info']);
         Route::post('Admin/password/pass_Overlay','PasswordController@pass_find_update');
@@ -61,21 +61,21 @@ Route::group(['middleware' => 'guest'], function () {
 //需要登陆并需要权限登陆（acl）的路由
 Route::group(['middleware' => ['auth','acl']], function () {
     Route::group(['namespace' => 'Admin'], function () {
-        //平台分类管理
-        Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
-        Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );
-        Route::get('Admin/category/show',['as'=>'category.show','uses'=>'CategoryController@show'] );
-        Route::post('Admin/category/save',['as'=>'category.save','uses'=>'CategoryController@create_category']);  //保存分类
-        Route::post('Admin/category/cate_dele',['as'=>'category.cate_dele','uses'=>'CategoryController@cate_dele']);  //分类删除
-        Route::get('Admin/category/media_from',['as'=>'category.media_from','uses'=>'CategoryController@media_from']);  //创建媒体
-        Route::post('Admin/category/media_save',['as'=>'category.media_save','uses'=>'CategoryController@media_save']);  //保存媒体
-        Route::get('Admin/category/media_List',['as'=>'category.media_List','uses'=>'CategoryController@media_List']);  //媒体列表
-        Route::get('Admin/category/media_List_update/{id}',['as'=>'category.media_List_update','uses'=>'CategoryController@media_List_update']);  //媒体修改
-        Route::get('Admin/category/media_List_dele',['as'=>'category.media_List_dele','uses'=>'CategoryController@media_List_dele']);  //媒体删除
         //首页
         Route::get('/',['as'=>'admin.dashboard','uses'=>'DashboardController@index'] );
+        //平台分类管理
+        Route::get('Admin/category/index',['as'=>'category.index','uses'=>'CategoryController@index'] );
+        Route::get('Admin/category/store',['as'=>'category.store','uses'=>'CategoryController@store'] );//分类创建
+        Route::post('Admin/category/save',['as'=>'category.save','uses'=>'CategoryController@create_category']);  //保存分类
+        Route::post('Admin/category/cate_dele',['as'=>'category.cate_dele','uses'=>'CategoryController@cate_dele']);  //分类删除
+
        //网络媒体
-        Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);
+        Route::get('Admin/category/media_from',['as'=>'category.media_from','uses'=>'MediaController@media_from']);  //创建媒体
+        Route::post('Admin/category/media_save',['as'=>'category.media_save','uses'=>'MediaController@media_save']);  //保存媒体
+        Route::get('Admin/category/media_List',['as'=>'category.media_List','uses'=>'MediaController@media_List']);  //媒体列表
+        Route::get('Admin/category/media_List_update/{id}',['as'=>'category.media_List_update','uses'=>'MediaController@media_List_update']);  //媒体修改
+        Route::get('Admin/category/media_List_dele',['as'=>'category.media_List_dele','uses'=>'MediaController@media_List_dele']);  //媒体删除
+        Route::get('Admin/media/release',['as'=>"media.release",'uses'=>'MediaController@index']);//发布新闻媒体任务
         Route::post('Admin/media/Member_order',['as'=>"media.Member_order",'uses'=>'MediaController@Member_order']);//会员订单（新闻发布提交）
         Route::post('Admin/media/release','MediaController@index');
         Route::get('Admin/media/market',['as'=>'media.market','uses'=>'MediaController@Encyclopedia']);//百科
@@ -87,8 +87,8 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::post('Admin/media/Copy_plan','Copy_panController@create');//文案策划
         Route::get('Admin/media/Wechat_market',['as'=>'media.Wechat_market','uses'=>'MediaController@Wechat_market']);//微信营销
         //个人中心
-        Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);
-        Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);
+        Route::get('Admin/user/info',['as'=>'member.info','uses'=>'UserController@user_info']);//用户信息
+        Route::get('Admin/user/safety_set',['as'=>'member.safety_set','uses'=>'UserController@safety_set']);//密保问题
         Route::get('Admin/user/order_list',['as'=>'user.order_list','uses'=>'UserController@order_list']);//会员订单列表
         Route::post('Admin/user/order_list','UserController@order_redirect');//会员订单跳转
         Route::post('Admin/user/Settlement',['as'=>'user.Settlement','uses'=>"UserController@Settlement"]);//结算订单
@@ -99,7 +99,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         //用户中心
         Route::post('Admin/user/info','UserController@update_info');//会员信息
         Route::get('Admin/user/Onlnetop_up',['as'=>'member.Onlnetop_up','uses'=>'UserController@Onlnetop_up']);//在线充值
-        Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);
+        Route::get('Admin/user/logout', ['as' => 'user.logout', 'uses' => 'UserController@getLogout']);//用户退出
         //媒体供应商
         Route::get('Admin/vider/Event_list',['as'=>'vider.Event_list','uses'=>'MediaProviderController@Event_list']);//订单列表
         Route::get('Admin/vider/user_center',['as'=>'vider.user_center','uses'=>'MediaProviderController@user_center']);//用户中心

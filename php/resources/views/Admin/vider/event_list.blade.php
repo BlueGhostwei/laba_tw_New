@@ -120,17 +120,19 @@
                                             <td>2016.8.27</td>
                                             <td><span class="color_red1">￥2830</span></td>
                                             <td>已受理</td>
-                                            <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png"
+                                            <td><a href="" target="_blank"><img class="link" src="{{url('Admin/images/ico_link.png')}}"
                                                                                 alt="完成链接/截图"/></a></td>
                                             <td><span class="color_green">优</span></td>
                                             <td>合格</td>
                                             <td><span class="color_red2">80元</span></td>
-                                            <td><select>
+                                            <td>
+                                                <select>
                                                     <option>删除</option>
                                                     <option>1</option>
                                                     <option>2</option>
                                                     <option>3</option>
-                                                </select></td>
+                                                </select>
+                                            </td>
                                         </tr>
                                         @endif
                                     </tbody>

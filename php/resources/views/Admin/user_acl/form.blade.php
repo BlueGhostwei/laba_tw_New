@@ -9,13 +9,11 @@
                 <div class="ndt" style="margin-top:40px;padding-bottom:0;">
                     <form action="{{ route('acl.role.update', $role) }}" method="post"
                           class="form-horizontal bv-form" novalidate="novalidate">
-                        {{ method_field('put') }}
                         {{ csrf_field() }}
                         <div class="hdorder radius1">
                             <h3 class="title1"><strong><a href="#">修改角色权限</a></strong></h3>
                             <div class="premissions">
                                 <h3>{{role2text($role)}}</h3>
-
                                 <div style="width: 100%; height: auto;float: left; padding-bottom: 3%;min-height: 500px;">
                                     @foreach($resource as $model => $item)
                                         <div class="PRlist">

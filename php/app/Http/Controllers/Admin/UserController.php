@@ -857,8 +857,8 @@ class UserController extends Controller
 
     public function userManage()
     {
-        $users = User::orderBy('user.id', 'Desc')->select('user.username', 'user.id', 'user.role', 'user.created_at', 'user.created_by', 'user.wealth', 'user.lock', 'acl_user.acl_name')->join('acl_user', 'user.role', 'acl_user.acl_id')->where('user.deleted_at', '=', null)->paginate(10);
-//        dd($users);
+        $users = User::orderBy('user.id', 'desc')->select('user.username', 'user.id', 'user.role', 'user.created_at', 'user.created_by', 'user.wealth', 'user.lock', 'acl_user.acl_name')->join('acl_user', 'user.role', 'acl_user.acl_id')->where('user.deleted_at', null)->paginate(10);
+       // dd($users);
         foreach ($users as $k => $v) {
 //            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;
             $users[$k]['ordernum'] = Wealthlog::where('user_id','=',$users[$k]['id'])->count();

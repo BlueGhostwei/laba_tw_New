@@ -7,14 +7,15 @@
         <div class="Invoice">
             <div class="INa1dd">
                 <div class="ndt" style="margin-top:40px;padding-bottom:0;">
-
                     <div class="hdorder radius1">
-                        <h3 class="title1"><strong><a href="#">用户角色分组列表</a></strong></h3>
+                        <h3 class="title1"><strong><a href="#">角色列表</a></strong></h3>
                         <div class="dhorder_m">
+                            <form role="form" method="post" id="Form-Add-Class" action="{{ url( 'user_role') }}">
                             <div class="Urole">
-                                <input type="text" name="" placeholder="请输入角色名"/>
+                                <input type="text" name="acl_name" placeholder="请输入角色名"/>
                                 <input type="submit" value="创建新角色"/>
                             </div>
+                            </form>
                             <div class="tab1" style="">
                             </div>
 

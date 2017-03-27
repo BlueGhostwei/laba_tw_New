@@ -106,8 +106,6 @@
                                                 <th class="sbox_3_t3" width="10%">入口级别</th>
                                                 <th class="sbox_3_t4" width="16%">正文带链接</th>
                                                 <th class="sbox_3_t5" width="10%">入口示意图</th>
-                                                <th class="sbox_3_t6" width="10%">代理价</th>
-                                                <th class="sbox_3_t7" width="10%">会员价</th>
                                                 <th class="sbox_3_t8" width="10%">平台价</th>
                                             </tr>
                                             </thead>
@@ -146,8 +144,6 @@
                                                         <td class="sbox_3_t5"><img src="{{md52url($vel->diagram_img)}}"
                                                                                    style="width: 50px;height:20px"></td>
                                                         <td class="red">{{$vel->pf_price}}</td>
-                                                        <td class="red">{{$vel->px_price}}</td>
-                                                        <td class="red">{{$vel->mb_price}}</td>
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -510,8 +506,6 @@
 							'<td>'+vg+'</td>' +
 							'<td class="sbox_3_t5"><img src="'+get_data[i].diagram_img+'" style="width:50px;height:20px"></td>' +
 							'<td class="red">'+get_data[i].pf_price+'</td>' +
-							'<td class="red">'+get_data[i].px_price+'</td>' +
-							'<td class="red">'+get_data[i].mb_price+'</td>' +
 							'</tr>';
 					}
 					$('#wrapper_i').html("");

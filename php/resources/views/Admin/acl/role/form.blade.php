@@ -20,7 +20,7 @@
                             <div class=" widget-block">
                                 <form action="{{ route('acl.role.update', $role) }}" method="post"
                                       class="form-horizontal bv-form" novalidate="novalidate">
-                                    {{ method_field('put') }}
+                                  {{--  {{ method_field('put') }}--}}
                                     {{ csrf_field() }}
 
                                     @foreach($resource as $model => $item)
