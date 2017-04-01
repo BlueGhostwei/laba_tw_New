@@ -630,5 +630,14 @@ function get_message_num(){
     return $num;
 }
 
-
+if(!function_exists('get_month_data')){
+    function get_month_data(){
+        $data = [];
+        $year = date('Y',time());
+        for ($x=1; $x<=12; $x++){
+            $data[$x] = News::whereBetween('start_time', [strtotime($year.'-'.$x), strtotime($year.'-'.($x+1))])->count();
+        }
+        return $data;
+    }
+}
 

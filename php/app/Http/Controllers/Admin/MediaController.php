@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Wealthlog;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -73,15 +74,18 @@ class MediaController extends Controller
         }
         $keyword = array_get(Input::all(), 'keyword');
         if (isset($keyword)) {
+
             if ($keyword == "0") {
                 $data_list = DB::table('media_community')
-                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price', 'Website_Description')
+                    ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price', 'Website_Description','media_type')
                     ->orderBy('id', 'desc')->get()->toArray();
+
                 $data_list = $this->to_sql_array($data_list);
             } else {
                 $media_cate = Input::get('data');
                 $table='media_community';
-                $set_data="id,network,Entrance_level,Entrance_form,channel,standard,coverage,media_md5,diagram_img,media_name,pf_price,px_price,mb_price,Website_Description";
+                $set_data="id,network,Entrance_level,Entrance_form,channel,standard,coverage,media_md5,diagram_img,media_name,pf_price,px_price,mb_price,Website_Description,media_type";
+//                dd($media_cate);
                 $sql=Controller::joint_sql($table,$set_data,$media_cate);
                 // $sql = $this->build_sql($media_cate);
                 $data_list = DB::select($sql);
@@ -90,12 +94,19 @@ class MediaController extends Controller
             return json_encode(['msg' => '请求成功', 'sta' => '0', 'data' => $data_list]);
         } else {
             $data_list = DB::table('media_community')
-                ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price')
+                ->select('id', 'network', 'Entrance_level', 'Entrance_form', 'channel', 'standard', 'coverage', 'media_md5', 'diagram_img', 'media_name', 'pf_price', 'px_price', 'mb_price','media_type')
                 ->orderBy('id', 'desc')->paginate(10);
 
             $data_list = $this->to_sql($data_list);
         }
-        return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list]);
+        $id = Input::get('id');
+        if(!empty($id)){
+            $selectdata = Media_community::find($id)->first();
+            $selectdata->media_md5 = empty(md52url($selectdata->media_md5)) ? '' : md52url($selectdata->media_md5);
+        }else{
+            $selectdata = null;
+        }
+        return view('Admin.media.index', ['result_data' => $result, 'media_list' => $data_list,'select'=>$selectdata]);
     }
 
 
@@ -118,6 +129,7 @@ class MediaController extends Controller
 
     public function media_save(Request $request)
     {
+//        dd($request->all());
         $user_id=Auth::id();
         $media = new Media_community();
         $message = array(
@@ -387,7 +399,7 @@ class MediaController extends Controller
         );
         $price = Config::get('price');
         $sqlarr = array_column($price, 'sql', 'id');
-        dd($sqlarr);
+//        dd($sqlarr);
         $sql = 'SELECT `id`, `network`, `Entrance_level`, `Entrance_form`, `channel`, `standard`, `coverage`, `media_md5`, `diagram_img`, `media_name`, `pf_price`, `px_price`, `mb_price`,`Website_Description` FROM `media_community` WHERE ';
         foreach ($data as $k => $v) {
             $arr = explode(',',$v);
@@ -414,6 +426,7 @@ class MediaController extends Controller
      */
     protected function to_sql_array($data_list)
     {
+    //  dd($data_list);
         $type = Config::get('mediatype');
         $type = array_column($type,'media_name','media_id');
         foreach ($data_list as $k => $vel) {
@@ -429,7 +442,10 @@ class MediaController extends Controller
                     $vel->coverage .=',';
                 }
             }
-            $vel->media_type = $type[$vel->media_type];
+            if(isset($vel->media_type)){
+                $vel->media_type = $type[$vel->media_type];
+            }
+
             $vel->Entrance_level = $this->get_category($vel->Entrance_level);
             $vel->Entrance_form = $this->get_category($vel->Entrance_form);
             $vel->channel = $this->get_category($vel->channel);
@@ -478,13 +494,18 @@ class MediaController extends Controller
     public function Member_order()
     {
         $arr = Input::all();
+//        dd($arr);
+//        $price= DB::table('media_community')->where('id', 2)->pluck('pf_price')->first();
+//        dd($price);
         if(!empty(Input::get('form5data')) && empty($arr['form5data'])){
             $data=Input::get('form5data');
         }else{
             $data= $arr['form5data'];
         }
+        $media_id = $data['media_id'];
+//        dd($media_id);
+        $data['price']='1231';
         $Manuscripts_attr = $data['Manuscripts_attr'];
-        $data['price']="234123";
         switch ($Manuscripts_attr) {
             case '1';
                 $rules = array(
@@ -544,10 +565,10 @@ class MediaController extends Controller
             'content.min' => '内容最小为200个字符',
             'price.required'=>'价格不能为空'
         );
-        $set_title=News::where('title','=',$data['title'])->first();
-        if($set_title){
-            return json_encode(['msg' => '新闻标题已被占用', 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
-        }
+//        $set_title=News::where('title','=',$data['title'])->first();
+//        if($set_title){
+//            return json_encode(['msg' => '新闻标题已被占用', 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
+//        }
         $data['user_id']=Auth::id();
         $validator = Validator::make($data, $rules, $messgage);
         $messages = $validator->messages();
@@ -565,16 +586,24 @@ class MediaController extends Controller
             if (strtotime($data['start_time']) > strtotime($data['end_time'])) {
                 return json_encode(['msg' => "结束时间必须大于开始时间", 'sta' => "1", 'data' => ''], JSON_UNESCAPED_UNICODE);
             }
+            $start =$data['start_time'];
+            $end = $data['end_time'];
+//            dd($user);
+            for ($i=0;$i<count($media_id);$i++){
+                $data['news_type']=$arr['key'];
+                //查询价格
+                $data['price']= DB::table('media_community')->where('id', $media_id[$i])->pluck('pf_price')->first();
+                ;
+                //生成订单号
+                $data['order_code']=Controller::makePaySn(Auth::id());
+//                $data['media_id']=implode(',',$data['media_id']);
+                $data['media_id'] = $media_id[$i];
+                $data['start_time']=strtotime($start);
+                $data['end_time']=strtotime($end);
+                $result = News::create($data);
 
-            $data['news_type']=$arr['key'];
-            //查询价格
-            $data['price']='14231';
-            //生成订单号
-            $data['order_code']=Controller::makePaySn(Auth::id());
-            $data['media_id']=implode(',',$data['media_id']);
-            $data['start_time']=strtotime($data['start_time']);
-            $data['end_time']=strtotime($data['end_time']);
-            $result = News::create($data);
+            }
+
         }
         return json_encode(['msg' => "请求成功", 'sta' => "0", 'data' => $result], JSON_UNESCAPED_UNICODE);
 

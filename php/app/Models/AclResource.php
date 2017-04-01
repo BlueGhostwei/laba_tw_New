@@ -46,14 +46,22 @@ class AclResource extends Eloquent
             '锁定用户' => 'UserController@lock',
             '查看已删除用户列表' => 'UserController@trash',
             '恢复已删除用户' => 'UserController@restore',
+            '查看消息'=>'DashboardController@showMessage'
         ],
         '网络媒体' => [
             '发布新闻任务' => 'MediaController@index',
+            '修改用户反馈' =>'MediaProviderController@customer_feedback',
+            '修改供应商反馈'=>'MediaProviderController@provider_feedback',
+            '查看新闻详情'=>'MediaProviderController@order_details',
             
         ],
         '会员中心'=>[
             '会员信息'=>'UserController@user_info',
             '查看个人订单列表'=>'MediaController@Member_order',
+            '在线充值'=>'UserController@Onlnetop_up',
+            '账户提现'=>'UserController@show_withdraw',
+            '提现列表'=>'UserController@show_withdraw_list',
+            '我的账单'=>'UserController@get_order_list',
 
         ],
         '平台管理' => [
@@ -73,6 +81,13 @@ class AclResource extends Eloquent
             '查看系统日志' => 'SystemController@logs',
             '查看操作记录' => 'SystemController@action',
             '查看登录记录' => 'SystemController@loginHistory',
+        ],
+        '平台管理' =>[
+            '分类管理' => '',
+            '新增媒体' => '',
+            '媒体列表' => '',
+            '新增用户' => '',
+            '用户管理' => ''
         ]
 
 

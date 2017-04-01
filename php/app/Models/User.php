@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Hash;
 use Eloquent;
+//use Illuminate\Notifications\Notifiable;
 use App\Models\AclRole;
 use App\Models\AclResource;
 use Illuminate\Auth\Authenticatable;
@@ -48,7 +49,8 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'username',
         'password',
         'role',
-        'confirm'
+        'confirm',
+        'wealth'
     ];
 
     /**
@@ -179,6 +181,9 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
 
         return array_keys($acl->toArray());
     }
+
+
+
     /**
      * 定义于 创建者 的关联关系
      *
@@ -227,6 +232,9 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     {
         return $this->hasMany(\App\Models\AclRole::class, 'role', $this->role);
     }
+
+
+
 
 
 

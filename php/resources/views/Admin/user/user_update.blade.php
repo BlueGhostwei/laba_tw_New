@@ -82,9 +82,9 @@
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>兴趣爱好类：</p>
                                             <select class="sel_2">
                                                 <option value="" data_id="0">请选择问题</option>
-                                                @if(isset($data_con) && !empty($data_con['home']))
-                                                       @foreach($data_con['home'] as $ky =>$rst)
-                                                        <option value="{{$rst['id']}}" data_id="{{$rst['id']}}">{{$rst['question_name']}}</option>
+                                                @if(isset($data_con) && !empty($data_con->hobby))
+                                                       @foreach($data_con->hobby as $ky =>$rst)
+                                                        <option value="{{$rst->id}}" data_id="{{$rst->id}}">{{$rst->question_name}}</option>
                                                         @endforeach
                                                 @endif
                                             </select>
@@ -95,9 +95,9 @@
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>家庭工作类：</p>
                                             <select class="sel_2">
                                                 <option value=""  data_id="0">请选择问题</option>
-                                                @if(isset($data_con) && !empty($data_con['hobby']))
-                                                    @foreach($data_con['hobby'] as $ky =>$rst)
-                                                        <option value="{{$rst['id']}}" data_id="{{$rst['id']}}">{{$rst['question_name']}}</option>
+                                                @if(isset($data_con) && !empty($data_con->home))
+                                                    @foreach($data_con->home as $ky =>$rst)
+                                                        <option value="{{$rst->id}}" data_id="{{$rst->id}}">{{$rst->question_name}}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -108,9 +108,9 @@
                                         <div class="WMain3 WMain3_2 clearfix"><p><i class="LGntas"></i>教育杂项类：</p>
                                             <select class="sel_2">
                                                 <option value="" data_id="0">请选择问题</option>
-                                                @if(isset($data_con) && !empty($data_con['education']))
-                                                    @foreach($data_con['education'] as $ky =>$rst)
-                                                        <option value="{{$rst['id']}}" data_id="{{$rst['id']}}">{{$rst['question_name']}}</option>
+                                                @if(isset($data_con) && !empty($data_con->education))
+                                                    @foreach($data_con->education as $ky =>$rst)
+                                                        <option value="{{$rst->id}}" data_id="{{$rst->id}}">{{$rst->question_name}}</option>
                                                     @endforeach
                                                 @endif
                                             </select>

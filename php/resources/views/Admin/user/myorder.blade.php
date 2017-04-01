@@ -10,17 +10,17 @@
                     <div class="info1_l">
                         <div class="bill1" style="border-bottom:1px dotted #e5e5e5;">
                             <h3>平台打款金额：</h3>
-                            <p>￥0 元</p></li>
+                            <p>￥ 元</p></li>
                         </div>
                         <div class="bill1">
-                            <h3>余额：0</h3>
+                            <h3>余额：{{Auth::user()->wealth}}</h3>
                             <p></p>
                         </div>
                     </div>
                     <div class="info1_m">
                         <div class="bill1 bill2">
                             <h3>已发布订单数：</h3>
-                            <p>0个</p>
+                            <p>{{count($lists)}}个</p>
                         </div>
                         <div class="bill1 bill2" style="margin-top:19px;">
                             <h3>未完成订单数：</h3>
@@ -78,6 +78,7 @@
                                         <th>订单号</th>
                                         <th>订单类型</th>
                                         <th>订单名称</th>
+                                        <th>状态</th>
                                         <th>截图/链接</th>
                                         <th>金额</th>
                                     </tr>
@@ -106,6 +107,15 @@
                                                     @endif
 
                                                 <td>{{$list->title}}</td>
+                                                <td>
+                                                    @if($list->state == 0)
+                                                        未完成
+                                                    @elseif($list->state == 1)
+                                                        完成
+                                                    @else
+                                                        失败
+                                                    @endif
+                                                </td>
                                                 <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
                                                 <td><span class="color_red2">{{$list->price}}元</span></td>
                                             </tr>

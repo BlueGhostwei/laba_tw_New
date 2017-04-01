@@ -36,7 +36,7 @@ class CreateWealthlogTable extends Migration
             //状态 0：未完成，1完成
             $table->tinyInteger('state')->default(0)->commit('状态');
             //支付账号
-            $table->string('payment',100)->nullable()->commit('支付方式');
+            $table->string('payment',100)->nullable()->commit('支付账号');
             //账号类型
             $table->integer('paytype')->commit('支付方式');
             //URL

@@ -37,7 +37,7 @@
                                         <td>{{$data->Entrance_level}}</td>
                                         <td>{{$data->coverage}}</td>
                                         <td>￥{{$data->pf_price}}</td>
-                                        <td><a href="">新闻发布</a></td>
+                                        <td><a href="{{url('Admin/media/release?id=')}}{{$data->id}}">新闻发布</a></td>
                                     </tr>
                                     @endforeach
                                     </tbody>

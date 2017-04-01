@@ -108,6 +108,11 @@ class PayController extends Controller
                 }
                 $user = User::find($wealthlog->user_id);
                 $user->wealth = $user->wealth + $wealthlog->price;
+                $message = new Message();
+                $message->title = '充值完成';
+                $message->receive = $wealthlog->user_id;
+                $message->message = '你于'.$wealthlog->created_at.'发起的充值已到账！';
+                $message->save();
                 $user->save();
                 $wealthlog->save();
             case 'TRADE_FINISHED':
@@ -121,6 +126,11 @@ class PayController extends Controller
                 }
                 $user = User::find($wealthlog->user_id);
                 $user->wealth = $user->wealth + $wealthlog->price;
+                $message = new Message();
+                $message->title = '充值完成';
+                $message->receive = $wealthlog->user_id;
+                $message->message = '你于'.$wealthlog->created_at.'发起的充值已到账！';
+                $message->save();
                 $user->save();
                 $wealthlog->save();
             case 'TRADE_CLOSED':
@@ -131,6 +141,11 @@ class PayController extends Controller
                 }else{
                     $wealthlog->payment = Input::get('seller_email');
                 }
+                $message = new Message();
+                $message->title = '充值失败';
+                $message->receive = $wealthlog->user_id;
+                $message->message = '你于'.$wealthlog->created_at.'发起的充值放弃付款！';
+                $message->save();
                 $wealthlog->remark = '用户放弃付款！';
                 $wealthlog->save();
         }

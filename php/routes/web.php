@@ -187,6 +187,11 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::get('Admin/message',['as'=>'admin.message','uses'=>'DashboardController@showMessage']);
         Route::get('Admin/message/detail',['as'=>'admin.message.detail','uses'=>'DashboardController@messageDetail']);
         Route::get('Admin/search',['as'=>'admin.search','uses'=>'MediaController@search']);
+        Route::post('Admin/customer_feedback',['as'=>'admin.feedback.customer','uses'=>'MediaProviderController@customer_feedback']);
+        Route::post('Admin/provider_feedback',['as'=>'admin.feedback.provider','uses'=>'MediaProviderController@provider_feedback']);
+        Route::post('Admin/customer_confirm',['as'=>'admin.confirm','uses'=>'MediaProviderController@customer_confirm']);
+        Route::any('Admin/get_month_data','DashboardController@get_month_data');
+        Route::any('Admin/get_news_order','MediaProviderController@get_list_api');
     });
 
 });

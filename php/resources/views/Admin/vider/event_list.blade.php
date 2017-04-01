@@ -82,14 +82,15 @@
                                         <th>价格</th>
                                         <th>订单状态</th>
                                         <th>完成链接/截图</th>
-                                        <th>质检状态</th>
-                                        <th>质检处理</th>
-                                        <th>质检扣款</th>
+                                        {{--<th>质检状态</th>--}}
+                                        {{--<th>质检处理</th>--}}
+                                        {{--<th>质检扣款</th>--}}
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if(isset($result) && $result[0] != null)
+                                    @if(isset($result) )
+
                                         @foreach($result as $key =>$v)
                                         <tr>
                                             <td>{{$v->order_code}}</td>
@@ -100,12 +101,26 @@
                                             <td>{{date('Y-m-d H:i ',$v->start_time)}}</td>
                                             <td>{{date('Y-m-d H:i ',$v->end_time)}}</td>
                                             <td><span class="color_red1">{{$v->price}}</span></td>
-                                            <td>已受理</td>
+                                            <td>
+                                                @if($v->release_sta == 1)
+                                                    已派单
+                                                @elseif($v->release_sta == 2)
+                                                    已提交
+                                                @elseif($v->release_sta == 3)
+                                                    投诉申诉
+                                                @elseif($v->release_sta == 4)
+                                                    已完成
+                                                @elseif($v->release_sta == 5)
+                                                    已拒单
+                                                @else
+                                                    已流单
+                                                @endif
+                                            </td>
                                             <td><img class="link" src="{{url('Admin/images/ico_link.png')}}"
                                                                                 alt="完成链接/截图"/></td>
-                                            <td><span class="color_green">优</span></td>
-                                            <td>合格</td>
-                                            <td><span class="color_red2">80元</span></td>
+                                            {{--<td><span class="color_green">优</span></td>--}}
+                                            {{--<td>合格</td>--}}
+                                            {{--<td><span class="color_red2">80元</span></td>--}}
                                             <td>
                                                 <a href="{{route('order.details',$v->id)}}"><span>查看</span></a>&nbsp;
                                             </td>

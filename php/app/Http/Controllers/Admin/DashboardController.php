@@ -26,9 +26,32 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //        $page =  ceil(count(Db::table('news')->get())/6);
-        return view('Admin.dashboard.league-agent',['news'=>DB::table('news')->get()]);
+        $messages = Message::limit(4)->orderBy('id','DESC')->get();
+        $news = DB::table('news')->where('user_id','=',Auth::id())->get();
+
+
+//        dd($news);
+        return view('Admin.dashboard.league-agent',['news'=>$this->build_data($news),'messages'=>$messages]);
     }
+    public function build_data($news){
+        foreach ($news as $new =>$v){
+            if($v->release_sta==1){
+                $v->release_sta = '已派单';
+            }elseif ($v->release_sta==2){
+                $v->release_sta = '已提交';
+            }elseif ($v->release_sta==3){
+                $v->release_sta = '投诉申诉';
+            }elseif ($v->release_sta==4){
+                $v->release_sta = '已完成';
+            }elseif ($v->release_sta==4){
+                $v->release_sta = '已拒单';
+            }else{
+                $v->release_sta = '已流单';
+            }
+        }
+        return $news;
+    }
+
 
 
     /**
@@ -55,12 +78,13 @@ class DashboardController extends Controller
         $end =Input::get('end');
         $title = Input::get('title');
         $data = $this->searchNews($start,$end,$title);
-        return view('Admin.dashboard.newspage',['data'=>$data]);
+//        dd($data);
+        return view('Admin.dashboard.newspage',['data'=>$this->build_data($data)]);
     }
     public function searchNews($start,$end,$title){
         $start = strtotime($start);
         $end = strtotime($end);
-        $sql ='select id,order_code,title,news_type,created_at,price,status from news where ';
+        $sql ='select id,order_code,title,news_type,created_at,price,release_sta from news where user_id = '.Auth::id().' AND ';
         if($start==false||$end==false){
             if(empty($title)){
                 $sql .= '1';
@@ -87,6 +111,10 @@ class DashboardController extends Controller
         $order = Input::get('order');
     }
 
+    public function get_month_data(){
+        return response()->json(['sta'=>'1','data'=>get_month_data(),'msg'=>'gg']);
+    }
+
 
 
     public function showMessage(){
@@ -110,7 +138,4 @@ class DashboardController extends Controller
         $data->save();
         return $data;
     }
-
-
-
 }

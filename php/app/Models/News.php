@@ -39,5 +39,6 @@ class News extends Eloquent
         'order_code',
         'status',
         'remark',
+        'price'
     ];
 }

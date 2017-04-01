@@ -165,13 +165,8 @@
                                             <td>{{$new->news_type}}</td>
                                             <td>{{$new->created_at}}</td>
                                             <td>{{$new->price}}</td>
-                                            <td>{{$new->status}}</td>
-                                            <td><select>
-                                                    <option>删除</option>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                </select></td>
+                                            <td>{{$new->release_sta}}</td>
+                                            <td><a href="{{'Admin/order/details/'}}{{$new->id}}">查看</a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -254,10 +249,9 @@
                         <div class="row3 row3_1 radius1">
                             <h3 class="title1"><strong><a href="#">新闻中心</a></strong></h3>
                             <ul>
-                                <li class="clearfix"><a href="">你的任务已经被某某媒体商确认电视广告精准投放已经实现</a><span>2016-9-16</span></li>
-                                <li class="clearfix"><a href="">你的任务已经被某某媒体商确认电视广告精准投放已经实现</a><span>2016-9-16</span></li>
-                                <li class="clearfix"><a href="">你的任务已经被某某媒体商确认电视广告精准投放已经实现</a><span>2016-9-16</span></li>
-                                <li class="clearfix"><a href="">你的任务已经被某某媒体商确认电视广告精准投放已经实现</a><span>2016-9-16</span></li>
+                                @foreach($messages as $message)
+                                <li class="clearfix"><a href="{{url('Admin/message/detail?id=')}}{{$message->id}}">{{$message->title}}</a><span>{{$message->created_at}}</span></li>
+                                @endforeach
                             </ul>
                             <div class="clr"></div>
                         </div>
@@ -270,23 +264,23 @@
                             </div>
 
                             @else
-                            <div class="row3 row3_2 radius1">
-                                <h3 class="title1"><strong><a href="#">盈利状况</a></strong></h3>
-                                <ul>
-                                    <li class="li1">
-                                        <p>分销会员总收益<br/>
-                                            <b>￥0</b></p>
-                                        <span></span></li>
-                                    <li class="li2">
-                                        <p>纯分销收益<br/>
-                                            <b>￥0</b></p>
-                                        <span></span></li>
-                                    <li class="li3">
-                                        <p>占账户总收益率<br/>
-                                            <b>0%</b></p>
-                                        <span></span></li>
-                                </ul>
-                            </div>
+                            {{--<div class="row3 row3_2 radius1">--}}
+                                {{--<h3 class="title1"><strong><a href="#">盈利状况</a></strong></h3>--}}
+                                {{--<ul>--}}
+                                    {{--<li class="li1">--}}
+                                        {{--<p>分销会员总收益<br/>--}}
+                                            {{--<b>￥0</b></p>--}}
+                                        {{--<span></span></li>--}}
+                                    {{--<li class="li2">--}}
+                                        {{--<p>纯分销收益<br/>--}}
+                                            {{--<b>￥0</b></p>--}}
+                                        {{--<span></span></li>--}}
+                                    {{--<li class="li3">--}}
+                                        {{--<p>占账户总收益率<br/>--}}
+                                            {{--<b>0%</b></p>--}}
+                                        {{--<span></span></li>--}}
+                                {{--</ul>--}}
+                            {{--</div>--}}
                             @endif
 
 
@@ -297,18 +291,18 @@
                         <div class="row3 row3_3 radius1">
                             <h3 class="title1"><strong><a href="#">联系我们</a></strong></h3>
                             <div class="row3_3_m">
-                                <p>请输入你的电话号码<br/>
-                                    稍后即可接到我们的来电。</p>
-                                <div class="callback">
-                                    <form>
-                                        <input type="submit" name="submit" value="免费回电" class="sub3" />
-                                        <div class="w_txt4">
-                                            <input type="text" name="" value="" placeholder="请输入手机号码" class="txt4" />
-                                        </div>
-                                    </form>
-                                </div>
-                                <p style="color:#FF8400;">该通话对您免费，请放心接听。</p>
-                                <p>手机请直接输入<br/>座机前请加区号</p>
+                                <p>联系电话:<br/>
+                                    020-34206485</p>
+                                {{--<div class="callback">--}}
+                                    {{--<form>--}}
+                                        {{--<input type="submit" name="submit" value="免费回电" class="sub3" />--}}
+                                        {{--<div class="w_txt4">--}}
+                                            {{--<input type="text" name="" value="" placeholder="请输入手机号码" class="txt4" />--}}
+                                        {{--</div>--}}
+                                    {{--</form>--}}
+                                {{--</div>--}}
+                                {{--<p style="color:#FF8400;">该通话对您免费，请放心接听。</p>--}}
+                                {{--<p>手机请直接输入<br/>座机前请加区号</p>--}}
                             </div>
                         </div>
                     </div>

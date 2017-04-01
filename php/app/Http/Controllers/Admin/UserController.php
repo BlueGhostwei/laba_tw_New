@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\AclRole;
 use App\Models\AclUser;
+use App\Models\Media_community;
 use App\Models\Message;
 use App\Models\News;
 use App\Models\Order;
@@ -177,6 +178,7 @@ class UserController extends Controller
      */
     public function Settlement()
     {
+//        dd(Input::all());
         $arr = Input::all();
         //取消订单
         if (isset($arr['type']) && $arr['type']=='cancel_order'){
@@ -194,33 +196,55 @@ class UserController extends Controller
                 return json_encode(['msg'=>'密码错误，请重新输入','sta'=>'1','data'=>'']);
             }
             //获取订单号
-            $arr_p=[];
+            $arr_p=0;
             $order_id=explode(',',$arr['order_id']);
+//            dd($order_id);
             foreach ($order_id as $k =>$v){
                 $price=News::where(['id'=>$v,'user_id'=>Auth::id()])->select('price','status')->first();
                 if($price && $price->status=='2'){//订单已支付
                     return json_encode(['msg'=>'参数错误，请刷新页面重试！','sta'=>'1','data'=>'']);
                 }
                 if(empty($arr_p)){
-                    $arr_p[$k]=$price->price;
+                    $arr_p=$price->price;
                 }else{
-                    $arr_p=array_first($arr_p)+$price->price;
+                    $arr_p=$arr_p+$price->price;
                 }
             }
+//            dd($arr_p);
+//            dd($order_id);
             //对比价格（对比前端页面传过来的价格，true结算，false反馈）
-           if(!empty($arr_p) && array_first($arr_p)==$arr['price']){
+           if(!empty($arr_p) && $arr_p==$arr['price']){
                //查询账号余额
                if(Auth::user()->wealth < $arr['price'] ){
                    return json_encode(['msg'=>'账户余额不足，请充值！','sta'=>'1','data'=>'']);
                }
+//               dd($order_id);
                //扣除金额
                //修改订单状态
                //事务处理
-               DB::transaction(function() use($arr,$order_id){
+               $user = Auth::user();
+//               dd($user);
+//               dd($order_id);
+               DB::transaction(function() use($arr,$order_id,$user){
                    $wealth=Auth::user()->wealth - $arr['price'];
                    User::where('id',Auth::id())->update(['wealth'=>$wealth]);
                    foreach ($order_id as $key =>$vel){
                        News::where('id',$vel)->update(['status'=>'2']);
+                       $wealthlog['user_id'] = $user->id;
+                       $wealthlog['price'] =News::where(['id'=>$vel,'user_id'=>$user->id])->pluck('price')->first();
+                       $wealthlog['username'] = $user->username;
+                       $wealthlog['money'] = $user->wealth;
+                       $wealthlog['order_code'] = News::where(['id'=>$vel,'user_id'=>$user->id])->pluck('order_code')->first();
+                       $wealthlog['maketime'] = time();
+                       $wealthlog['type'] = '2';
+                       $wealthlog['state'] ='0';
+                       $wealthlog['title'] = '新闻下单';
+                       $media_id = News::where(['id'=>$vel,'user_id'=>$user->id])->pluck('media_id')->first();
+                       $message['title'] = '新闻发布';
+                       $message['receive'] = $user->id;
+                       $message['message'] = '你于'.time().'向'.Media_community::where(['id'=>$media_id])->pluck('media_name')->first().'发布了一条新闻';
+                       $rst1 = Message::create($message);
+                       $rst = Wealthlog::create($wealthlog);
                    }
                    $rvb=['sta'=>1,'time'=>time()];
                    Session::set('pay_status',$rvb);
@@ -403,7 +427,12 @@ class UserController extends Controller
     public function safety_update($data)
     {
         if ($data == 'security') {
-            $data_con = config('security');
+//            $data_con = config('security');
+            $data_con = $this->_data_con();
+            $data_con = json_decode($data_con);
+            $data_con = $data_con->data;
+//            $data_con=(array)objectToArray($data_con);
+//            dd($data_con);
             return view('Admin.user.user_update', ['type' => $data, 'data_con' => $data_con]);
         }
         return view('Admin.user.user_update', ['type' => $data]);
@@ -808,10 +837,14 @@ class UserController extends Controller
             return json_encode(['msg' => '参数错误！', 'sta' => '1', 'data' => '']);
         }
         $checkbool = 0;
+//        dd($data);
         for ($i = 0; $i < count($data); $i++) {
-            $arr = explode(',', $data[$i]);
-            if ($arr['1'] == DB::table('security')->where('id', $arr['0'])->pluck('answer')->first()) {
-                $checkbool++;
+//            $arr = explode(',', $data[$i]);
+//            if ($arr['1'] == DB::table('security')->where('id', $arr['0'])->pluck('answer')->first()) {
+//                $checkbool++;
+//            }
+            if($data[$i]['answer'] == DB::table('security')->where('id',$data[$i]['id'])->pluck('answer')->first()){
+                $checkbool ++;
             }
         }
         if ($checkbool == count($data)) {
@@ -864,7 +897,7 @@ class UserController extends Controller
 
     public function userManage()
     {
-        $users = User::orderBy('user.id', 'desc')->select('user.username', 'user.id', 'user.role', 'user.created_at', 'user.created_by', 'user.wealth', 'user.lock', 'acl_user.acl_name')->join('acl_user', 'user.role', 'acl_user.acl_id')->where('user.deleted_at', null)->paginate(10);
+        $users = User::orderBy('user.id', 'desc')->select('user.username', 'user.id', 'user.role', 'user.created_at', 'user.created_by', 'user.wealth', 'user.lock', 'acl_user.acl_name')->join('acl_user', 'user.role', 'acl_user.id')->where('user.deleted_at', null)->paginate(10);
        // dd($users);
         foreach ($users as $k => $v) {
 //            $users[$k]['created_by']=User::find($users[$k]['created_by'])->username;

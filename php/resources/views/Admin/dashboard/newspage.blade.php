@@ -5,7 +5,7 @@
     <td>{{$new->news_type}}</td>
     <td>{{$new->created_at}}</td>
     <td>{{$new->price}}</td>
-    <td>{{$new->status}}</td>
+    <td>{{$new->release_sta}}</td>
     <td><select>
             <option>删除</option>
             <option>1</option>
