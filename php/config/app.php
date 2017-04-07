@@ -164,6 +164,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Latrell\Alipay\AlipayServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -231,7 +232,8 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image'=>Intervention\Image\Facades\Image::class,
         'Input'     => Illuminate\Support\Facades\Input::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

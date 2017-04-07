@@ -10,21 +10,21 @@
                     <div class="info1_l">
                         <div class="bill1" style="border-bottom:1px dotted #e5e5e5;">
                             <h3>平台打款金额：</h3>
-                            <p>￥ 元</p></li>
+                            <p>￥{{$money}}元</p></li>
                         </div>
                         <div class="bill1">
-                            <h3>余额：{{Auth::user()->wealth}}</h3>
-                            <p></p>
+                            <h3>余额：</h3>
+                            <p>￥{{Auth::user()->wealth}}元</p>
                         </div>
                     </div>
                     <div class="info1_m">
                         <div class="bill1 bill2">
                             <h3>已发布订单数：</h3>
-                            <p>{{count($lists)}}个</p>
+                            <p>{{$num}}个</p>
                         </div>
                         <div class="bill1 bill2" style="margin-top:19px;">
                             <h3>未完成订单数：</h3>
-                            <p>0个</p>
+                            <p>{{$unfinishnum}}个</p>
                         </div>
                     </div>
                     <div class="info1_r"><img src="{{url('admin/images/pic6.jpg')}}" ></div>
@@ -57,18 +57,19 @@
                                     <li><a href="javascript:void (0)" val="2" class="typesel">消费</a></li>
                                 </ul>
                                 <div class="search_2">
-
+                                    <form action="" method="" name="">
                                         <div class="l">
                                             <span>起止时间</span>
                                         </div>
                                         <div class="l">
-                                            <input type="text" class="txt2" id="datepicker1" />-<input type="text" class="txt2" id="datepicker2" />
+                                            <input type="text" class="txt2" name="start" id="datepicker1" />-<input type="text" name="end" class="txt2" id="datepicker2" />
                                         </div>
                                         <div class="l">
                                             <input type="submit" name="submit" id="search" class="sub4" value="查询" />
                                         </div>
+                                    </form>
                                 </div>
-                                <a href="" class="daochu">导出财务明细</a>
+                                <a href="?output=1" class="daochu">导出财务明细</a>
                             </div>
                             <div class="tab1_body" style="min-height:515px;">
                                 <table class="table_in1 cur">
@@ -85,26 +86,26 @@
                                     </thead>
                                     <tbody>
                                     @if(empty($lists))
-                                    <tr>
-                                        <td colspan="9">
-                                            <div class="nodata">
-                                                <img src="/images/nodata.png" />
-                                                <p>您目前暂无明细信息</p>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="nodata">
+                                                    <img src="/images/nodata.png" />
+                                                    <p>您目前暂无明细信息</p>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @else
                                         @foreach($lists as $list)
                                             <tr>
                                                 <td>{{$list->created_at}}</td>
                                                 <td>{{$list->order_code}}</td>
                                                 @if($list->type==0)
-                                                <td>提现</td>
+                                                    <td>提现</td>
                                                 @elseif($list->type==1)
                                                     <td>充值</td>
-                                                    @else
+                                                @else
                                                     <td>消费</td>
-                                                    @endif
+                                                @endif
 
                                                 <td>{{$list->title}}</td>
                                                 <td>
@@ -119,7 +120,163 @@
                                                 <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
                                                 <td><span class="color_red2">{{$list->price}}元</span></td>
                                             </tr>
-                                            @endforeach
+                                        @endforeach
+                                    @endif
+                                    </tbody>
+                                </table>
+                                <table class="table_in1">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>订单号</th>
+                                        <th>订单类型</th>
+                                        <th>订单名称</th>
+                                        <th>状态</th>
+                                        <th>截图/链接</th>
+                                        <th>金额</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @if(empty($withdrawlist))
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="nodata">
+                                                    <img src="/images/nodata.png" />
+                                                    <p>您目前暂无提现明细信息</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        @foreach($withdrawlist as $list)
+                                            <tr>
+                                                <td>{{$list->created_at}}</td>
+                                                <td>{{$list->order_code}}</td>
+                                                @if($list->type==0)
+                                                    <td>提现</td>
+                                                @elseif($list->type==1)
+                                                    <td>充值</td>
+                                                @else
+                                                    <td>消费</td>
+                                                @endif
+
+                                                <td>{{$list->title}}</td>
+                                                <td>
+                                                    @if($list->state == 0)
+                                                        未完成
+                                                    @elseif($list->state == 1)
+                                                        完成
+                                                    @else
+                                                        失败
+                                                    @endif
+                                                </td>
+                                                <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
+                                                <td><span class="color_red2">{{$list->price}}元</span></td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                    </tbody>
+                                </table>
+                                <table class="table_in1">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>订单号</th>
+                                        <th>订单类型</th>
+                                        <th>订单名称</th>
+                                        <th>状态</th>
+                                        <th>截图/链接</th>
+                                        <th>金额</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @if(empty($topuplist))
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="nodata">
+                                                    <img src="/images/nodata.png" />
+                                                    <p>您目前暂无明细信息</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        @foreach($topuplist as $list)
+                                            <tr>
+                                                <td>{{$list->created_at}}</td>
+                                                <td>{{$list->order_code}}</td>
+                                                @if($list->type==0)
+                                                    <td>提现</td>
+                                                @elseif($list->type==1)
+                                                    <td>充值</td>
+                                                @else
+                                                    <td>消费</td>
+                                                @endif
+
+                                                <td>{{$list->title}}</td>
+                                                <td>
+                                                    @if($list->state == 0)
+                                                        未完成
+                                                    @elseif($list->state == 1)
+                                                        完成
+                                                    @else
+                                                        失败
+                                                    @endif
+                                                </td>
+                                                <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
+                                                <td><span class="color_red2">{{$list->price}}元</span></td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                    </tbody>
+                                </table>
+                                <table class="table_in1">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>订单号</th>
+                                        <th>订单类型</th>
+                                        <th>订单名称</th>
+                                        <th>状态</th>
+                                        <th>截图/链接</th>
+                                        <th>金额</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @if(empty($uselist))
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="nodata">
+                                                    <img src="/images/nodata.png" />
+                                                    <p>您目前暂无明细信息</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        @foreach($uselist as $list)
+                                            <tr>
+                                                <td>{{$list->created_at}}</td>
+                                                <td>{{$list->order_code}}</td>
+                                                @if($list->type==0)
+                                                    <td>提现</td>
+                                                @elseif($list->type==1)
+                                                    <td>充值</td>
+                                                @else
+                                                    <td>消费</td>
+                                                @endif
+
+                                                <td>{{$list->title}}</td>
+                                                <td>
+                                                    @if($list->state == 0)
+                                                        未完成
+                                                    @elseif($list->state == 1)
+                                                        完成
+                                                    @else
+                                                        失败
+                                                    @endif
+                                                </td>
+                                                <td><a href="" target="_blank"><img class="link" src="/images/ico_link.png" alt="链接/截图" /></a></td>
+                                                <td><span class="color_red2">{{$list->price}}元</span></td>
+                                            </tr>
+                                        @endforeach
                                     @endif
                                     </tbody>
                                 </table>

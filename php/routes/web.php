@@ -192,6 +192,7 @@ Route::group(['middleware' => ['auth','acl']], function () {
         Route::post('Admin/customer_confirm',['as'=>'admin.confirm','uses'=>'MediaProviderController@customer_confirm']);
         Route::any('Admin/get_month_data','DashboardController@get_month_data');
         Route::any('Admin/get_news_order','MediaProviderController@get_list_api');
+        Route::get('Admin/get_my_order_list',['as'=>'admin.order.getlist','uses'=>'UserController@get_order_list_api']);
     });
 
 });

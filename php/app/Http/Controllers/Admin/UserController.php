@@ -10,6 +10,7 @@ use App\Models\News;
 use App\Models\Order;
 use App\Models\Wealthlog;
 use League\Flysystem\Exception;
+use Maatwebsite\Excel\Facades\Excel;
 use Session;
 use Hash;
 use Illuminate\Http\Request;
@@ -607,21 +608,73 @@ class UserController extends Controller
         return $data;
     }
 
+
     public function get_order_list(){
 //        dd($this->get_my_order());
-        return view('Admin/user/myorder',['lists'=>$this->get_my_order()]);
+
+        //所有列表
+        $lists = $this->get_my_order();
+        if(is_array($lists)){
+            //提现列表
+            $withdrawlist = array_filter($lists,function($elem){
+                if($elem->type==0){
+                    return $elem;
+                }
+            });
+            //充值列表
+            $topuplist = array_filter($lists,function($elem){
+                if ($elem->type ==1){
+                    return $elem;
+                }
+            });
+            //消费列表
+            $uselist = array_filter($lists,function($elem){
+                if ($elem->type ==2){
+                    return $elem;
+                }
+            });
+            $sum = DB::table('wealthlog')->where('user_id','=',Auth::id())->where('state','=','1')->where('type','=','2')->sum('price');
+            $allnum = DB::table('wealthlog')->where('user_id','=',Auth::id())->count();
+            $unfinishnum = DB::table('wealthlog')->where('user_id','=',Auth::id())->where('state','!=','1')->count();
+
+        }
+        if(Input::get('output')){
+            $cellData = [];
+            $type = ['0'=>'提现','1'=>'充值','2'=>'消费'];
+            $state= ['0'=>'未完成','1'=>'完成','2'=>'失败'];
+            for ($i=0;$i<count($lists);$i++){
+                $ret = [];
+                array_push($ret,$lists[$i]->created_at);
+                array_push($ret,$lists[$i]->order_code);
+                array_push($ret,$type[$lists[$i]->type]);
+                array_push($ret,$lists[$i]->title);
+                array_push($ret,$state[$lists[$i]->state]);
+                array_push($ret,$lists[$i]->price);
+                array_push($cellData,$ret);
+            }
+            Array_unshift($cellData,['日期','订单号','订单类型','订单名称','状态','金额']);
+//            dd($cellData);
+            Excel::create(time(),function($excel) use ($cellData){
+                $excel->sheet('score', function($sheet) use ($cellData){
+                    $sheet->rows($cellData);
+                });
+            })->export('xls');
+        }
+//        $uselist;
+        return view('Admin/user/myorder',['lists'=>$this->get_my_order(),'withdrawlist'=>$withdrawlist,'topuplist'=>$topuplist,'uselist'=>$uselist,'money'=>$sum,'num'=>$allnum,'unfinishnum'=>$unfinishnum]);
     }
+    public function get_order_list_api(){
+        return json_encode(['msg'=>'获取成功！','sta'=>'0','data'=>$this->get_my_order()]);
+    }
+
 
     public function get_my_order(){
         $type = Input::get('type');
         $start = Input::get('start');
         $end = Input::get('end');
-        $page = Input::get('page');
         if(empty($type)&&empty($start)&&empty($end)&&empty($page)){
-            $data = DB::table('wealthlog')->where('user_id','=',Auth::id())->limit(10)->orderBy('id','DESC')->get();
+            $data = DB::table('wealthlog')->where('user_id','=',Auth::id())->orderBy('id','DESC')->get()->toArray();
         }else{
-            $rev = '10';
-            $offset = ($page-1)*$rev;
             $data = Db::table('wealthlog');
             if(!empty($type)){
                 $data->where('type','=',$type);
@@ -629,11 +682,8 @@ class UserController extends Controller
             if(!empty($start)&&!empty($end)){
                 $data->whereBetween('maketime', [strtotime($start), strtotime($end)]);
             }
-            if(empty($type)||(empty($starttime)&&empty($end))){
-                $data->skip($offset)->take($rev);
-            }
             $data->orderBy('id','DESC');
-            $data = $data->get();
+            $data = $data->get()->toArray();
         }
         return $data;
     }
@@ -667,6 +717,7 @@ class UserController extends Controller
                         $message->save();
                         $weathlog->save();
                         $user->save();
+                        return TRUE;
                     });
                     if ($bool){
                         return response()->json(['msg'=>'操作失败！','sta'=>'1','data'=>'']);

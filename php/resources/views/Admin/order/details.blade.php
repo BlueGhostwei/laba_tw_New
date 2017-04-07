@@ -57,9 +57,12 @@
                                 </div>
                                 <div class="IF3"><p>质量反馈:</p>
                                     @if($news_data->user_id==Auth::id())
-                                   <input type="radio" name="Evaluation" value="1" checked>优 &nbsp; &nbsp;
-                                   <input type="radio" name="Evaluation" value="1">良&nbsp; &nbsp;
-                                   <input type="radio" name="Evaluation" value="1">差
+                                        <select name="Evaluation" id="quality">
+                                            <option value="{{$news_data->quality}}">当前：{{$news_data->qualitytext}}</option>
+                                            <option value="1">优</option>
+                                            <option value="2">良</option>
+                                            <option value="3">差</option>
+                                        </select>
                                     @else
                                         {{$news_data->quality}}
                                     @endif
@@ -75,6 +78,10 @@
 
                                 </div>
                                 <div class="IF3"><p>修改状态:</p>
+                                    <select name="select" id="select">
+                                        <option>确认完成</option>
+                                        <option>订单反馈</option>
+                                    </select>
                                     <input type="radio" id="State" name="State" value="2" checked>默认
                                     <input type="radio" id="State" name="State" value="5">拒单&nbsp; &nbsp;
                                     <input type="radio" id="State" name="State" value="3">反馈
@@ -92,25 +99,28 @@
                                         </div></form>
 
                                     </div>
+
                                     <div class="IF3" ><p>供应商反馈:</p>
-                                        <textarea id="p_feedback" name="textfield3" class="IFN3  {{mla('MediaProviderController@provider_feedback')}}">{{$news_data->ofeedback}}</textarea>
+                                        @if($news_data->media_id==Auth::user()->media_id)
+                                            <textarea id="p_feedback" name="textfield3" class="IFN3  {{mla('MediaProviderController@provider_feedback')}}">{{$news_data->ofeedback}}</textarea>
+                                        @else
+                                            <textarea id="p_feedback" name="textfield3" readonly class="IFN3  {{mla('MediaProviderController@provider_feedback')}}">{{$news_data->ofeedback}}</textarea>
+                                        @endif
                                     </div>
                                 <div class="IF3"><p>会员反馈:</p>
+                                    @if($news_data->user_id == Auth::id())
                                     <textarea name="textfield3" id="c_feedback" class="IFN3 {{mla('MediaProviderController@customer_feedback')}}">{{$news_data->cfeedback}}</textarea>
+                                    @else
+                                        <textarea name="textfield3" id="c_feedback" readonly class="IFN3 {{mla('MediaProviderController@customer_feedback')}}">{{$news_data->cfeedback}}</textarea>
+                                    @endif
                                 </div>
+
                             </div>
-                            @if($news_data->media_id==Auth::user()->media_id)
-                            <input type="submit" name="button" value="供应商确认" id="provider_feedback" class="LGButton3 {{mla('MediaProviderController@provider_feedback')}}" style="margin: 5% 10% 5% 20%"/>
+                            @if($news_data->release_sta<4)
+                            <input type="submit" name="button" value="确   认" id="provider_feedback" class="LGButton3 {{mla('MediaProviderController@provider_feedback')}}" style="margin: 5% 10% 5% 20%"/>
                             @else
                             @endif
-                            @if($news_data->user_id==Auth::id())
-                            <input type="submit" name="button" id="customer_feedback" value="确  认" class="LGButton3 {{mla('MediaProviderController@provider_feedback')}}" style="margin: 5% 10% 5% 20%"/>
-                            @else
-                            @endif
-                            @if($news_data->user_id==Auth::id()&&$news_data->release_sta==2)
-                            <input type="submit" name="button" value="确认完成" id="customer_confrim" class="LGButton3 "style="margin: 5% 10%"/>
-                            @else
-                            @endif
+
                         </div>
                     </div>
                 </div>

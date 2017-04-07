@@ -24,9 +24,35 @@ class MediaProviderController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+
     public function order_details($id){
         //查询news表
       $result=News::find($id);
+
+          if($result->release_sta==1){
+              $result->release =  '已派单';
+          }elseif($result->release_sta==2){
+              $result->release =  '已提交';
+          }elseif($result->release_sta==3){
+              $result->release =  '反馈';
+          }elseif($result->release_sta==4){
+              $result->release =  '已完成';
+          }elseif($result->release_sta==5){
+              $result->release =  '已拒单';
+          }elseif($result->release_sta==6){
+              $result->release =  '已流单';
+          }
+      if($result->quality==1){
+          $result->qualitytext =  '优';
+      }elseif ($result->quality==2){
+          $result->qualitytext =  '良';
+      }else{
+          $result->qualitytext =  '差';
+      }
       return view('Admin.order.details',['news_data'=>$result]);
     }
 
@@ -60,9 +86,66 @@ class MediaProviderController extends Controller
        $media_id=$Media->id;
             //查询媒体未处理订单
 //            $result=DB::select("SELECT id,start_time,end_time,order_code,media_id,news_type,title,price FROM news WHERE  instr(concat(',',media_id,','),',$media_id,')<>0 AND status = 2 ORDER BY id DESC ;");
-        $result = DB::select('SELECT id,start_time,end_time,order_code,release_sta,media_id,news_type,title,price FROM news WHERE media_id = '.$media_id.' AND status = 2 ORDER BY id DESC');
+//        $result = DB::select('SELECT id,start_time,end_time,order_code,release_sta,media_id,news_type,title,price FROM news WHERE media_id = '.$media_id.' AND status = 2 ORDER BY id DESC');
+        $result = $this->get_event_list();
+        if(is_array($result)){
+
+            $state1 = array_filter($result,function($elem){
+                if($elem->release_sta==1){
+                    return $elem;
+                }
+            });
+            $state2 = array_filter($result,function($elem){
+                if($elem->release_sta==2){
+                    return $elem;
+                }
+            });
+            $state3 = array_filter($result,function($elem){
+                if($elem->release_sta==3){
+                    return $elem;
+                }
+            });
+            $state4 = array_filter($result,function($elem){
+                if($elem->release_sta==4){
+                    return $elem;
+                }
+            });
+            $state5 = array_filter($result,function($elem){
+                if($elem->release_sta==5){
+                    return $elem;
+                }
+            });
+            $state6 = array_filter($result,function($elem){
+                if($elem->release_sta==6){
+                    return $elem;
+                }
+            });
+        }
 //        dd($result);
-      return view('Admin.vider.event_list',['result'=>$result]);
+      return view('Admin.vider.event_list',['result'=>$result,'list1'=>$state1,'list2'=>$state2,'list3'=>$state3,'list4'=>$state4,'list5'=>$state5,'list6'=>$state6]);
+    }
+
+    public function get_event_list(){
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $title = Input::get('title');
+        $type = Input::get('type');
+        $Media=Media_community::find(Auth::user()->media_id);
+//       dd($Media);
+        $media_id=$Media->id;
+        if(empty($start)&&empty($end)&&empty($type)&&empty($title)){
+            $result = DB::select('SELECT id,quality,start_time,end_time,order_code,release_sta,media_id,news_type,title,price FROM news WHERE media_id = '.$media_id.' AND status = 2 ORDER BY id DESC');
+        }else{
+            $db = DB::table('news')->select(['id','quality','start_time','end_time','order_code','release_sta','media_id','news_type','title','price']);
+            if(!empty($start)&&!empty($end)){
+                $db->whereBetween('start_time',strtotime($start),strtotime($end));
+            }
+            if(!empty($title)){
+                $db->where('title','like','%'.$title.'%');
+            }
+            $result = $db->get()->toArray();
+        }
+        return $result;
     }
 
 
@@ -70,7 +153,7 @@ class MediaProviderController extends Controller
         $feedback = empty(Input::get('feedback'))?'':Input::get('feedback');
         $id = Input::get('id');
         $quality = Input::get('quality');
-        $news = News::where('id','=',$id)->get();
+        $news = News::where('id','=',$id)->first();
         if($news->user_id != Auth::id()){
             return response()->json(['msg'=>'没有操作权限！','sta'=>'1','data'=>'']);
         }else{
@@ -78,7 +161,7 @@ class MediaProviderController extends Controller
             $news->quality =$quality;
             $message['title']='新闻状态更新';
             $message['receive'] =$news->user_id;
-            $message['message'] = '你于'.$news->created_at.'向'.Media_community::where(['id'=>$news->media_id])->pluck('media_name')->first().'提交的新闻有了新的状态，请前往'.url('Admin/order/details/').$id.'"查看 。';
+            $message['message'] = '你于'.$news->created_at.'向'.Media_community::where(['id'=>$news->media_id])->pluck('media_name')->first().'提交的新闻有了新的状态，请前往'.url('Admin/order/details/').$id.'查看 。';
             $rst1 = Message::create($message);
             if($news->save()){
                 return response()->json(['msg'=>'更新成功！','sta'=>'0','data'=>'']);
@@ -180,7 +263,7 @@ class MediaProviderController extends Controller
                                 return response()->json(['msg'=>'数据库操作失败！','sta'=>'1','data'=>'']);
                             }
                     }
-                }catch (SQLiteException $e){
+                }catch (\Exception $e){
                     return response()->json(['msg'=>'数据库操作出错！','data'=>'','sta'=>'1']);
                 }
             }
